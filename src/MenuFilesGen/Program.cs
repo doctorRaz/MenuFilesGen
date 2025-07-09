@@ -1,4 +1,4 @@
-using System.IO.Compression;
+п»їusing System.IO.Compression;
 using System.Text;
 using System.Xml.Linq;
 
@@ -12,23 +12,35 @@ namespace MenuFilesGen
         [STAThread]
         static void Main(string[] args)
         {
-            OpenFileDialog tableFileDialog = new OpenFileDialog() { Filter = "TSV files (*.tsv)|*.tsv" };
+#if !DEBUG
+
+            OpenFileDialog tableFileDialog = new OpenFileDialog() { Filter = "TXT (*.txt)|*.txt|CSV (*.csv)|*.csv|TSV files (*.tsv)|*.tsv" };
             if (tableFileDialog.ShowDialog() != DialogResult.OK)
                 return;
+            string fileName = tableFileDialog.FileName;
 
-            var directoryPath = Path.GetDirectoryName(tableFileDialog.FileName);
-            var addinName = Path.GetFileNameWithoutExtension(tableFileDialog.FileName);
+#else
+            //СЃРѕС…СЂР°РЅСЏС‚СЊ РєР°Рє С‚РµРєСЃС‚ РІ СЋРЅРёРєРѕРґРµ
+            //РѕР±СЂРµР·Р°С‚СЊ РїСѓСЃС‚С‹Рµ СЃС‚СЂРѕРєРё
+            string fileName = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.txt";
 
-            // Описания команд,сгруппированных по имени панели
+#endif
+
+            string directoryPath = Path.GetDirectoryName(fileName);
+            string addinName = Path.GetFileNameWithoutExtension(fileName);
+
+            // РћРїРёСЃР°РЅРёСЏ РєРѕРјР°РЅРґ,СЃРіСЂСѓРїРїРёСЂРѕРІР°РЅРЅС‹С… РїРѕ РёРјРµРЅРё РїР°РЅРµР»Рё
             List<IGrouping<string, string[]>> commands;
-            using (StreamReader reader = new StreamReader(tableFileDialog.FileName))
+            using (StreamReader reader = new StreamReader(fileName))
             {
                 commands = reader
                     .ReadToEnd()
-                    .Split('\n')
-                    .Skip(1) // Заголовок таблицы
-                    .Select(c => c.Split('\t')) // Разделитель - табуляция
-                    .Where(c => !(c.Count() > 6 && c[6] == "TRUE")) // Пропуск скрытых команд
+                    .Split('\n',StringSplitOptions.RemoveEmptyEntries)
+                    .Skip(1) // Р—Р°РіРѕР»РѕРІРѕРє С‚Р°Р±Р»РёС†С‹
+                             .Select(c => c.Split('\t')) // Р Р°Р·РґРµР»РёС‚РµР»СЊ - С‚Р°Р±СѓР»СЏС†РёСЏ
+                                                         //.Select(c => c.Split(';')) // Р Р°Р·РґРµР»РёС‚РµР»СЊ - ;
+                                                         //.Where(c => !(c.Count() > 6 && c[6] == "TRUE")) // РџСЂРѕРїСѓСЃРє СЃРєСЂС‹С‚С‹С… РєРѕРјР°РЅРґ
+                    .Where(c => !(c.Count() > 6 && c[6] == "РРЎРўРРќРђ")) // РџСЂРѕРїСѓСЃРє СЃРєСЂС‹С‚С‹С… РєРѕРјР°РЅРґ
                     .GroupBy(c => c[3])
                     .ToList();
             }
@@ -39,7 +51,7 @@ namespace MenuFilesGen
 
             using (StreamWriter writer = new StreamWriter(cfgFilePath, false, new UTF8Encoding(true)))
             {
-                // Регистрация команд
+                // Р РµРіРёСЃС‚СЂР°С†РёСЏ РєРѕРјР°РЅРґ
                 writer.WriteLine(
                     $"[\\ribbon\\{addinName}]" +
                     $"\r\nCUIX=s%CFG_PATH%\\{addinName}.cuix" +
@@ -62,7 +74,7 @@ namespace MenuFilesGen
                     }
                 }
 
-                // Классическое меню
+                // РљР»Р°СЃСЃРёС‡РµСЃРєРѕРµ РјРµРЅСЋ
                 writer.WriteLine(
                     "\r\n[\\menu]" +
                     $"\r\n[\\menu\\{addinName}_Menu]" +
@@ -83,7 +95,7 @@ namespace MenuFilesGen
                     }
                 }
 
-                // Панели инструментов
+                // РџР°РЅРµР»Рё РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ
                 writer.WriteLine("\r\n[\\toolbars]");
 
                 foreach (IGrouping<string, string[]> commandGroup in commands)
@@ -102,10 +114,10 @@ namespace MenuFilesGen
                 }
             }
 
-            // Ленточное меню
-            //Создание XML документа 
+            // Р›РµРЅС‚РѕС‡РЅРѕРµ РјРµРЅСЋ
+            //РЎРѕР·РґР°РЅРёРµ XML РґРѕРєСѓРјРµРЅС‚Р° 
             var xDoc = new XDocument();
-            //Корневой элемент
+            //РљРѕСЂРЅРµРІРѕР№ СЌР»РµРјРµРЅС‚
             var ribbonRoot = new XElement("RibbonRoot");
             xDoc.Add(ribbonRoot);
 
@@ -127,10 +139,10 @@ namespace MenuFilesGen
                 ribbonPanelSource.Add(new XAttribute("Text", commandGroup.Key));
                 ribbonPanelSourceCollection.Add(ribbonPanelSource);
 
-                // Временный контейнер для сбора кнопок
+                // Р’СЂРµРјРµРЅРЅС‹Р№ РєРѕРЅС‚РµР№РЅРµСЂ РґР»СЏ СЃР±РѕСЂР° РєРЅРѕРїРѕРє
                 var panelButtons = new XElement("Temp");
 
-                // Группируем команды по тому, объединяются ли они в RibbonSplitButton
+                // Р“СЂСѓРїРїРёСЂСѓРµРј РєРѕРјР°РЅРґС‹ РїРѕ С‚РѕРјСѓ, РѕР±СЉРµРґРёРЅСЏСЋС‚СЃСЏ Р»Рё РѕРЅРё РІ RibbonSplitButton
                 var unitedCommands = commandGroup.GroupBy(c => c[5]).ToList();
 
                 foreach (var unitedCommandGroup in unitedCommands)
@@ -191,17 +203,21 @@ namespace MenuFilesGen
 
             xDoc.Save(cuiFilePath);
 
-            // Удаление .cuix файла, если он существует
+            // РЈРґР°Р»РµРЅРёРµ .cuix С„Р°Р№Р»Р°, РµСЃР»Рё РѕРЅ СЃСѓС‰РµСЃС‚РІСѓРµС‚
             if (File.Exists(cuixFilePath))
                 File.Delete(cuixFilePath);
 
-            // Создание архива (.cuix), добавление в него сформированного .xml файла
+            // РЎРѕР·РґР°РЅРёРµ Р°СЂС…РёРІР° (.cuix), РґРѕР±Р°РІР»РµРЅРёРµ РІ РЅРµРіРѕ СЃС„РѕСЂРјРёСЂРѕРІР°РЅРЅРѕРіРѕ .xml С„Р°Р№Р»Р°
             using (var zip = ZipFile.Open(cuixFilePath, ZipArchiveMode.Create))
             {
                 zip.CreateEntryFromFile(cuiFilePath, "RibbonRoot.cui");
             }
 
-            MessageBox.Show($"Файлы {addinName}.cfg и {addinName}.cuix сохранены в папке {directoryPath}");
+            // РЈРґР°Р»РµРЅРёРµ ribbon.cui С„Р°Р№Р»Р°, РµСЃР»Рё РѕРЅ СЃСѓС‰РµСЃС‚РІСѓРµС‚
+            if (File.Exists(cuiFilePath))
+                File.Delete(cuiFilePath);
+
+            MessageBox.Show($"Р¤Р°Р№Р»С‹ {addinName}.cfg Рё {addinName}.cuix СЃРѕС…СЂР°РЅРµРЅС‹ РІ РїР°РїРєРµ {directoryPath}");
         }
 
         public static XElement CreateButton(string[] commandData)
