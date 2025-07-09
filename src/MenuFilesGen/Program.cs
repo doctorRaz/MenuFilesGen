@@ -12,6 +12,7 @@ namespace MenuFilesGen
         [STAThread]
         static void Main(string[] args)
         {
+             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 #if !DEBUG
 
             OpenFileDialog tableFileDialog = new OpenFileDialog() { Filter = "TXT (*.txt)|*.txt|CSV (*.csv)|*.csv|TSV files (*.tsv)|*.tsv" };
@@ -83,9 +84,11 @@ namespace MenuFilesGen
             string cuiFilePath = $"{directoryPath}\\RibbonRoot.cui";
             string cuixFilePath = $"{directoryPath}\\{addinName}.cuix";
 
-            using (StreamWriter writer = new StreamWriter(cfgFilePath, false, new UTF8Encoding(true)))
+            //using (StreamWriter writer = new StreamWriter(cfgFilePath, false, new UTF8Encoding(false)))
+            using (StreamWriter writer = new StreamWriter(cfgFilePath, false,Encoding.GetEncoding(1251)))
             {
-                // Регистрация команд
+                #region Регистрация команд
+
                 writer.WriteLine(
                     $"[\\ribbon\\{addinName}]" +
                     $"\r\nCUIX=s%CFG_PATH%\\{addinName}.cuix" +
