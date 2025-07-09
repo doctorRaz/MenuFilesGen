@@ -70,11 +70,12 @@ namespace MenuFilesGen
                             $"\r\nintername=s{commandData[1]}" +
                             $"\r\nDispName=s{commandData[0]}" +
                             $"\r\nStatusText=s{commandData[2]}" +
-                            $"\r\nBitmapDll=sicons\\{commandData[1]}.ico");
+                            $"\r\nBitmapDll=sicons\\{commandData[1]}.ico");//todo возможность иконок из dll
                     }
                 }
 
                 // Классическое меню
+                //todo root menu drzTools
                 writer.WriteLine(
                     "\r\n[\\menu]" +
                     $"\r\n[\\menu\\{addinName}_Menu]" +
@@ -96,6 +97,7 @@ namespace MenuFilesGen
                 }
 
                 // Панели инструментов
+                //todo command show hide toolbar, ad view or other menu
                 writer.WriteLine("\r\n[\\toolbars]");
 
                 foreach (IGrouping<string, string[]> commandGroup in commands)
