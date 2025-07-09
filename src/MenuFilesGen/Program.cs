@@ -42,7 +42,7 @@ namespace MenuFilesGen
             }
             else
             {
-                addinName = rootMenu=csvName;
+                addinName = rootMenu = csvName;
             }
 
 
@@ -97,21 +97,36 @@ namespace MenuFilesGen
                 {
                     foreach (string[] commandData in commandGroup)
                     {
+
                         writer.WriteLine(
-                            $@"[\configman\commands\{commandData[1]}]" +
+                            $"\r\n[\\configman\\commands\\{commandData[1]}]" +
                             $"\r\nweight=i10" +
                             $"\r\ncmdtype=i1" +
                             $"\r\nintername=s{commandData[1]}" +
                             $"\r\nDispName=s{commandData[0]}" +
-                            $"\r\nStatusText=s{commandData[2]}" +
-                            $"\r\nBitmapDll=sicons\\{commandData[1]}.ico");//todo возможность иконок из dll
+                            $"\r\nStatusText=s{commandData[2]}" );//todo возможность иконок из dll
+
+                        if (!string.IsNullOrEmpty(commandData[12]))//dll
+                        {
+                            writer.WriteLine(
+                              $"BitmapDll=s{commandData[11]}"+
+                              $"\r\nIcon=s{commandData[12]}"                              
+                              );//todo возможность иконок из dll
+                        }
+                        else
+                        {
+                            writer.WriteLine(
+                               $"BitmapDll=sicons\\{commandData[1]}.ico");//todo возможность иконок из dll
+                        }
+
+
                     }
                 }
 
                 // Классическое меню
-               
+
                 //header
-                if(!string.IsNullOrEmpty(rootName))
+                if (!string.IsNullOrEmpty(rootName))
                 {
                     writer.WriteLine(
                     "\r\n[\\menu]" +
@@ -128,7 +143,7 @@ namespace MenuFilesGen
                     $"\r\nName=s{addinName}");
                 }
 
-               
+
 
                 foreach (IGrouping<string, string[]> commandGroup in commands)
                 {
