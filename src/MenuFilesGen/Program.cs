@@ -107,26 +107,25 @@ namespace MenuFilesGen
                             $"\r\ncmdtype=i1" +
                             $"\r\nintername=s{commandData[1]}" +
                             $"\r\nDispName=s{commandData[0]}" +
-                            $"\r\nStatusText=s{commandData[2]}" );//todo возможность иконок из dll
+                            $"\r\nStatusText=s{commandData[2]}");
 
-                        if (!string.IsNullOrEmpty(commandData[12]))//dll
+                        if (!string.IsNullOrEmpty(commandData[12]))//возможность иконок из dll
                         {
                             writer.WriteLine(
-                              $"BitmapDll=s{commandData[11]}"+
-                              $"\r\nIcon=s{commandData[12]}"                              
-                              );//todo возможность иконок из dll
+                              $"BitmapDll=s{commandData[11]}" +
+                              $"\r\nIcon=s{commandData[12]}"
+                              );
                         }
-                        else
+                        else//возможность иконок из иконок
                         {
                             writer.WriteLine(
-                               $"BitmapDll=sicons\\{commandData[1]}.ico");//todo возможность иконок из dll
+                               $"BitmapDll=sicons\\{commandData[1]}.ico");
                         }
-
-
                     }
                 }
 
-                // Классическое меню
+                #endregion
+                #region Классическое меню
 
                 //header
                 if (!string.IsNullOrEmpty(rootName))
