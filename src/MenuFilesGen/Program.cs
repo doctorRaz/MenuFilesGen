@@ -22,12 +22,46 @@ namespace MenuFilesGen
 #else
             //сохранять как текст в юникоде
             //обрезать пустые строки
-            string fileName = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.txt";
+            //string fileName = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.txt";
+            string fileName = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\drzTools_BlockFix.txt";
 
 #endif
 
             string directoryPath = Path.GetDirectoryName(fileName);
-            string addinName = Path.GetFileNameWithoutExtension(fileName);
+            string csvName = Path.GetFileNameWithoutExtension(fileName);
+            var name = csvName.Split('_');
+
+            string rootName = "";
+            string rootMenu = "";
+            string addinName = "";
+            if (name.Length > 1)//костылище(((
+            {
+                rootName = name[0];
+                addinName = name[1];
+                rootMenu = $"{rootName}\\{addinName}";
+            }
+            else
+            {
+                addinName = rootMenu=csvName;
+            }
+
+
+            ////by dRz on 09.07.2025 at 11:54
+            //List<IGrouping<string, List<IGrouping<string, string[]>>>> commandsTools;
+            //using (StreamReader reader = new StreamReader(fileName))
+            //{
+            //    commandsTools = reader
+            //        .ReadToEnd()
+            //        .Split('\n', StringSplitOptions.RemoveEmptyEntries)
+            //        .Skip(1) // Заголовок таблицы
+            //                 .Select(c => c.Split('\t')) // Разделитель - табуляция
+            //                                             //.Select(c => c.Split(';')) // Разделитель - ;
+            //                                             //.Where(c => !(c.Count() > 6 && c[6] == "TRUE")) // Пропуск скрытых команд
+            //        .Where(c => !(c.Count() > 6 && c[6] == "ИСТИНА")) // Пропуск скрытых команд
+            //        .GroupBy(c => c[13])
+            //        .ToList()                    ;
+            //}
+
 
             // Описания команд,сгруппированных по имени панели
             List<IGrouping<string, string[]>> commands;
@@ -35,7 +69,7 @@ namespace MenuFilesGen
             {
                 commands = reader
                     .ReadToEnd()
-                    .Split('\n',StringSplitOptions.RemoveEmptyEntries)
+                    .Split('\n', StringSplitOptions.RemoveEmptyEntries)
                     .Skip(1) // Заголовок таблицы
                              .Select(c => c.Split('\t')) // Разделитель - табуляция
                                                          //.Select(c => c.Split(';')) // Разделитель - ;
@@ -45,9 +79,9 @@ namespace MenuFilesGen
                     .ToList();
             }
 
-            var cfgFilePath = $"{directoryPath}\\{addinName}.cfg";
-            var cuiFilePath = $"{directoryPath}\\RibbonRoot.cui";
-            var cuixFilePath = $"{directoryPath}\\{addinName}.cuix";
+            string cfgFilePath = $"{directoryPath}\\{addinName}.cfg";
+            string cuiFilePath = $"{directoryPath}\\RibbonRoot.cui";
+            string cuixFilePath = $"{directoryPath}\\{addinName}.cuix";
 
             using (StreamWriter writer = new StreamWriter(cfgFilePath, false, new UTF8Encoding(true)))
             {
@@ -75,22 +109,37 @@ namespace MenuFilesGen
                 }
 
                 // Классическое меню
-                //todo root menu drzTools
-                writer.WriteLine(
+               
+                //header
+                if(!string.IsNullOrEmpty(rootName))
+                {
+                    writer.WriteLine(
                     "\r\n[\\menu]" +
-                    $"\r\n[\\menu\\{addinName}_Menu]" +
+                    $"\r\n[\\menu\\{rootName}]" +
+                    $"\r\nName=s{rootName}" +
+                    $"\r\n[\\menu\\{rootMenu}_Menu]" +
                     $"\r\nName=s{addinName}");
+                }
+                else
+                {
+                    writer.WriteLine(
+                    "\r\n[\\menu]" +
+                    $"\r\n[\\menu\\{rootMenu}_Menu]" +
+                    $"\r\nName=s{addinName}");
+                }
+
+               
 
                 foreach (IGrouping<string, string[]> commandGroup in commands)
                 {
                     writer.WriteLine(
-                        $@"[\menu\{addinName}_Menu\{commandGroup.Key}]" +
+                        $@"[\menu\{rootMenu}_Menu\{commandGroup.Key}]" +
                         $"\r\nname=s{commandGroup.Key}");
 
                     foreach (string[] commandData in commandGroup)
                     {
                         writer.WriteLine(
-                            $@"[\menu\{addinName}_Menu\{commandGroup.Key}\s{commandData[1]}]" +
+                            $@"[\menu\{rootMenu}_Menu\{commandGroup.Key}\s{commandData[1]}]" +
                             $"\r\nname=s{commandData[0]}" +
                             $"\r\nIntername=s{commandData[1]}");
                     }
