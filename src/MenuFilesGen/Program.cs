@@ -12,7 +12,7 @@ namespace MenuFilesGen
         [STAThread]
         static void Main(string[] args)
         {
-             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 #if !DEBUG
 
             OpenFileDialog tableFileDialog = new OpenFileDialog() { Filter = "TXT (*.txt)|*.txt|CSV (*.csv)|*.csv|TSV files (*.tsv)|*.tsv" };
@@ -35,6 +35,7 @@ namespace MenuFilesGen
             string rootName = "";
             string rootMenu = "";
             string addinName = "";
+
             if (name.Length > 1)//костылище(((
             {
                 rootName = name[0];
@@ -46,31 +47,69 @@ namespace MenuFilesGen
                 addinName = rootMenu = csvName;
             }
 
-
-            ////by dRz on 09.07.2025 at 11:54
+            //by dRz on 09.07.2025 at 11:54 не умею в группировку
+            // https://stackoverflow.com/questions/1159233/multi-level-grouping-in-linq
             //List<IGrouping<string, List<IGrouping<string, string[]>>>> commandsTools;
-            //using (StreamReader reader = new StreamReader(fileName))
-            //{
-            //    commandsTools = reader
-            //        .ReadToEnd()
-            //        .Split('\n', StringSplitOptions.RemoveEmptyEntries)
-            //        .Skip(1) // Заголовок таблицы
-            //                 .Select(c => c.Split('\t')) // Разделитель - табуляция
-            //                                             //.Select(c => c.Split(';')) // Разделитель - ;
-            //                                             //.Where(c => !(c.Count() > 6 && c[6] == "TRUE")) // Пропуск скрытых команд
-            //        .Where(c => !(c.Count() > 6 && c[6] == "ИСТИНА")) // Пропуск скрытых команд
-            //        .GroupBy(c => c[13])
-            //        .ToList()                    ;
-            //}
+            using (StreamReader reader = new StreamReader(fileName))
+            {
+                var read = reader.ReadToEnd()
+                    .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
+                    .Skip(1).ToList()
+                    .Select(x => x.Split('\t')).ToList()
+                    .Where(c => !(c.Count() > 6 && c[6] == "ИСТИНА")).ToList();
+
+                var gr = read.GroupBy(c => new { root = c[13], panel = c[3] });
+
+                var gr0 = read.GroupBy(c => new { root = c[13], panel = c[3] })
+     .Select(s => new
+     {
+         root = s.Key.root,
+         panel = s.Key.panel,
+         item = s.Select(c => c)
+     });
+
+
+                var grgr = /*from g in read*/
+                           from i in read
+                           group i by new { root = i[13], panel = i[3] };
+
+
+                var ggs = grgr.ToList();
+
+                foreach (var gg in ggs)
+                {
+                    var d = gg.Key;
+
+                    var dr = d.root;
+                    var dp = d.panel;
+                }
+
+
+                //var grouped = gr.GroupBy(p => new { Value = p[13], p[3] });
+
+                { }
+                //    commandsTools = reader
+                //        .ReadToEnd()
+                //        .Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                //        .Skip(1) // Заголовок таблицы
+                //                 .Select(c => c.Split('\t')) // Разделитель - табуляция
+                //                                             //.Select(c => c.Split(';')) // Разделитель - ;
+                //                                             //.Where(c => !(c.Count() > 6 && c[6] == "TRUE")) // Пропуск скрытых команд
+                //        .Where(c => !(c.Count() > 6 && c[6] == "ИСТИНА")) // Пропуск скрытых команд
+                //        .GroupBy(c => c[13])
+                //        .ToList()                    ;
+            }
 
 
             // Описания команд,сгруппированных по имени панели
             List<IGrouping<string, string[]>> commands;
             using (StreamReader reader = new StreamReader(fileName))
             {
+                //https://stackoverflow.com/questions/7647716/how-to-remove-empty-lines-from-a-formatted-string
                 commands = reader
                     .ReadToEnd()
-                    .Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                    .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
+                    //.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                     .Skip(1) // Заголовок таблицы
                              .Select(c => c.Split('\t')) // Разделитель - табуляция
                                                          //.Select(c => c.Split(';')) // Разделитель - ;
@@ -85,10 +124,10 @@ namespace MenuFilesGen
             string cuixFilePath = $"{directoryPath}\\{addinName}.cuix";
 
             //using (StreamWriter writer = new StreamWriter(cfgFilePath, false, new UTF8Encoding(false)))
-            using (StreamWriter writer = new StreamWriter(cfgFilePath, false,Encoding.GetEncoding(1251)))
+            using (StreamWriter writer = new StreamWriter(cfgFilePath, false, Encoding.GetEncoding(1251)))
             {
                 #region Регистрация команд
-
+                //todo сгрупировать сбор записей в один цикл
                 writer.WriteLine(
                     $"[\\ribbon\\{addinName}]" +
                     $"\r\nCUIX=s%CFG_PATH%\\{addinName}.cuix" +
@@ -109,17 +148,22 @@ namespace MenuFilesGen
                             $"\r\nDispName=s{commandData[0]}" +
                             $"\r\nStatusText=s{commandData[2]}");
 
-                        if (!string.IsNullOrEmpty(commandData[12]))//возможность иконок из dll
+                        if (!string.IsNullOrEmpty(commandData[12]))//иконки из dll
                         {
                             writer.WriteLine(
                               $"BitmapDll=s{commandData[11]}" +
                               $"\r\nIcon=s{commandData[12]}"
                               );
                         }
-                        else//возможность иконок из иконок
+                        else if (!string.IsNullOrEmpty(commandData[11])) //прописана  иконка с относительным путем и расширением
                         {
                             writer.WriteLine(
-                               $"BitmapDll=sicons\\{commandData[1]}.ico");
+                                $"BitmapDll=s{commandData[11]}");
+                        }
+                        else //иконка не прописана, имя иконки название команды в каталоге \\icons
+                        {
+                            writer.WriteLine(
+                                 $"BitmapDll=sicons\\{commandData[1]}");
                         }
                     }
                 }
@@ -162,25 +206,72 @@ namespace MenuFilesGen
                     }
                 }
 
-                // Панели инструментов
+                #endregion
+
+                #region Панели инструментов
+
                 //todo command show hide toolbar, ad view or other menu
-                writer.WriteLine("\r\n[\\toolbars]");
+                string toolbarLine = "\r\n[\\toolbars]";
+                string toolbarLineCmd = "";
+
+                //writer.WriteLine("\r\n[\\toolbars]");
 
                 foreach (IGrouping<string, string[]> commandGroup in commands)
                 {
-                    var panelName = $"{addinName}_{commandGroup.Key}";
-                    writer.WriteLine($"[\\toolbars\\{panelName}]" +
-                            $"\r\nname=s{panelName}" +
-                            $"\r\nIntername=s{panelName}");
+                    var panelName = $"{addinName}_{commandGroup.Key.Replace(' ', '_')}";
+
+
+                    //tool bar
+                    toolbarLine += $"\n[\\toolbars\\{panelName}]" +
+                            $"\r\nname=s{commandGroup.Key}\n" /*+
+                            $"\r\nIntername=s{panelName}"*/;
+
+                    //writer.WriteLine($"[\\toolbars\\{panelName}]" +
+                    //        $"\r\nname=s{commandGroup.Key}" /*+
+                    //        $"\r\nIntername=s{panelName}"*/);
+
+                    //cmd
+                    toolbarLineCmd += $"[\\configman\\commands\\ShowToolbar_{panelName}]\n";
+                    toolbarLineCmd += $"weight=i0\n";
+                    toolbarLineCmd += $"cmdtype=i0\n";
+                    toolbarLineCmd += $"intername=sShowToolbar_{panelName}\n";
+
+
 
                     foreach (string[] commandData in commandGroup)
                     {
-                        writer.WriteLine(
-                            $"[\\toolbars\\{panelName}\\{commandData[1]}]" +
-                            $"\r\nIntername=s{commandData[1]}");
+                        toolbarLine += $"[\\toolbars\\{panelName}\\{commandData[1]}]" +
+                                     $"\r\nIntername=s{commandData[1]}\n";
+
+                        //writer.WriteLine(
+                        //    $"[\\toolbars\\{panelName}\\{commandData[1]}]" +
+                        //    $"\r\nIntername=s{commandData[1]}");
                     }
                 }
+                writer.WriteLine(toolbarLine);
+                writer.WriteLine(toolbarLineCmd);
+
+                #endregion
+
+                #region  [\menu\View\toolbars]
+                /*
+                [\menu\View]
+                [\menu\View\toolbars]
+                [\menu\View\toolbars\drzTools]
+                Name=sdrzTools
+                [\menu\View\toolbars\drzTools\ShowToolbar_Correct_Blocks]
+                Name=sCorrect Blocks
+                InterName=sShowToolbar_Correct_Blocks
+
+                */
+                #endregion
+
+
+                #region 
+
+                #endregion
             }
+
 
             // Ленточное меню
             //Создание XML документа 
