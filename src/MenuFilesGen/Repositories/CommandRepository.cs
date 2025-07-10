@@ -1,18 +1,19 @@
-﻿using MenuFilesGen.Enums;
+﻿using System.Text;
+using MenuFilesGen.Enums;
 using MenuFilesGen.Models;
 
 namespace MenuFilesGen.Repositories
 {
     public class CommandRepository
     {
-        public CommandRepository(ColumnNumbers columnNumbers)
-        {
-            _columnNumbers = columnNumbers;
-        }
-        public void ReadFromCsv(string csvFileFullName)
+        // По здравому размышлению понял, что получение колонок для парсера интересно только здесь. Переделываю ;)
+        /// <summary> Чтение файла обмена (csv) </summary>
+        /// <param name="csvFileFullName">Полный путь к обрабатываемому файлу</param>
+        /// <param name="columnNumbers">Настройки парсинга</param>
+        public void ReadFromCsv(string csvFileFullName, ColumnNumbers columnNumbers)
         {
             List<string[]> datas;
-            using (StreamReader reader = new StreamReader(csvFileFullName))
+            using (StreamReader reader = new StreamReader(csvFileFullName, Encoding.UTF8))
             {
                 datas = reader.ReadToEnd()
                     .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
@@ -23,7 +24,7 @@ namespace MenuFilesGen.Repositories
 
             PanelDefinitions = new List<PanelDefinition>(
                 datas
-                    .Select(o => o[_columnNumbers.PanelNameColumn])
+                    .Select(o => o[columnNumbers.PanelNameColumn])
                     .Distinct()
                     .Select(o => new PanelDefinition()
                     { Name = o })
@@ -31,7 +32,7 @@ namespace MenuFilesGen.Repositories
 
             RibbonPaletteDefinitions = new List<RibbonPaletteDefinition>(
                 datas
-                    .Select(o => o[_columnNumbers.RibbonNameColumn])
+                    .Select(o => o[columnNumbers.RibbonNameColumn])
                     .Distinct()
                     .Select(o => new RibbonPaletteDefinition()
                     {
@@ -44,14 +45,18 @@ namespace MenuFilesGen.Repositories
                 {
                     CommandDefinition res = new CommandDefinition
                     {
-                        MenuCommandName = null,
-                        InternalName = null,
-                        Description = null,
-                        IconName = null,
-                        ResourceDllName = null,
+                        MenuCommandName = o[columnNumbers.CommandNameColumn],
+                        InternalName = o[columnNumbers.CommandInternaleNameColumn],
+                        Description = o[columnNumbers.CommandDescriptionColumn],
+                        IconName = o[columnNumbers.IconColumn],
+                        ResourceDllName = o[columnNumbers.ResourseDllNameColumn],
                         HideCommand = false,
-                        Panel = null,
-                        RibbonPanel = null,
+                        Panel = PanelDefinitions.Where(p => p.Name.Equals(o[columnNumbers.PanelNameColumn],
+                            StringComparison.InvariantCultureIgnoreCase))
+                            .ToList(),
+                        RibbonPanel = RibbonPaletteDefinitions
+                            .Where(p => p.Name.Equals(o[columnNumbers.RibbonNameColumn]))
+                            .ToList(),
                         RibbonSize = RibbonButtonSize.None
                     };
                     return res;
@@ -73,8 +78,6 @@ namespace MenuFilesGen.Repositories
         public List<PanelDefinition> PanelDefinitions { get; private set; }
         public List<RibbonPaletteDefinition> RibbonPaletteDefinitions { get; private set; }
 
-
-        private ColumnNumbers _columnNumbers;
         private const int HEADER_ROW_RANGE = 1;
     }
 }

@@ -18,8 +18,8 @@ namespace MenuGenUnitTests
         [Test]
         public void GetAllData()
         {
-            CommandRepository rep = new CommandRepository(_columnNumbers);
-            rep.ReadFromCsv(_csvFile);
+            CommandRepository rep = new CommandRepository();
+            rep.ReadFromCsv(_csvFile, _columnNumbers);
             // Добавить проверку количества команд, панелей, элементов ленты
             Assert.That(rep.PanelDefinitions.Count, Is.EqualTo(15));
             Assert.That(rep.RibbonPaletteDefinitions.Count, Is.EqualTo(3));

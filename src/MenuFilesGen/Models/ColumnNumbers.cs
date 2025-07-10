@@ -12,6 +12,8 @@
             PanelNameColumn = 3;
             RibbonNameColumn = 4;
             RibbonSizeColumn = 5;
+            ResourseDllNameColumn = 11;
+            IconColumn = 12;
         }
         /// <summary> Номер колонки для имени команды </summary>
         public int CommandNameColumn { get; }
@@ -26,5 +28,7 @@
         /// </summary>
         public int PanelNameColumn { get; }
         public int RibbonNameColumn { get; }
+        public int IconColumn { get; }
+        public int ResourseDllNameColumn { get; }
     }
 }
