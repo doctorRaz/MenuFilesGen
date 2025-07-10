@@ -14,6 +14,12 @@ namespace MenuFilesGen
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
+
+
+            GroupTest test = new GroupTest();
+            string fileNametst = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\drzTools_BlockFix.txt";
+            test.Run(fileNametst);
+
 #if !DEBUG
 
             OpenFileDialog tableFileDialog = new OpenFileDialog() { Filter = "TXT (*.txt)|*.txt|CSV (*.csv)|*.csv|TSV files (*.tsv)|*.tsv" };
@@ -158,7 +164,7 @@ namespace MenuFilesGen
 
                 #region Панели инструментов
 
-              
+
                 //todo добавить в [\menu\View\toolbars] и ...[\ToolbarPopupMenu\
                 string toolbarLine = "\r\n[\\toolbars]";
                 string toolbarLineCmd = "";
