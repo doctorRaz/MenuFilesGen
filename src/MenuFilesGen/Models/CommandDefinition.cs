@@ -3,7 +3,7 @@
 namespace MenuFilesGen.Models
 {
     /// <summary> Общие данные по команде </summary>
-    internal class CommandDefinition
+    public class CommandDefinition
     {
         /// <summary> Имя команды, как оно будет показываться в меню </summary>
         public string MenuCommandName { get; set; }
