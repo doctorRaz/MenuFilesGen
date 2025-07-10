@@ -192,11 +192,11 @@ namespace MenuFilesGen
                     toolbarLineCmd += $"intername=sShowToolbar_{panelName}\n";
                     /* добавить
                         LocalName=sПанель_публикации_PlotSPDS
-                        BitmapDll=sPlotSPDS_Res.dll
-                        Icon=sPLOT
+                        BitmapDll11=sPlotSPDS_Res.dll
+                        Icon12=sPLOT
                         StatusText=sПоказать/Скрыть панель PlotSPDS
                         ; ToolTipText=sПоказать/Скрыт панель PlotSPDS
-                        DispName=sПоказать/Скрыть панель PlotSPDS
+                        DispName0=sПоказать/Скрыть панель PlotSPDS
                     */
                     foreach (string[] commandData in commandGroup)
                     {
@@ -263,7 +263,7 @@ namespace MenuFilesGen
                 // Временный контейнер для сбора кнопок
                 var panelButtons = new XElement("Temp");
 
-                // Группируем команды по тому, объединяются ли они в RibbonSplitButton
+                // Группируем команды по тому, объединяются ли они в RibbonSplitButton5
                 var unitedCommands = commandGroup.GroupBy(c => c[5]).ToList();
 
                 foreach (var unitedCommandGroup in unitedCommands)
