@@ -13,7 +13,41 @@ namespace MenuFilesGen
         {
 
             // https://stackoverflow.com/questions/1159233/multi-level-grouping-in-linq
-            dynamic readdata=GetRes(fileName);
+            var readdata = GetRes(fileName);//прочитали файл в класс
+
+            //группируем по RootData и PanelName
+            var hierarchicalGrouping = readdata
+                .GroupBy(e => e.RootData)
+                .Select(root => new
+                {
+                    root = root.Key,
+                    panel = root
+                       .GroupBy(e => e.PanelName)
+                       .Select(panel => new
+                       {
+                           panel = panel.Key,
+                           command = panel.ToList()
+                       }).ToList()
+                }).ToList();
+
+            foreach (var root in hierarchicalGrouping)
+            {
+                Console.WriteLine($"Root: {root.root}");
+                foreach (var panel in root.panel)
+                {
+                    Console.WriteLine($"  panel: {panel.panel}");
+                    foreach (var cmd in panel.command)
+                    {
+                        Console.WriteLine($"    - {cmd.Intername}");
+                        Console.WriteLine($"        - {cmd.DispName}");
+                    }
+                }
+            }
+
+            Console.ReadKey();
+
+            //группировка по PanelName
+
 
 
         }
@@ -23,9 +57,9 @@ namespace MenuFilesGen
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns></returns>
-        public dynamic GetRes(string fileName)
+        public List<CommandDescription> GetRes(string fileName)
         {
-            dynamic readdata;
+            List<CommandDescription> readdata;
             using (StreamReader reader = new StreamReader(fileName))
             {
                 readdata = reader.ReadToEnd()
@@ -33,7 +67,7 @@ namespace MenuFilesGen
                           .Skip(1).ToList()
                           .Select(x => x.Split('\t')).ToList()
                           .Where(c => !(c.Count() > 6 && c[6] == "ИСТИНА"))
-                          .Select(c => new
+                          .Select(c => new CommandDescription
                           {
                               DispName = c[0],
                               Intername = c[1],
@@ -58,7 +92,7 @@ namespace MenuFilesGen
     public static class Test
     {
 
-
+        //https://dotnettutorials.net/lesson/groupby-in-linq/
         public static void prg()
         {
             var hierarchicalGrouping = Employee.GetAllEmployees()
@@ -93,6 +127,25 @@ namespace MenuFilesGen
         }
 
     }
+}
+
+public class CommandDescription
+{
+    public string DispName { get; set; }
+    public string Intername { get; set; }
+    public string Description { get; set; }
+    public string PanelName { get; set; }
+    public string SizeFeed { get; set; }
+    public string RibbonSplitButton { get; set; }
+    public string DontTake { get; set; }
+    public string DontDisplay { get; set; }
+    public string Comment { get; set; }
+    public string HelpPriority { get; set; }
+    public string Video { get; set; }
+    public string BitmapDll { get; set; }
+    public string Icon { get; set; }
+    public string RootData { get; set; }
+
 }
 class Employee
 {
