@@ -13,6 +13,7 @@ namespace MenuFilesGen
         static void Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
 #if !DEBUG
 
             OpenFileDialog tableFileDialog = new OpenFileDialog() { Filter = "TXT (*.txt)|*.txt|CSV (*.csv)|*.csv|TSV files (*.tsv)|*.tsv" };
@@ -47,60 +48,6 @@ namespace MenuFilesGen
                 addinName = rootMenu = csvName;
             }
 
-            //by dRz on 09.07.2025 at 11:54 не умею в группировку
-            // https://stackoverflow.com/questions/1159233/multi-level-grouping-in-linq
-            //List<IGrouping<string, List<IGrouping<string, string[]>>>> commandsTools;
-            using (StreamReader reader = new StreamReader(fileName))
-            {
-                var read = reader.ReadToEnd()
-                    .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
-                    .Skip(1).ToList()
-                    .Select(x => x.Split('\t')).ToList()
-                    .Where(c => !(c.Count() > 6 && c[6] == "ИСТИНА")).ToList();
-
-                var gr = read.GroupBy(c => new { root = c[13], panel = c[3] });
-
-                var gr0 = read.GroupBy(c => new { root = c[13], panel = c[3] })
-     .Select(s => new
-     {
-         root = s.Key.root,
-         panel = s.Key.panel,
-         item = s.Select(c => c)
-     });
-
-
-                var grgr = /*from g in read*/
-                           from i in read
-                           group i by new { root = i[13], panel = i[3] };
-
-
-                var ggs = grgr.ToList();
-
-                foreach (var gg in ggs)
-                {
-                    var d = gg.Key;
-
-                    var dr = d.root;
-                    var dp = d.panel;
-                }
-
-
-                //var grouped = gr.GroupBy(p => new { Value = p[13], p[3] });
-
-                { }
-                //    commandsTools = reader
-                //        .ReadToEnd()
-                //        .Split('\n', StringSplitOptions.RemoveEmptyEntries)
-                //        .Skip(1) // Заголовок таблицы
-                //                 .Select(c => c.Split('\t')) // Разделитель - табуляция
-                //                                             //.Select(c => c.Split(';')) // Разделитель - ;
-                //                                             //.Where(c => !(c.Count() > 6 && c[6] == "TRUE")) // Пропуск скрытых команд
-                //        .Where(c => !(c.Count() > 6 && c[6] == "ИСТИНА")) // Пропуск скрытых команд
-                //        .GroupBy(c => c[13])
-                //        .ToList()                    ;
-            }
-
-
             // Описания команд,сгруппированных по имени панели
             List<IGrouping<string, string[]>> commands;
             using (StreamReader reader = new StreamReader(fileName))
@@ -123,6 +70,7 @@ namespace MenuFilesGen
             string cuiFilePath = $"{directoryPath}\\RibbonRoot.cui";
             string cuixFilePath = $"{directoryPath}\\{addinName}.cuix";
 
+            //! в нанокад бага не умеет в ком строке UTF-8 латиницу, поэтому в АСКИ
             //using (StreamWriter writer = new StreamWriter(cfgFilePath, false, new UTF8Encoding(false)))
             using (StreamWriter writer = new StreamWriter(cfgFilePath, false, Encoding.GetEncoding(1251)))
             {
@@ -210,7 +158,8 @@ namespace MenuFilesGen
 
                 #region Панели инструментов
 
-                //todo command show hide toolbar, ad view or other menu
+              
+                //todo добавить в [\menu\View\toolbars] и ...[\ToolbarPopupMenu\
                 string toolbarLine = "\r\n[\\toolbars]";
                 string toolbarLineCmd = "";
 
@@ -235,9 +184,14 @@ namespace MenuFilesGen
                     toolbarLineCmd += $"weight=i0\n";
                     toolbarLineCmd += $"cmdtype=i0\n";
                     toolbarLineCmd += $"intername=sShowToolbar_{panelName}\n";
-
-
-
+                    /* добавить
+                        LocalName=sПанель_публикации_PlotSPDS
+                        BitmapDll=sPlotSPDS_Res.dll
+                        Icon=sPLOT
+                        StatusText=sПоказать/Скрыть панель PlotSPDS
+                        ; ToolTipText=sПоказать/Скрыт панель PlotSPDS
+                        DispName=sПоказать/Скрыть панель PlotSPDS
+                    */
                     foreach (string[] commandData in commandGroup)
                     {
                         toolbarLine += $"[\\toolbars\\{panelName}\\{commandData[1]}]" +
@@ -267,9 +221,11 @@ namespace MenuFilesGen
                 #endregion
 
 
-                #region 
+                #region [\ToolbarPopupMenu\
 
                 #endregion
+
+                //todo [\Accelerators]
             }
 
 
