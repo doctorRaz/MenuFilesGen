@@ -47,7 +47,9 @@ namespace MenuFilesGen
             Console.ReadKey();
 
             //группировка по PanelName
-
+            List<IGrouping<string, CommandDescription>> groups = readdata
+                                                                    .GroupBy
+                                                                     (e => e.PanelName).ToList();
 
 
         }
