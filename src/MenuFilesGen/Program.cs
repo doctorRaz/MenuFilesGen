@@ -17,9 +17,9 @@ namespace MenuFilesGen
 
 
             GroupTest test = new GroupTest();
-            string fileNametst = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\drzTools_BlockFix.txt";
+            string fileNametst = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFixTst.txt";
             test.Run(fileNametst);
-
+            return;
 #if !DEBUG
 
             OpenFileDialog tableFileDialog = new OpenFileDialog() { Filter = "TXT (*.txt)|*.txt|CSV (*.csv)|*.csv|TSV files (*.tsv)|*.tsv" };

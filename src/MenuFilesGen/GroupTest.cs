@@ -30,200 +30,161 @@ namespace MenuFilesGen
 
             //собираем в строки конфиг
 
-            //прописка ленты
+            //прописываем ленту
             string ribbon = $"{newLine}[\\ribbon\\{addinName}]" +
-                             $"{newLine}CUIX=s%CFG_PATH%\\{addinName}.cuix" +
-                             $"{newLine}visible=f1";
+                            $"{newLine}CUIX=s%CFG_PATH%\\{addinName}.cuix" +
+                            $"{newLine}visible=f1";
 
-            //прописка команд
+            //команды
             string configman = $"{newLine}[\\configman]" +
                         $"{newLine}[\\configman\\commands]";//имхо это лишнее надо проверить
 
-            //прописка хоткеев
+            //горячие клавиши
             string accelerators = $"{newLine}[\\Accelerators]";
+            /* [\Accelerators]
+                drz_PublishMC=sCtrl+Shift+P
+            */
 
+            //меню
+            string menu = $"{newLine}[\\menu]";
 
+            //панели
+            string toolbars = $"{newLine};Панели" +
+                                $"{newLine}[\\toolbars]";
+
+            //всплывающее меню панелей
+            string toolbarPopupMenu = $"{newLine};Popup меню" +
+                                    $"{newLine}[\\ToolbarPopupMenu]" +
+                                    $"{newLine}[\\ToolbarPopupMenu\\{addinName}]" +
+                                    $"{newLine}Name=s{addinName}";
+
+            //команды вызова панелей
+            string toolbarsCmd = $"{newLine}; Команды вызова панелей";
+
+            //меню вид панелей
+            string toolbarsViewMenu = $"{newLine};View меню"+
+                                        $"{newLine}[\\menu\\View\\toolbars\\{addinName}]" +
+                                        $"{newLine}Name=s{addinName}";
 
             foreach (var root in hierarchicalGrouping)
             {
-                string _root = root.root;
+                string rootName = root.root;
+                string rootMenu = $"{addinName}";
+
+                #region Классическое меню шапка
+
+                if (!string.IsNullOrEmpty(rootName))
+                {
+                    rootMenu = $"{rootName}\\{addinName}";
+
+                    menu += $"{newLine}[\\menu\\{rootName}]" +
+                            $"{newLine}Name=s{rootName}" +
+                            $"{newLine}[\\menu\\{rootMenu}]" +
+                            $"{newLine}Name=s{addinName}";
+
+                }
+                else
+                {
+                    menu += $"{newLine}[\\menu\\{rootMenu}]" +
+                            $"{newLine} Name=s{addinName}";
+                }
+                #endregion
 
                 foreach (var panel in root.panel)
                 {
-                    string _panel = panel.panel;
+                    string panelName = panel.panel;
 
-                    foreach (var cmd in panel.command)
+                    string panelNameCmd = $"{addinName}_{panelName.Replace(' ', '_')}";//
+
+                    #region Панели
+
+                    //панели
+                    toolbars += $"{newLine}{newLine}[\\toolbars\\{panelNameCmd}]" +
+                                $"{newLine}name=s{panelName}";
+
+                    //команды
+                    toolbarsCmd += $"{newLine}{newLine}[\\configman\\commands\\ShowToolbar_{panelNameCmd}]" +
+                                    $"{newLine}weight=i10" +
+                                    $"{newLine}cmdtype=i0" +
+                                    $"{newLine}intername=sShowToolbar_{panelNameCmd}" +
+                                    $"{newLine}StatusText=sОтображение панели {panelName}" +
+                                    $"{newLine}ToolTipText=sОтображение панели {panelName}" +
+                                    $"{newLine}DispName=sОтображение панели {panelName}" +
+                                    $"{newLine}LocalName=sПанель_{panelNameCmd}";
+
+                    //поп меню
+                    toolbarPopupMenu += $"{newLine}[\\ToolbarPopupMenu\\{addinName}\\ShowToolbar_{panelNameCmd}]"+
+                     $"{newLine}Name=s{panelName}"+
+                     $"{newLine}InterName=sShowToolbar_{panelNameCmd}";
+                    //вью меню
+                    toolbarsViewMenu += $"{newLine}[\\menu\\View\\toolbars\\{addinName}\\ShowToolbar_{panelNameCmd}]"+
+                                        $"{newLine}Name=s{panelName}"+
+                                        $"{newLine}InterName=sShowToolbar_{panelNameCmd}";
+
+                    #endregion
+
+                    #region Классическое меню раздел
+
+                    menu += $"{newLine}{newLine}[\\menu\\{rootMenu}\\{panelName}]" +
+                            $"{newLine}name=s{panelName}";
+
+                    #endregion
+
+                    foreach (CommandDescription cmd in panel.command)
                     {
-       
-                        Console.WriteLine($"    - {cmd.Intername}");
-                        Console.WriteLine($"        - {cmd.DispName}");
+                        #region Регистрация команд
+                        configman += $"{newLine}{newLine}[\\configman\\commands\\{cmd.Intername1}]" +
+                                     $"{newLine}weight=i10" +
+                                     $"{newLine}cmdtype=i1" +
+                                     $"{newLine}intername=s{cmd.Intername1}" +
+                                     $"{newLine}DispName=s{cmd.DispName0}" +
+                                     $"{newLine}StatusText=s{cmd.Description2}";
+
+                        if (!string.IsNullOrEmpty(cmd.Icon12))//иконки из dll
+                        {
+                            configman += $"{newLine}BitmapDll=s{cmd.BitmapDll11}" +
+                                         $"{newLine}Icon=s{cmd.Icon12}";
+                        }
+                        else if (!string.IsNullOrEmpty(cmd.BitmapDll11)) //прописана  иконка с относительным путем и расширением
+                        {
+                            configman += $"{newLine}BitmapDll=s{cmd.BitmapDll11}";
+                        }
+                        else //иконка не прописана, имя иконки название команды в каталоге \\icons
+                        {
+                            configman += $"{newLine}BitmapDll=sicons\\{cmd.Intername1}.ico";
+                        }
+                        #endregion
+
+                        #region Классическое меню
+
+                        menu += $"{newLine}[\\menu\\{rootMenu}\\{panelName}\\s{cmd.Intername1}]" +
+                                $"{newLine}name=s{cmd.DispName0}" +
+                                $"{newLine}Intername=s{cmd.Intername1}";
+
+                        #endregion
+
+                        #region Панели
+                        toolbars += $"{newLine}[\\toolbars\\{panelNameCmd}\\{cmd.Intername1}]" +
+                                    $"{newLine}Intername=s{cmd.Intername1}";
+                        #endregion
                     }
                 }
             }
 
             using (StreamWriter writer = new StreamWriter(cfgFilePath, false, Encoding.GetEncoding(1251)))
             {
-                writer.WriteLine(ribbon);
-                writer.WriteLine(configman);
-                writer.WriteLine(accelerators);
+                writer.WriteLine(menu);//меню
+                writer.WriteLine(toolbarPopupMenu); //поп меню
+                writer.WriteLine(toolbarsViewMenu); //виев меню
+
+                writer.WriteLine(toolbars);//панели
+
+                writer.WriteLine(configman);//команды
+                writer.WriteLine(toolbarsCmd);//команды меню
+
+                writer.WriteLine(ribbon);//лента
+                writer.WriteLine(accelerators);//горячие кнопки
             }
-            //! в нанокад бага не умеет в ком строке UTF-8 латиницу, поэтому в АСКИ
-            //using (StreamWriter writer = new StreamWriter(cfgFilePath, false, Encoding.GetEncoding(1251)))
-            //{
-            //    #region Регистрация команд
-            //   
-            //    foreach (IGrouping<string, string[]> commandGroup in commands)
-            //    {
-            //        foreach (string[] commandData in commandGroup)
-            //        {
-
-            //            writer.WriteLine(
-            //                $"\r\n[\\configman\\commands\\{commandData[1]}]" +
-            //                $"\r\nweight=i10" +
-            //                $"\r\ncmdtype=i1" +
-            //                $"\r\nintername=s{commandData[1]}" +
-            //                $"\r\nDispName=s{commandData[0]}" +
-            //                $"\r\nStatusText=s{commandData[2]}");
-
-            //            if (!string.IsNullOrEmpty(commandData[12]))//иконки из dll
-            //            {
-            //                writer.WriteLine(
-            //                  $"BitmapDll11=s{commandData[11]}" +
-            //                  $"\r\nIcon=s{commandData[12]}"
-            //                  );
-            //            }
-            //            else if (!string.IsNullOrEmpty(commandData[11])) //прописана  иконка с относительным путем и расширением
-            //            {
-            //                writer.WriteLine(
-            //                    $"BitmapDll11=s{commandData[11]}");
-            //            }
-            //            else //иконка не прописана, имя иконки название команды в каталоге \\icons
-            //            {
-            //                writer.WriteLine(
-            //                     $"BitmapDll11=sicons\\{commandData[1]}");
-            //            }
-            //        }
-            //    }
-
-            //    #endregion
-            //    #region Классическое меню
-
-            //    //header
-            //    if (!string.IsNullOrEmpty(rootName))
-            //    {
-            //        writer.WriteLine(
-            //        "\r\n[\\menu]" +
-            //        $"\r\n[\\menu\\{rootName}]" +
-            //        $"\r\nName=s{rootName}" +
-            //        $"\r\n[\\menu\\{rootMenu}_Menu]" +
-            //        $"\r\nName=s{addinName}");
-            //    }
-            //    else
-            //    {
-            //        writer.WriteLine(
-            //        "\r\n[\\menu]" +
-            //        $"\r\n[\\menu\\{rootMenu}_Menu]" +
-            //        $"\r\nName=s{addinName}");
-            //    }
-
-
-
-            //    foreach (IGrouping<string, string[]> commandGroup in commands)
-            //    {
-            //        writer.WriteLine(
-            //            $@"[\menu\{rootMenu}_Menu\{commandGroup.Key}]" +
-            //            $"\r\nname=s{commandGroup.Key}");
-
-            //        foreach (string[] commandData in commandGroup)
-            //        {
-            //            writer.WriteLine(
-            //                $@"[\menu\{rootMenu}_Menu\{commandGroup.Key}\s{commandData[1]}]" +
-            //                $"\r\nname=s{commandData[0]}" +
-            //                $"\r\nIntername=s{commandData[1]}");
-            //        }
-            //    }
-
-            //    #endregion
-
-            //    #region Панели инструментов
-
-
-            //    //todo добавить в [\menu\View\toolbars] и ...[\ToolbarPopupMenu\
-            //    string toolbarLine = "\r\n[\\toolbars]";
-            //    string toolbarLineCmd = "";
-
-            //    //writer.WriteLine("\r\n[\\toolbars]");
-
-            //    foreach (IGrouping<string, string[]> commandGroup in commands)
-            //    {
-            //        var panelName = $"{addinName}_{commandGroup.Key.Replace(' ', '_')}";
-
-
-            //        //tool bar
-            //        toolbarLine += $"\n[\\toolbars\\{panelName}]" +
-            //                $"\r\nname=s{commandGroup.Key}\n" /*+
-            //     $"\r\nIntername=s{panelName}"*/;
-
-            //        //writer.WriteLine($"[\\toolbars\\{panelName}]" +
-            //        //        $"\r\nname=s{commandGroup.Key}" /*+
-            //        //        $"\r\nIntername=s{panelName}"*/);
-
-            //        //cmd
-            //        toolbarLineCmd += $"[\\configman\\commands\\ShowToolbar_{panelName}]\n";
-            //        toolbarLineCmd += $"weight=i0\n";
-            //        toolbarLineCmd += $"cmdtype=i0\n";
-            //        toolbarLineCmd += $"intername=sShowToolbar_{panelName}\n";
-            //        /* добавить
-            //            LocalName=sПанель_публикации_PlotSPDS
-            //            BitmapDll11=sPlotSPDS_Res.dll
-            //            Icon12=sPLOT
-            //            StatusText=sПоказать/Скрыть панель PlotSPDS
-            //            ; ToolTipText=sПоказать/Скрыт панель PlotSPDS
-            //            DispName0=sПоказать/Скрыть панель PlotSPDS
-            //        */
-            //        foreach (string[] commandData in commandGroup)
-            //        {
-            //            toolbarLine += $"[\\toolbars\\{panelName}\\{commandData[1]}]" +
-            //                         $"\r\nIntername=s{commandData[1]}\n";
-
-            //            //writer.WriteLine(
-            //            //    $"[\\toolbars\\{panelName}\\{commandData[1]}]" +
-            //            //    $"\r\nIntername=s{commandData[1]}");
-            //        }
-            //    }
-            //    writer.WriteLine(toolbarLine);
-            //    writer.WriteLine(toolbarLineCmd);
-
-            //    #endregion
-
-            //    #region  [\menu\View\toolbars]
-            //    /*
-            //    [\menu\View]
-            //    [\menu\View\toolbars]
-            //    [\menu\View\toolbars\drzTools]
-            //    Name=sdrzTools
-            //    [\menu\View\toolbars\drzTools\ShowToolbar_Correct_Blocks]
-            //    Name=sCorrect Blocks
-            //    InterName=sShowToolbar_Correct_Blocks
-
-            //    */
-            //    #endregion
-
-
-            //    #region [\ToolbarPopupMenu\
-
-            //    #endregion
-
-            //    //todo [\Accelerators]
-            //}
-
-
-
-
-
-
-
-
             //группировка по PanelName3
             List<IGrouping<string, CommandDescription>> groups = readdata
                                                                     .GroupBy
