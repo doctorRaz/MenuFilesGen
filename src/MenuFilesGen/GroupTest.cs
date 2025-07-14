@@ -3,9 +3,11 @@ using MenuFilesGen.Repositories;
 using NickBuhro.Translit;
 using System;
 using System.Collections.Generic;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace MenuFilesGen
 {
@@ -181,6 +183,9 @@ namespace MenuFilesGen
                     }
                 }
             }
+
+            #region Save *.cfg            
+
             using (StreamWriter writer = new StreamWriter(cfgFilePath, false, Encoding.GetEncoding(65001)))
             //using (StreamWriter writer = new StreamWriter(cfgFilePath, false, new UTF8Encoding(false)))
             //using (StreamWriter writer = new StreamWriter(cfgFilePath, false, Encoding.GetEncoding(1251)))
@@ -197,12 +202,129 @@ namespace MenuFilesGen
                 writer.WriteLine(ribbon);//лента
                 writer.WriteLine(accelerators);//горячие кнопки
             }
+
+            #endregion
+
             //группировка по PanelName3
-            List<IGrouping<string, CommandDescription>> groups = readdata
+            List<IGrouping<string, CommandDescription>> groupsPanel = readdata
                                                                     .GroupBy
                                                                      (e => e.PanelName3).ToList();
 
-            Console.ReadKey();
+            #region Ribbon
+            // Ленточное меню
+            //Создание XML документа 
+            var xDoc = new XDocument();
+            //Корневой элемент
+            var ribbonRoot = new XElement("RibbonRoot");
+            xDoc.Add(ribbonRoot);
+
+            var ribbonPanelSourceCollection = new XElement("RibbonPanelSourceCollection");
+            ribbonRoot.Add(ribbonPanelSourceCollection);
+
+            var ribbonTabSourceCollection = new XElement("RibbonTabSourceCollection");
+            ribbonRoot.Add(ribbonTabSourceCollection);
+
+            var ribbonTabSource = new XElement("RibbonTabSource");
+            ribbonTabSource.Add(new XAttribute("Text", addinName));
+            ribbonTabSource.Add(new XAttribute("UID", $"{addinName.Replace(" ", "")}_Tab"));
+            ribbonTabSourceCollection.Add(ribbonTabSource);
+
+            foreach (IGrouping<string, CommandDescription> cmd in groupsPanel)
+            //foreach (IGrouping<string, string[]> commandGroup in commands)
+            {
+                var ribbonPanelSource = new XElement("RibbonPanelSource");
+                ribbonPanelSource.Add(new XAttribute("UID", cmd.Key));
+                ribbonPanelSource.Add(new XAttribute("Text", cmd.Key));
+                ribbonPanelSourceCollection.Add(ribbonPanelSource);
+
+                // Временный контейнер для сбора кнопок
+                var panelButtons = new XElement("Temp");
+
+                // Группируем команды по тому, объединяются ли они в RibbonSplitButton5
+                List<IGrouping<string, CommandDescription>> unitedCommands = cmd.GroupBy(c => c.RibbonSplitButton5).ToList();
+
+                foreach (IGrouping<string, CommandDescription> unitedCommandGroup in unitedCommands)
+                {
+                    XElement container = panelButtons;
+                    if (!string.IsNullOrWhiteSpace(unitedCommandGroup.Key))
+                    {
+                        var ribbonSplitButton = new XElement("RibbonSplitButton");
+                        ribbonSplitButton.Add(new XAttribute("Text", unitedCommandGroup.Key));
+                        ribbonSplitButton.Add(new XAttribute("Behavior", "SplitFollowStaticText"));
+                        ribbonSplitButton.Add(new XAttribute("ButtonStyle", unitedCommandGroup. First().SizeFeed4));
+
+                        panelButtons.Add(ribbonSplitButton);
+                        container = ribbonSplitButton;
+                    }
+
+                    foreach (CommandDescription commandData in unitedCommandGroup)
+                        container.Add(CreateButton(commandData));
+                }
+
+                var sortedButtons = panelButtons
+                    .Elements()
+                    .GroupBy(button => button.Attributes().First(attr => attr.Name == "ButtonStyle").Value.Contains("Small"))
+                    .ToDictionary(g => g.Key);
+
+                if (sortedButtons.ContainsKey(false))
+                {
+                    foreach (var button in sortedButtons[false])
+                        ribbonPanelSource.Add(button);
+                }
+
+                if (sortedButtons.ContainsKey(true))
+                {
+                    XElement ribbonRowPanel = null;
+                    var ribbonRowPanelButtonsCount = 3;
+
+                    foreach (var button in sortedButtons[true])
+                    {
+                        if (ribbonRowPanelButtonsCount == 3)
+                        {
+                            ribbonRowPanel = new XElement("RibbonRowPanel");
+                            ribbonPanelSource.Add(ribbonRowPanel);
+                            ribbonRowPanelButtonsCount = 0;
+                        }
+
+                        var ribbonRow = new XElement("RibbonRow");
+                        ribbonRow.Add(button);
+                        ribbonRowPanel.Add(ribbonRow);
+
+                        ribbonRowPanelButtonsCount++;
+                    }
+                }
+
+                var ribbonPanelSourceReference = new XElement("RibbonPanelSourceReference");
+                ribbonPanelSourceReference.Add(new XAttribute("PanelId", cmd.Key));
+                ribbonTabSource.Add(ribbonPanelSourceReference);
+            }
+
+            xDoc.Save(cuiFilePath);
+
+            // Удаление .cuix файла, если он существует
+            if (File.Exists(cuixFilePath))
+                File.Delete(cuixFilePath);
+
+            // Создание архива (.cuix), добавление в него сформированного .xml файла
+            using (var zip = ZipFile.Open(cuixFilePath, ZipArchiveMode.Create))
+            {
+                zip.CreateEntryFromFile(cuiFilePath, "RibbonRoot.cui");
+            }
+
+            // Удаление ribbon.cui файла, если он существует
+            if (File.Exists(cuiFilePath))
+                File.Delete(cuiFilePath);
+
+            MessageBox.Show($"Файлы {addinName}.cfg и {addinName}.cuix сохранены в папке {directoryPath}");
+
+
+
+
+            #endregion
+
+             
+
+            //Console.ReadKey();
 
         }
 
@@ -261,47 +383,21 @@ namespace MenuFilesGen
             }
             return readdata;
         }
-    }
 
-    public static class Test
-    {
-
-        //https://dotnettutorials.net/lesson/groupby-in-linq/
-        public static void prg()
+        public static XElement CreateButton(CommandDescription commandData)
         {
-            var hierarchicalGrouping = Employee.GetAllEmployees()
-           .GroupBy(e => e.Department)
-           .Select(departmentGroup => new
-           {
-               Department = departmentGroup.Key,
-               Roles = departmentGroup
-                   .GroupBy(e => e.Role)
-                   .Select(roleGroup => new
-                   {
-                       Role = roleGroup.Key,
-                       Employees = roleGroup.ToList()
-                   })
-                   .ToList()
-           })
-           .ToList();
-            foreach (var department in hierarchicalGrouping)
-            {
-                Console.WriteLine($"Department: {department.Department}");
-                foreach (var role in department.Roles)
-                {
-                    Console.WriteLine($"  Role: {role.Role}");
-                    foreach (var employee in role.Employees)
-                    {
-                        Console.WriteLine($"    - {employee.Name}");
-                    }
-                }
-            }
-
-            Console.ReadKey();
+            var ribbonCommandButton = new XElement("RibbonCommandButton");
+            ribbonCommandButton.Add(new XAttribute("Text", commandData.DispName0));
+            ribbonCommandButton.Add(new XAttribute("ButtonStyle", commandData.SizeFeed4));
+            ribbonCommandButton.Add(new XAttribute("MenuMacroID", commandData.Intername1));
+            return ribbonCommandButton;
         }
-
     }
+
+
+
 }
+
 
 public class CommandDescription
 {
@@ -321,25 +417,7 @@ public class CommandDescription
     public string RootData13 { get; set; }
 
 }
-class Employee
-{
-    public string Name { get; set; }
-    public string Department { get; set; }
-    public string Role { get; set; }
-    public static List<Employee> GetAllEmployees()
-    {
-        List<Employee> employees = new List<Employee>
-            {
-                new Employee { Name = "Alice", Department = "IT", Role = "Developer" },
-                new Employee { Name = "Bob", Department = "IT", Role = "Tester" },
-                new Employee { Name = "Charlie", Department = "HR", Role = "Recruiter" },
-                new Employee { Name = "David", Department = "IT", Role = "Developer" },
-                new Employee { Name = "Eve", Department = "HR", Role = "Manager" },
-                new Employee { Name = "Frank", Department = "IT", Role = "Developer" }
-            };
-        return employees;
-    }
-}
+
 
 
 
