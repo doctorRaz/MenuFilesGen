@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NickBuhro.Translit;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -94,32 +95,36 @@ namespace MenuFilesGen
                 {
                     string panelName = panel.panel;
 
-                    string panelNameCmd = $"{addinName}_{panelName.Replace(' ', '_')}";//
 
+                    string panelNameRu = $"{addinName}_{panelName.Replace(' ', '_')}";//todo бага в меню вид панель с именем команд 
+                    var panelNameEn=Transliteration.CyrillicToLatin(panelNameRu, Language.Russian);
+
+                    string intername = $"ShowToolbar_{panelNameEn}";
+                    string localName = $"Панель_{panelNameRu}";
                     #region Панели
 
                     //панели
-                    toolbars += $"{newLine}{newLine}[\\toolbars\\{panelNameCmd}]" +
+                    toolbars += $"{newLine}{newLine}[\\toolbars\\{panelNameEn}]" +
                                 $"{newLine}name=s{panelName}";
 
                     //команды
-                    toolbarsCmd += $"{newLine}{newLine}[\\configman\\commands\\ShowToolbar_{panelNameCmd}]" +
+                    toolbarsCmd += $"{newLine}{newLine}[\\configman\\commands\\{intername}]" +
                                     $"{newLine}weight=i10" +
                                     $"{newLine}cmdtype=i0" +
-                                    $"{newLine}intername=sShowToolbar_{panelNameCmd}" +
+                                    $"{newLine}Intername=s{intername}" +
                                     $"{newLine}StatusText=sОтображение панели {panelName}" +
                                     $"{newLine}ToolTipText=sОтображение панели {panelName}" +
                                     $"{newLine}DispName=sОтображение панели {panelName}" +
-                                    $"{newLine}LocalName=sПанель_{panelNameCmd}";
+                                    $"{newLine}LocalName=s{localName}";
 
                     //поп меню
-                    toolbarPopupMenu += $"{newLine}[\\ToolbarPopupMenu\\{addinName}\\ShowToolbar_{panelNameCmd}]"+
+                    toolbarPopupMenu += $"{newLine}[\\ToolbarPopupMenu\\{addinName}\\{intername}]"+
                      $"{newLine}Name=s{panelName}"+
-                     $"{newLine}InterName=sShowToolbar_{panelNameCmd}";
+                     $"{newLine}InterName=s{intername}";
                     //вью меню
-                    toolbarsViewMenu += $"{newLine}[\\menu\\View\\toolbars\\{addinName}\\ShowToolbar_{panelNameCmd}]"+
+                    toolbarsViewMenu += $"{newLine}[\\menu\\View\\toolbars\\{addinName}\\{intername}]"+
                                         $"{newLine}Name=s{panelName}"+
-                                        $"{newLine}InterName=sShowToolbar_{panelNameCmd}";
+                                        $"{newLine}InterName=s{intername}";
 
                     #endregion
 
@@ -164,14 +169,15 @@ namespace MenuFilesGen
                         #endregion
 
                         #region Панели
-                        toolbars += $"{newLine}[\\toolbars\\{panelNameCmd}\\{cmd.Intername1}]" +
+                        toolbars += $"{newLine}[\\toolbars\\{panelNameEn}\\{cmd.Intername1}]" +
                                     $"{newLine}Intername=s{cmd.Intername1}";
                         #endregion
                     }
                 }
             }
-
-            using (StreamWriter writer = new StreamWriter(cfgFilePath, false, Encoding.GetEncoding(1251)))
+            using (StreamWriter writer = new StreamWriter(cfgFilePath, false, Encoding.GetEncoding(65001)))
+            //using (StreamWriter writer = new StreamWriter(cfgFilePath, false, new UTF8Encoding(false)))
+            //using (StreamWriter writer = new StreamWriter(cfgFilePath, false, Encoding.GetEncoding(1251)))
             {
                 writer.WriteLine(menu);//меню
                 writer.WriteLine(toolbarPopupMenu); //поп меню

@@ -13,4 +13,8 @@
     <Content Include="Icons\Yellow.ico" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NickBuhro.Translit" Version="1.4.5" />
+  </ItemGroup>
+
 </Project>
