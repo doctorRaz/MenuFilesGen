@@ -16,7 +16,7 @@ namespace MenuFilesGen
     {
         public void Run(string fileName)
         {
-      
+
 
             ColumnNumbers _columnNumbers = new ColumnNumbers();
             CommandRepository rep = new CommandRepository();
@@ -107,7 +107,6 @@ namespace MenuFilesGen
 
                     string panelNameRu = $"{addinName}_{panelName.Replace(' ', '_')}";//todo бага в меню вид панель с именем команд 
                     string panelNameEn = Transliteration.CyrillicToLatin(panelNameRu, Language.Russian);
-                    //panelNameEn = panelNameEn.Replace('`', '0');
 
                     string intername = $"ShowToolbar_{panelNameEn}";
                     string localName = $"Панель_{panelNameRu}";
@@ -149,12 +148,26 @@ namespace MenuFilesGen
                     foreach (CommandDefinition cmd in panel.command)
                     {
                         #region Регистрация команд
+
+                        string _toolTipText = !string.IsNullOrEmpty(cmd.ToolTipText) ? $"{newLine}ToolTipText=s{cmd.ToolTipText}" : "";
+                        string _localName = !string.IsNullOrEmpty(cmd.LocalName) ? $"{newLine}LocalName=s{cmd.LocalName}" : "";
+                        string _realCommandName = !string.IsNullOrEmpty(cmd.RealCommandName) ? $"{newLine}RealCommandName=s{cmd.RealCommandName}" : "";
+                        string _keyword = !string.IsNullOrEmpty(cmd.Keyword) ? $"{newLine}Keyword=s{cmd.Keyword}" : "";
+
                         configman += $"{newLine}{newLine}[\\configman\\commands\\{cmd.InterName}]" +
-                                     $"{newLine}weight=i10" +
-                                     $"{newLine}cmdtype=i1" +
+                                     $"{newLine}weight=i{cmd.Weight}" +
+                                     $"{newLine}cmdtype=i{cmd.CmdType}" +
                                      $"{newLine}intername=s{cmd.InterName}" +
                                      $"{newLine}DispName=s{cmd.DispName}" +
-                                     $"{newLine}StatusText=s{cmd.StatusText}";
+                                     $"{newLine}StatusText=s{cmd.StatusText}" +
+                                     _toolTipText +
+                                     _localName +
+                                     _realCommandName +
+                                     _keyword;
+
+
+
+
 
                         if (!string.IsNullOrEmpty(cmd.IconName))//иконки из dll
                         {
@@ -165,14 +178,19 @@ namespace MenuFilesGen
                         {
                             configman += $"{newLine}BitmapDll=s{cmd.ResourceDllName}";
                         }
-                        else //иконка не прописана, имя иконки название команды в каталоге \\icons
+                        else //иконка не прописана, имя иконки = название команды в каталоге \\icons
                         {
                             configman += $"{newLine}BitmapDll=sicons\\{cmd.InterName}.ico";
                         }
                         #endregion
 
+                        if (!string.IsNullOrEmpty(cmd.Accelerators))
+                        {
+                            accelerators += $"{newLine}{cmd.InterName}=s{cmd.Accelerators}";
 
-                        if(cmd.DontMenu) continue;// не добавлять в меню пропуск
+                        }
+
+                        if (cmd.DontMenu) continue;// не добавлять в меню пропуск
                         #region Классическое меню
 
                         menu += $"{newLine}[\\menu\\{rootMenu}\\{panelName}\\s{cmd.InterName}]" +
@@ -264,7 +282,7 @@ namespace MenuFilesGen
 
                     foreach (CommandDefinition commandData in unitedCommandGroup)
                     {
-                        if(commandData.DontMenu) continue;
+                        if (commandData.DontMenu) continue;
                         container.Add(CreateButton(commandData));
                     }
                 }

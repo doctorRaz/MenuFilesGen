@@ -23,6 +23,7 @@
             WeightColumn = 14;
             CmdTypeColumn = 15;
             ToolTipTextColumn = 16;
+            AcceleratorsColumn = 17;
         }
 
         /// <summary> Номер колонки для имени команды </summary>
@@ -48,7 +49,7 @@
 
         /// <summary>библиотека ресурсов или иконка с относительным путем </summary>
         public int ResourseDllNameColumn { get; }
-        
+
         /// <summary>
         /// имя ресурсной иконки
         /// </summary>
@@ -69,13 +70,16 @@
         /// <summary> ключевое слово </summary>
         public int KeywordColumn { get; }
 
-         /// <summary>вес команды???)) </summary>
+        /// <summary>вес команды???)) </summary>
         public int WeightColumn { get; }
 
-         /// <summary> подсказки </summary>
+        /// <summary> подсказки </summary>
         public int ToolTipTextColumn { get; }
 
-      /// <summary>Тип команды, контекст выполнения , документ/приложение</summary>
+        /// <summary>Тип команды, контекст выполнения , документ/приложение</summary>
         public int CmdTypeColumn { get; }
+
+        /// <summary>горячие кнопки</summary>
+        public int AcceleratorsColumn { get; }
     }
 }

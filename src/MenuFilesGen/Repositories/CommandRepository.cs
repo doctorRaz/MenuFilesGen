@@ -64,6 +64,8 @@ namespace MenuFilesGen.Repositories
                         Keyword = o[columnNumbers.KeywordColumn].Trim(),
                         Weight =Utils.StringToInt( o[columnNumbers.WeightColumn].Trim(),10),
                         CmdType =Utils.StringToInt( o[columnNumbers.CmdTypeColumn].Trim(),1),
+                        ToolTipText=o[columnNumbers.ToolTipTextColumn].Trim(),
+                        Accelerators=o[columnNumbers.AcceleratorsColumn].Trim(),
                     };
 
 
