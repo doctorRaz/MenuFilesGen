@@ -171,6 +171,8 @@ namespace MenuFilesGen
                         }
                         #endregion
 
+
+                        if(cmd.DontMenu) continue;// не добавлять в меню пропуск
                         #region Классическое меню
 
                         menu += $"{newLine}[\\menu\\{rootMenu}\\{panelName}\\s{cmd.InterName}]" +
@@ -261,7 +263,10 @@ namespace MenuFilesGen
                     }
 
                     foreach (CommandDefinition commandData in unitedCommandGroup)
+                    {
+                        if(commandData.DontMenu) continue;
                         container.Add(CreateButton(commandData));
+                    }
                 }
 
                 var sortedButtons = panelButtons
