@@ -194,7 +194,7 @@ namespace MenuFilesGen
                         LocalName=sПанель_публикации_PlotSPDS
                         BitmapDll11=sPlotSPDS_Res.dll
                         Icon12=sPLOT
-                        StatusText=sПоказать/Скрыть панель PlotSPDS
+                        StatusTextColumn=sПоказать/Скрыть панель PlotSPDS
                         ; ToolTipText=sПоказать/Скрыт панель PlotSPDS
                         DispName0=sПоказать/Скрыть панель PlotSPDS
                     */

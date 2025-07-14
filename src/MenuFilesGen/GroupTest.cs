@@ -16,13 +16,15 @@ namespace MenuFilesGen
     {
         public void Run(string fileName)
         {
-            ColumnNumbers  _columnNumbers = new ColumnNumbers();
+      
+
+            ColumnNumbers _columnNumbers = new ColumnNumbers();
             CommandRepository rep = new CommandRepository();
             rep.ReadFromCsv(fileName, _columnNumbers);
 
             // https://stackoverflow.com/questions/1159233/multi-level-grouping-in-linq
 
-            List<CommandDescription> readdata = GetRes(fileName);//прочитали файл в класс
+            //List<CommandDescription> readdata = GetRes(fileName);//прочитали файл в класс
 
             string newLine = Environment.NewLine;
 
@@ -34,7 +36,7 @@ namespace MenuFilesGen
             string cuixFilePath = $"{directoryPath}\\{addinName}.cuix";
 
             //группируем по RootData13 и PanelName3
-            var hierarchicalGrouping = GetHierarchicalGrouping(readdata);
+            //var hierarchicalGrouping = GetHierarchicalGrouping(readdata);
 
             //собираем в строки конфиг
 
@@ -45,10 +47,10 @@ namespace MenuFilesGen
 
             //команды
             string configman = $"{newLine}[\\configman]" +
-                        $"{newLine}[\\configman\\commands]";//имхо это лишнее надо проверить
+                        $"{newLine}[\\configman\\commands]";//todo это лишнее надо проверить
 
             //горячие клавиши
-            string accelerators = $"{newLine}[\\Accelerators]";
+            string accelerators = $"{newLine}[\\Accelerators]";//todo добавить столбецхоткеев
             /* [\Accelerators]
                 drz_PublishMC=sCtrl+Shift+P
             */
@@ -70,11 +72,11 @@ namespace MenuFilesGen
             string toolbarsCmd = $"{newLine}; Команды вызова панелей";
 
             //меню вид панелей
-            string toolbarsViewMenu = $"{newLine};View меню"+
+            string toolbarsViewMenu = $"{newLine};View меню" +
                                         $"{newLine}[\\menu\\View\\toolbars\\{addinName}]" +
                                         $"{newLine}Name=s{addinName}";
 
-            foreach (var root in hierarchicalGrouping)
+            foreach (var root in rep.HierarchicalGrouping)
             {
                 string rootName = root.root;
                 string rootMenu = $"{addinName}";
@@ -104,11 +106,12 @@ namespace MenuFilesGen
 
 
                     string panelNameRu = $"{addinName}_{panelName.Replace(' ', '_')}";//todo бага в меню вид панель с именем команд 
-                    string panelNameEn =Transliteration.CyrillicToLatin(panelNameRu, Language.Russian);
+                    string panelNameEn = Transliteration.CyrillicToLatin(panelNameRu, Language.Russian);
                     //panelNameEn = panelNameEn.Replace('`', '0');
 
                     string intername = $"ShowToolbar_{panelNameEn}";
                     string localName = $"Панель_{panelNameRu}";
+
                     #region Панели
 
                     //панели
@@ -126,12 +129,12 @@ namespace MenuFilesGen
                                     $"{newLine}LocalName=s{localName}";
 
                     //поп меню
-                    toolbarPopupMenu += $"{newLine}[\\ToolbarPopupMenu\\{addinName}\\{intername}]"+
-                     $"{newLine}Name=s{panelName}"+
+                    toolbarPopupMenu += $"{newLine}[\\ToolbarPopupMenu\\{addinName}\\{intername}]" +
+                     $"{newLine}Name=s{panelName}" +
                      $"{newLine}InterName=s{intername}";
                     //вью меню
-                    toolbarsViewMenu += $"{newLine}[\\menu\\View\\toolbars\\{addinName}\\{intername}]"+
-                                        $"{newLine}Name=s{panelName}"+
+                    toolbarsViewMenu += $"{newLine}[\\menu\\View\\toolbars\\{addinName}\\{intername}]" +
+                                        $"{newLine}Name=s{panelName}" +
                                         $"{newLine}InterName=s{intername}";
 
                     #endregion
@@ -143,42 +146,42 @@ namespace MenuFilesGen
 
                     #endregion
 
-                    foreach (CommandDescription cmd in panel.command)
+                    foreach (CommandDefinition cmd in panel.command)
                     {
                         #region Регистрация команд
-                        configman += $"{newLine}{newLine}[\\configman\\commands\\{cmd.Intername1}]" +
+                        configman += $"{newLine}{newLine}[\\configman\\commands\\{cmd.InterName}]" +
                                      $"{newLine}weight=i10" +
                                      $"{newLine}cmdtype=i1" +
-                                     $"{newLine}intername=s{cmd.Intername1}" +
-                                     $"{newLine}DispName=s{cmd.DispName0}" +
-                                     $"{newLine}StatusText=s{cmd.Description2}";
+                                     $"{newLine}intername=s{cmd.InterName}" +
+                                     $"{newLine}DispName=s{cmd.DispName}" +
+                                     $"{newLine}StatusText=s{cmd.StatusText}";
 
-                        if (!string.IsNullOrEmpty(cmd.Icon12))//иконки из dll
+                        if (!string.IsNullOrEmpty(cmd.IconName))//иконки из dll
                         {
-                            configman += $"{newLine}BitmapDll=s{cmd.BitmapDll11}" +
-                                         $"{newLine}Icon=s{cmd.Icon12}";
+                            configman += $"{newLine}BitmapDll=s{cmd.ResourceDllName}" +
+                                         $"{newLine}Icon=s{cmd.IconName}";
                         }
-                        else if (!string.IsNullOrEmpty(cmd.BitmapDll11)) //прописана  иконка с относительным путем и расширением
+                        else if (!string.IsNullOrEmpty(cmd.ResourceDllName)) //прописана  иконка с относительным путем и расширением
                         {
-                            configman += $"{newLine}BitmapDll=s{cmd.BitmapDll11}";
+                            configman += $"{newLine}BitmapDll=s{cmd.ResourceDllName}";
                         }
                         else //иконка не прописана, имя иконки название команды в каталоге \\icons
                         {
-                            configman += $"{newLine}BitmapDll=sicons\\{cmd.Intername1}.ico";
+                            configman += $"{newLine}BitmapDll=sicons\\{cmd.InterName}.ico";
                         }
                         #endregion
 
                         #region Классическое меню
 
-                        menu += $"{newLine}[\\menu\\{rootMenu}\\{panelName}\\s{cmd.Intername1}]" +
-                                $"{newLine}name=s{cmd.DispName0}" +
-                                $"{newLine}Intername=s{cmd.Intername1}";
+                        menu += $"{newLine}[\\menu\\{rootMenu}\\{panelName}\\s{cmd.InterName}]" +
+                                $"{newLine}name=s{cmd.DispName}" +
+                                $"{newLine}Intername=s{cmd.InterName}";
 
                         #endregion
 
                         #region Панели
-                        toolbars += $"{newLine}[\\toolbars\\{panelNameEn}\\{cmd.Intername1}]" +
-                                    $"{newLine}Intername=s{cmd.Intername1}";
+                        toolbars += $"{newLine}[\\toolbars\\{panelNameEn}\\{cmd.InterName}]" +
+                                    $"{newLine}Intername=s{cmd.InterName}";
                         #endregion
                     }
                 }
@@ -205,10 +208,10 @@ namespace MenuFilesGen
 
             #endregion
 
-            //группировка по PanelName3
-            List<IGrouping<string, CommandDescription>> groupsPanel = readdata
-                                                                    .GroupBy
-                                                                     (e => e.PanelName3).ToList();
+            //группировка по PanelName
+            List<IGrouping<string, CommandDefinition>> groupsPanel = rep.CommandDefinitions
+                                                            .GroupBy
+                                                             (e => e.PanelName).ToList();
 
             #region Ribbon
             // Ленточное меню
@@ -229,7 +232,7 @@ namespace MenuFilesGen
             ribbonTabSource.Add(new XAttribute("UID", $"{addinName.Replace(" ", "")}_Tab"));
             ribbonTabSourceCollection.Add(ribbonTabSource);
 
-            foreach (IGrouping<string, CommandDescription> cmd in groupsPanel)
+            foreach (IGrouping<string, CommandDefinition> cmd in groupsPanel)
             //foreach (IGrouping<string, string[]> commandGroup in commands)
             {
                 var ribbonPanelSource = new XElement("RibbonPanelSource");
@@ -241,9 +244,9 @@ namespace MenuFilesGen
                 var panelButtons = new XElement("Temp");
 
                 // Группируем команды по тому, объединяются ли они в RibbonSplitButton5
-                List<IGrouping<string, CommandDescription>> unitedCommands = cmd.GroupBy(c => c.RibbonSplitButton5).ToList();
+                List<IGrouping<string, CommandDefinition>> unitedCommands = cmd.GroupBy(c => c.RibbonSplitButtonName).ToList();
 
-                foreach (IGrouping<string, CommandDescription> unitedCommandGroup in unitedCommands)
+                foreach (IGrouping<string, CommandDefinition> unitedCommandGroup in unitedCommands)
                 {
                     XElement container = panelButtons;
                     if (!string.IsNullOrWhiteSpace(unitedCommandGroup.Key))
@@ -251,13 +254,13 @@ namespace MenuFilesGen
                         var ribbonSplitButton = new XElement("RibbonSplitButton");
                         ribbonSplitButton.Add(new XAttribute("Text", unitedCommandGroup.Key));
                         ribbonSplitButton.Add(new XAttribute("Behavior", "SplitFollowStaticText"));
-                        ribbonSplitButton.Add(new XAttribute("ButtonStyle", unitedCommandGroup. First().SizeFeed4));
+                        ribbonSplitButton.Add(new XAttribute("ButtonStyle", unitedCommandGroup.First().RibbonSize));
 
                         panelButtons.Add(ribbonSplitButton);
                         container = ribbonSplitButton;
                     }
 
-                    foreach (CommandDescription commandData in unitedCommandGroup)
+                    foreach (CommandDefinition commandData in unitedCommandGroup)
                         container.Add(CreateButton(commandData));
                 }
 
@@ -322,30 +325,30 @@ namespace MenuFilesGen
 
             #endregion
 
-             
+
 
             //Console.ReadKey();
 
         }
 
-        public dynamic GetHierarchicalGrouping(List<CommandDescription> readdata)
-        {
-            var hierarchicalGrouping = readdata
-                .GroupBy(e => e.RootData13)
-                .Select(root => new
-                {
-                    root = root.Key,
-                    panel = root
-                .GroupBy(e => e.PanelName3)
-                .Select(panel => new
-                {
-                    panel = panel.Key,
-                    command = panel.ToList()
-                }).ToList()
-                }).ToList();
-            return hierarchicalGrouping;
+        //public dynamic GetHierarchicalGrouping(List<CommandDefinition> readdata)
+        //{
+        //    var hierarchicalGrouping = readdata
+        //        .GroupBy(e => e.RootData13)
+        //        .Select(root => new
+        //        {
+        //            root = root.Key,
+        //            panel = root
+        //        .GroupBy(e => e.PanelName3)
+        //        .Select(panel => new
+        //        {
+        //            panel = panel.Key,
+        //            command = panel.ToList()
+        //        }).ToList()
+        //        }).ToList();
+        //    return hierarchicalGrouping;
 
-        }
+        //}
 
 
         /// <summary>
@@ -353,43 +356,43 @@ namespace MenuFilesGen
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns></returns>
-        public List<CommandDescription> GetRes(string fileName)
-        {
-            List<CommandDescription> readdata;
-            using (StreamReader reader = new StreamReader(fileName))
-            {
-                readdata = reader.ReadToEnd()
-                          .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
-                          .Skip(1).ToList()
-                          .Select(x => x.Split('\t')).ToList()
-                          .Where(c => !(c.Count() > 6 && c[6] == "ИСТИНА"))
-                          .Select(c => new CommandDescription
-                          {
-                              DispName0 = c[0],
-                              Intername1 = c[1],
-                              Description2 = c[2],
-                              PanelName3 = c[3],
-                              SizeFeed4 = c[4],
-                              RibbonSplitButton5 = c[5],
-                              DontTake6 = c[6],
-                              DontDisplay7 = c[7],
-                              Comment8 = c[8],
-                              HelpPriority9 = c[9],
-                              Video10 = c[10],
-                              BitmapDll11 = c[11],
-                              Icon12 = c[12],
-                              RootData13 = c[13]
-                          }).ToList();
-            }
-            return readdata;
-        }
+        //public List<CommandDescription> GetRes(string fileName)
+        //{
+        //    List<CommandDescription> readdata;
+        //    using (StreamReader reader = new StreamReader(fileName))
+        //    {
+        //        readdata = reader.ReadToEnd()
+        //                  .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
+        //                  .Skip(1).ToList()
+        //                  .Select(x => x.Split('\t')).ToList()
+        //                  .Where(c => !(c.Count() > 6 && c[6] == "ИСТИНА"))
+        //                  .Select(c => new CommandDescription
+        //                  {
+        //                      DispName0 = c[0],
+        //                      Intername1 = c[1].Trim(),
+        //                      Description2 = c[2],
+        //                      PanelName3 = c[3],
+        //                      SizeFeed4 = c[4],
+        //                      RibbonSplitButton5 = c[5],
+        //                      DontTake6 = c[6],
+        //                      DontDisplay7 = c[7],
+        //                      Comment8 = c[8],
+        //                      HelpPriority9 = c[9],
+        //                      Video10 = c[10],
+        //                      BitmapDll11 = c[11],
+        //                      Icon12 = c[12],
+        //                      RootData13 = c[13]
+        //                  }).ToList();
+        //    }
+        //    return readdata;
+        //}
 
-        public static XElement CreateButton(CommandDescription commandData)
+        public static XElement CreateButton(CommandDefinition commandData)
         {
             var ribbonCommandButton = new XElement("RibbonCommandButton");
-            ribbonCommandButton.Add(new XAttribute("Text", commandData.DispName0));
-            ribbonCommandButton.Add(new XAttribute("ButtonStyle", commandData.SizeFeed4));
-            ribbonCommandButton.Add(new XAttribute("MenuMacroID", commandData.Intername1));
+            ribbonCommandButton.Add(new XAttribute("Text", commandData.DispName));
+            ribbonCommandButton.Add(new XAttribute("ButtonStyle", commandData.RibbonSize));
+            ribbonCommandButton.Add(new XAttribute("MenuMacroID", commandData.InterName));
             return ribbonCommandButton;
         }
     }
@@ -398,7 +401,7 @@ namespace MenuFilesGen
 
 }
 
-
+/*
 public class CommandDescription
 {
     public string DispName0 { get; set; }
@@ -418,7 +421,7 @@ public class CommandDescription
 
 }
 
-
+*/
 
 
 

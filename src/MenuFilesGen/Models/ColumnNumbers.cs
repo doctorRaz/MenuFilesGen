@@ -6,29 +6,76 @@
     {
         public ColumnNumbers()
         {
-            CommandNameColumn = 0;
-            CommandInternaleNameColumn = 1;
-            CommandDescriptionColumn = 2;
+            DispNameColumn = 0;
+            InternameColumn = 1;
+            StatusTextColumn = 2;
             PanelNameColumn = 3;
-            RibbonNameColumn = 4;
-            RibbonSizeColumn = 5;
-            ResourseDllNameColumn = 11;
-            IconColumn = 12;
+            RibbonSizeColumn = 4;
+            RibbonSplitButtonColumn = 5;
+            DontTakeColumn = 6;
+            DontMenuColumn = 7;
+            ResourseDllNameColumn = 8;
+            IconColumn = 9;
+            RootColumn = 10;
+            LocalNameColumn = 11;
+            RealCommandNameColumn = 12;
+            KeywordColumn = 13;
+            WeightColumn = 14;
+            CmdTypeColumn = 15;
+            ToolTipTextColumn = 16;
         }
+
         /// <summary> Номер колонки для имени команды </summary>
-        public int CommandNameColumn { get; }
+        public int DispNameColumn { get; }
+
         /// <summary> ВНутренне имя команды </summary>
-        public int CommandInternaleNameColumn { get; }
+        public int InternameColumn { get; }
+
         /// <summary> Описание команды </summary>
-        public int CommandDescriptionColumn { get; }
+        public int StatusTextColumn { get; }
+
         /// <summary> Размер кнопки команды в ленте </summary>
         public int RibbonSizeColumn { get; }
-        /// <summary>
-        /// Имя панели
-        /// </summary>
+
+        /// <summary> Имя панели  </summary>
         public int PanelNameColumn { get; }
-        public int RibbonNameColumn { get; }
-        public int IconColumn { get; }
+
+        /// <summary> Имя сплитера ленты  </summary>
+        public int RibbonSplitButtonColumn { get; }
+
+        /// <summary>Не учитывать команду никак и нигде </summary> 
+        public int DontTakeColumn { get; }
+
+        /// <summary>библиотека ресурсов или иконка с относительным путем </summary>
         public int ResourseDllNameColumn { get; }
+        
+        /// <summary>
+        /// имя ресурсной иконки
+        /// </summary>
+        public int IconColumn { get; }
+
+        /// <summary> команду регистрировать но не показывать ни в меню ни в ленте ни в панелях </summary>
+        public int DontMenuColumn { get; }
+
+        /// <summary>  родитель меню  </summary>
+        public int RootColumn { get; }
+
+        /// <summary>  локальное имя команды </summary>
+        public int LocalNameColumn { get; }
+
+        /// <summary> реальное имя команды </summary>
+        public int RealCommandNameColumn { get; }
+
+        /// <summary> ключевое слово </summary>
+        public int KeywordColumn { get; }
+
+         /// <summary>вес команды???)) </summary>
+        public int WeightColumn { get; }
+
+         /// <summary> подсказки </summary>
+        public int ToolTipTextColumn { get; }
+
+      /// <summary>Тип команды, контекст выполнения , документ/приложение</summary>
+        public int CmdTypeColumn { get; }
     }
 }
