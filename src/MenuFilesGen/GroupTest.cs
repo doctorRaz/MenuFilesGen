@@ -1,4 +1,6 @@
-﻿using NickBuhro.Translit;
+﻿using MenuFilesGen.Models;
+using MenuFilesGen.Repositories;
+using NickBuhro.Translit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,9 @@ namespace MenuFilesGen
     {
         public void Run(string fileName)
         {
+            ColumnNumbers  _columnNumbers = new ColumnNumbers();
+            CommandRepository rep = new CommandRepository();
+            rep.ReadFromCsv(fileName, _columnNumbers);
 
             // https://stackoverflow.com/questions/1159233/multi-level-grouping-in-linq
 
@@ -97,7 +102,8 @@ namespace MenuFilesGen
 
 
                     string panelNameRu = $"{addinName}_{panelName.Replace(' ', '_')}";//todo бага в меню вид панель с именем команд 
-                    var panelNameEn=Transliteration.CyrillicToLatin(panelNameRu, Language.Russian);
+                    string panelNameEn =Transliteration.CyrillicToLatin(panelNameRu, Language.Russian);
+                    //panelNameEn = panelNameEn.Replace('`', '0');
 
                     string intername = $"ShowToolbar_{panelNameEn}";
                     string localName = $"Панель_{panelNameRu}";
