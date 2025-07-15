@@ -51,15 +51,12 @@ namespace MenuFilesGen
             string newLine = Environment.NewLine;
 
             string directoryPath = Path.GetDirectoryName(fileName);
-            string addinName = Path.GetFileNameWithoutExtension(fileName);
+            string addinName = rep.addinName;
 
             string cfgFilePath = $"{directoryPath}\\{addinName}.cfg";
             string cuiFilePath = $"{directoryPath}\\RibbonRoot.cui";
             string cuixFilePath = $"{directoryPath}\\{addinName}.cuix";
-
-            //группируем по RootData13 и PanelName3
-            //var hierarchicalGrouping = GetHierarchicalGrouping(readdata);
-
+                        
             //собираем в строки конфиг
 
             //прописываем ленту

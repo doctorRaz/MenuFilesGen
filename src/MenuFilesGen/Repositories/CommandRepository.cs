@@ -13,7 +13,9 @@ namespace MenuFilesGen.Repositories
         /// <summary> Чтение файла обмена (xls)</summary>
         public void ReadFromXls(string xlsFileFullName, ColumnNumbers columnNumbers)
         {
-            XLWorkbook workbook = new XLWorkbook(xlsFileFullName);
+            //XLWorkbook workbook = new XLWorkbook(xlsFileFullName);
+
+            XLWorkbook workbook = new XLWorkbook(new FileStream(xlsFileFullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
 
             Console.WriteLine("Введите номер листа:");
             int wscount = 1;
@@ -34,55 +36,121 @@ namespace MenuFilesGen.Repositories
 
             IXLWorksheet worksheet = workbook.Worksheet(number);
 
-            IXLRangeRows rows = worksheet.RangeUsed().RowsUsed();
+            addinName = worksheet.Name;
+
+            IEnumerable<IXLRangeRow> rows = worksheet.RangeUsed().RowsUsed().Skip(HEADER_ROW_RANGE);
 
             CommandDefinitions = new List<CommandDefinition>();
 
-          
-             
-
-            for(int i =1+ HEADER_ROW_RANGE;i<=rows.Count();++i)
+            foreach (var r in rows)
             {
 
-                IXLRow row =worksheet. Row(i);
 
-                int celN = 7;
-                var cel = row.Cell(celN);
-                var celV = row.Cell(celN).Value;
 
-                var gcel = celV.TryGetText;
+                Console.WriteLine($"DispName\t\t{r.Cell(columnNumbers.DispNameColumn + 1).GetString().Trim()}");
+                Console.WriteLine($"InterName\t\t{r.Cell(columnNumbers.InternameColumn + 1).GetString().Trim()}");
+                Console.WriteLine($"StatusText\t\t{r.Cell(columnNumbers.StatusTextColumn + 1).GetString().Trim()}");
+                Console.WriteLine($"IconName\t\t{r.Cell(columnNumbers.IconColumn + 1).GetString().Trim()}");
+                Console.WriteLine($"ResourceDllName\t\t{r.Cell(columnNumbers.ResourseDllNameColumn + 1).GetString().Trim()}");
+                Console.WriteLine($"PanelName\t\t{r.Cell(columnNumbers.PanelNameColumn + 1).GetString().Trim()}");
+                Console.WriteLine($"RibbonSplitButtonName\t\t{r.Cell(columnNumbers.RibbonSplitButtonColumn + 1).GetString().Trim()}");
+                Console.WriteLine($"RibbonSize\t\t{r.Cell(columnNumbers.RibbonSizeColumn + 1).GetString().Trim()}");
+                Console.WriteLine($"Root\t\t{r.Cell(columnNumbers.RootColumn + 1).GetString().Trim()}");
+                Console.WriteLine($"LocalName\t\t{r.Cell(columnNumbers.LocalNameColumn + 1).GetString().Trim()}");
+                Console.WriteLine($"RealCommandName\t\t{r.Cell(columnNumbers.RealCommandNameColumn + 1).GetString().Trim()}");
+                Console.WriteLine($"Keyword\t\t{r.Cell(columnNumbers.KeywordColumn + 1).GetString().Trim()}");
+                Console.WriteLine($"ToolTipText\t\t{r.Cell(columnNumbers.ToolTipTextColumn + 1).GetString().Trim()}");
+                Console.WriteLine($"Accelerators\t\t{r.Cell(columnNumbers.AcceleratorsColumn + 1).GetString().Trim()}");
+
+                Console.WriteLine($"DontMenu\t\t{r.Cell(columnNumbers.DontMenuColumn + 1).GetString().Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase)}");
+                Console.WriteLine($"DontTake\t\t{r.Cell(columnNumbers.DontTakeColumn + 1).GetString().Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase)}");
+
+                Console.WriteLine($"Weight\t\t{Utils.StringToInt(r.Cell(columnNumbers.WeightColumn + 1).GetString(), 10)}");
+                Console.WriteLine($"CmdType\t\t{Utils.StringToInt(r.Cell(columnNumbers.CmdTypeColumn + 1).GetString(), 1)}");
+
+
+
+
+                Console.WriteLine("******");
+
+                {
+                }
 
                 CommandDefinition res = new CommandDefinition
                 {
-                    DispName = row.Cell(columnNumbers.DispNameColumn+1).Value.ToString().Trim(),
-                    InterName = row.Cell(columnNumbers.InternameColumn+1).Value.ToString().Trim(),
-                    StatusText = row.Cell(columnNumbers.StatusTextColumn + 1).Value.ToString().Trim(),
-                    IconName = row.Cell(columnNumbers.IconColumn + 1).Value.ToString().Trim(),
-                    ResourceDllName = row.Cell(columnNumbers.ResourseDllNameColumn+1).Value.ToString().Trim(),
-                    PanelName = row.Cell(columnNumbers.PanelNameColumn + 1).Value.ToString().Trim(),
-                    RibbonSplitButtonName = row.Cell(columnNumbers.RibbonSplitButtonColumn + 1).Value.ToString().Trim(),
-                    RibbonSize = row.Cell(columnNumbers.RibbonSizeColumn+1).ToString().Trim(),
-                    Root = row.Cell(columnNumbers.RootColumn + 1).Value.ToString().Trim(),
-                    DontMenu = row.Cell(columnNumbers.DontMenuColumn+1  ).ToString().Trim().ToUpper() == "ИСТИНА",
-                    DontTake = row.Cell(columnNumbers.DontTakeColumn + 1).Value.ToString().Trim().ToUpper() == "ИСТИНА",
-                    LocalName = row.Cell(columnNumbers.LocalNameColumn+1).ToString().Trim(),
-                    RealCommandName = row.Cell(columnNumbers.RealCommandNameColumn + 1).Value.ToString().Trim(),
-                    Keyword = row.Cell(columnNumbers.KeywordColumn+1).Value.ToString().Trim(),
-                    Weight = Utils.StringToInt(row.Cell(columnNumbers.WeightColumn + 1).ToString().Trim(), 10),
-                    CmdType = Utils.StringToInt(row.Cell(columnNumbers.CmdTypeColumn+1).Value.ToString().Trim(), 1),
-                    ToolTipText = row.Cell(columnNumbers.ToolTipTextColumn + 1).Value.ToString().Trim(),
-                    Accelerators = row.Cell(columnNumbers.AcceleratorsColumn + 1).Value.ToString().Trim(),
+                    DispName = r.Cell(columnNumbers.DispNameColumn + 1).GetString().Trim(),
+                    InterName = r.Cell(columnNumbers.InternameColumn + 1).GetString().Trim(),
+                    StatusText = r.Cell(columnNumbers.StatusTextColumn + 1).GetString().Trim(),
+                    IconName = r.Cell(columnNumbers.IconColumn + 1).GetString().Trim(),
+                    ResourceDllName = r.Cell(columnNumbers.ResourseDllNameColumn + 1).GetString().Trim(),
+                    PanelName = r.Cell(columnNumbers.PanelNameColumn + 1).GetString().Trim(),
+                    RibbonSplitButtonName = r.Cell(columnNumbers.RibbonSplitButtonColumn + 1).GetString().Trim(),
+                    RibbonSize = r.Cell(columnNumbers.RibbonSizeColumn + 1).GetString().Trim(),
+                    Root = r.Cell(columnNumbers.RootColumn + 1).GetString().Trim(),
+                    LocalName = r.Cell(columnNumbers.LocalNameColumn + 1).GetString().Trim(),
+                    RealCommandName = r.Cell(columnNumbers.RealCommandNameColumn + 1).GetString().Trim(),
+                    Keyword = r.Cell(columnNumbers.KeywordColumn + 1).GetString().Trim(),
+                    ToolTipText = r.Cell(columnNumbers.ToolTipTextColumn + 1).GetString().Trim(),
+                    Accelerators = r.Cell(columnNumbers.AcceleratorsColumn + 1).GetString().Trim(),
+
+                    DontMenu = r.Cell(columnNumbers.DontMenuColumn + 1).GetString().Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
+                    DontTake = r.Cell(columnNumbers.DontTakeColumn + 1).GetString().Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
+
+                    Weight = Utils.StringToInt(r.Cell(columnNumbers.WeightColumn + 1).GetString(), 10),
+                    CmdType = Utils.StringToInt(r.Cell(columnNumbers.CmdTypeColumn + 1).GetString(), 1),
+
                 };
-                if(res.DontTake)
+
+                if (res.DontTake)
                 {
                     continue;
                 }
-
                 CommandDefinitions.Add(res);
-                // Вместо строки можно заносить в базу согласно модели.
-                Console.WriteLine($"{row.Cell(1).Value}\t{row.Cell(2).Value}");
-                // для проверки, что данные были получены - можно поставить точку останова
             }
+
+
+            //for (int i = 1 + HEADER_ROW_RANGE; i <= rows.Count(); ++i)
+            //{
+
+            //    IXLRow row = worksheet.Row(i);
+
+            //    int celN = 5;
+            //    var cel = row.Cell(celN);
+            //    var celV = cel.GetValue<bool>();
+
+
+
+            //    CommandDefinition res = new CommandDefinition
+            //    {
+            //        DispName = row.Cell(columnNumbers.DispNameColumn + 1).Value.ToString().Trim(),
+            //        InterName = row.Cell(columnNumbers.InternameColumn + 1).Value.ToString().Trim(),
+            //        StatusText = row.Cell(columnNumbers.StatusTextColumn + 1).Value.ToString().Trim(),
+            //        IconName = row.Cell(columnNumbers.IconColumn + 1).Value.ToString().Trim(),
+            //        ResourceDllName = row.Cell(columnNumbers.ResourseDllNameColumn + 1).Value.ToString().Trim(),
+            //        PanelName = row.Cell(columnNumbers.PanelNameColumn + 1).Value.ToString().Trim(),
+            //        RibbonSplitButtonName = row.Cell(columnNumbers.RibbonSplitButtonColumn + 1).Value.ToString().Trim(),
+            //        RibbonSize = row.Cell(columnNumbers.RibbonSizeColumn + 1).ToString().Trim(),
+            //        Root = row.Cell(columnNumbers.RootColumn + 1).Value.ToString().Trim(),
+            //        DontMenu = row.Cell(columnNumbers.DontMenuColumn + 1).ToString().Trim().ToUpper() == "ИСКЛЮЧИТЬ",
+            //        DontTake = row.Cell(columnNumbers.DontTakeColumn + 1).Value.ToString().Trim().ToUpper() == "ИСКЛЮЧИТЬ",
+            //        LocalName = row.Cell(columnNumbers.LocalNameColumn + 1).ToString().Trim(),
+            //        RealCommandName = row.Cell(columnNumbers.RealCommandNameColumn + 1).Value.ToString().Trim(),
+            //        Keyword = row.Cell(columnNumbers.KeywordColumn + 1).Value.ToString().Trim(),
+            //        Weight = Utils.StringToInt(row.Cell(columnNumbers.WeightColumn + 1).ToString().Trim(), 10),
+            //        CmdType = Utils.StringToInt(row.Cell(columnNumbers.CmdTypeColumn + 1).Value.ToString().Trim(), 1),
+            //        ToolTipText = row.Cell(columnNumbers.ToolTipTextColumn + 1).Value.ToString().Trim(),
+            //        Accelerators = row.Cell(columnNumbers.AcceleratorsColumn + 1).Value.ToString().Trim(),
+            //    };
+            //    if (res.DontTake)
+            //    {
+            //        continue;
+            //    }
+
+            //    CommandDefinitions.Add(res);
+            //    // Вместо строки можно заносить в базу согласно модели.
+            //    Console.WriteLine($"{row.Cell(1).Value}\t{row.Cell(2).Value}");
+            //    // для проверки, что данные были получены - можно поставить точку останова
+            //}
 
 
         }
@@ -100,6 +168,8 @@ namespace MenuFilesGen.Repositories
         /// <param name="columnNumbers">Настройки парсинга</param>
         public void ReadFromTsv(string tsvFileFullName, ColumnNumbers columnNumbers)
         {
+            addinName = Path.GetFileNameWithoutExtension(tsvFileFullName);
+
             List<string[]> datas;
             using (StreamReader reader = new StreamReader(tsvFileFullName, Encoding.UTF8))
             {
@@ -107,7 +177,7 @@ namespace MenuFilesGen.Repositories
                     .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
                     .Skip(HEADER_ROW_RANGE)
                     .Select(o => o.Split('\t'))
-                    .Where(c => !(c[columnNumbers.DontTakeColumn].Trim() == "ИСТИНА"))
+                    .Where(c => !(c[columnNumbers.DontTakeColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase)))
                     .ToList();
             }
 
@@ -140,17 +210,17 @@ namespace MenuFilesGen.Repositories
                         IconName = o[columnNumbers.IconColumn].Trim(),
                         ResourceDllName = o[columnNumbers.ResourseDllNameColumn].Trim(),
                         PanelName = o[columnNumbers.PanelNameColumn].Trim(),
-                        //HideCommand = false,
+
                         RibbonSplitButtonName = o[columnNumbers.RibbonSplitButtonColumn].Trim(),
                         RibbonSize = o[columnNumbers.RibbonSizeColumn].Trim(),
                         Root = o[columnNumbers.RootColumn].Trim(),
-                        DontMenu = o[columnNumbers.DontMenuColumn].Trim().ToUpper() == "ИСТИНА",
-                        DontTake = o[columnNumbers.DontTakeColumn].Trim().ToUpper() == "ИСТИНА",
+                        DontMenu = o[columnNumbers.DontMenuColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
+                        DontTake = o[columnNumbers.DontTakeColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
                         LocalName = o[columnNumbers.LocalNameColumn].Trim(),
                         RealCommandName = o[columnNumbers.RealCommandNameColumn].Trim(),
                         Keyword = o[columnNumbers.KeywordColumn].Trim(),
-                        Weight = Utils.StringToInt(o[columnNumbers.WeightColumn].Trim(), 10),
-                        CmdType = Utils.StringToInt(o[columnNumbers.CmdTypeColumn].Trim(), 1),
+                        Weight = Utils.StringToInt(o[columnNumbers.WeightColumn]/*.Trim()*/, 10),
+                        CmdType = Utils.StringToInt(o[columnNumbers.CmdTypeColumn], 1),
                         ToolTipText = o[columnNumbers.ToolTipTextColumn].Trim(),
                         Accelerators = o[columnNumbers.AcceleratorsColumn].Trim(),
                     };
@@ -196,6 +266,8 @@ namespace MenuFilesGen.Repositories
         public List<CommandDefinition> CommandDefinitions { get; private set; }
         public List<PanelDefinition> PanelDefinitions { get; private set; }
         public List<RibbonPaletteDefinition> RibbonPaletteDefinitions { get; private set; }
+
+        public string addinName { get; set; }
 
         private const int HEADER_ROW_RANGE = 3;
     }
