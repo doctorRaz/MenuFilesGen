@@ -17,7 +17,8 @@ namespace MenuFilesGen
 
 
             GroupTest test = new GroupTest();
-            string fileNametst = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.txt";
+            //string fileNametst = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.txt";
+            string fileNametst = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.xlsm";
             test.Run(fileNametst);
             return;
 #if !DEBUG

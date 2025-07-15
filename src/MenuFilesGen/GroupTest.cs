@@ -20,7 +20,29 @@ namespace MenuFilesGen
 
             ColumnNumbers _columnNumbers = new ColumnNumbers();
             CommandRepository rep = new CommandRepository();
-            rep.ReadFromCsv(fileName, _columnNumbers);
+            string fileExtension = Path.GetExtension(fileName);
+
+            //обработчик по расширению файла перенаправлять в свой читатель
+            if (fileExtension.Contains("xls",StringComparison.OrdinalIgnoreCase))
+            {
+                rep.ReadFromXls(fileName, _columnNumbers);
+            }
+            else if (fileExtension.Contains("csv",StringComparison.OrdinalIgnoreCase))//разделитель ; ASCI
+            {
+                rep.ReadFromCsv(fileName, _columnNumbers);
+            }
+            else//разделитель tab юникод или tsb
+            {
+                rep.ReadFromTsv(fileName, _columnNumbers);
+            }
+
+            if(rep.CommandDefinitions is null || rep.CommandDefinitions.Count<1) 
+            {
+                Console.WriteLine("Файл не прочитан");
+                Console.WriteLine("Для выхода нажмите любую клавишу");
+                Console.ReadKey();
+                return;
+            }
 
             // https://stackoverflow.com/questions/1159233/multi-level-grouping-in-linq
 
