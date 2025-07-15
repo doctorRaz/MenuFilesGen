@@ -1,0 +1,38 @@
+Обязательные поля;;;;;;;;;;;;;;;;;;;;;
+"DispName
+Имя команды";"intername
+Внутреннее имя";"StatusText
+Описание";"PanelName
+Имя панели";"RibbonSize
+Размер в ленте";RibbonSplitButtonName;"DontTake
+Не учитывать";"DontMenu
+Зарегистрировать, но не отображать в меню";ResourceDllName;IconName;Root;"LocalName
+Локальное имя команды";RealCommandName;Keyword;weight;cmdtype;ToolTipText;"Accelerators
+горячие кнопки";Комментарий;Приоритетность справки;Видео;Sort
+0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21
+Нормализация блоков, оконный режим;    drz-block-normalize   ;Нормализация блоков, оконный режим;Нормализация блоков;SmallWithText;;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;100
+Нормализация блоков, командный режим, настройки окно;-drz-block-normalize;Нормализация блоков, командный режим, настройки окно;Нормализация блоков;SmallWithText;;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;110
+Нормализация блоков, командный режим, настройки ком строка;-drz-block-normalize-notWin;Нормализация блоков, командный режим, настройки ком строка;Нормализация блоков;SmallWithText;;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;120
+Штриховки назад;-drz-block-HatchBack;Штриховки позади всех;Порядок следования;LargeWithText;Порядок;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;130
+Маскировки назад;-drz-block-WipeOutBack;Маскировки позади всех;Порядок следования;LargeWithText;Порядок;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;140
+Запретить расчленение;-drz-block-Explodable-No;Запретить расчленение блока;Свойства блоков;LargeWithText;Расчленение;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;150
+Разрешить расчленение;-drz-block-Explodable-Yes;Разрешить расчленение блока;Свойства блоков;LargeWithText;Расчленение;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;160
+Разные масштабы;-drz-block-Scale-No;Разные масштабы блока;Свойства блоков;LargeWithText;Масштаб;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;170
+Одинаковые масштабы;-drz-block-Scale-Yes;Одинаковые масштабы блока;Свойства блоков;LargeWithText;Масштаб;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;180
+Все свойства по блоку;-drz-block-AllProp-ByBlock;Все свойства по блоку;Свойства примитивов;LargeWithText;Все;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;190
+Все свойства по слою;-drz-block-AllProp-ByLayer;Все свойства по слою;Свойства примитивов;LargeWithText;Все;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;200
+Цвет линий по блоку;-drz-block-Color-ByBlock;Цвет линий примитивов по блоку;Свойства примитивов;SmallWithoutText;Цвет;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;210
+Цвет линий по слою;-drz-block-Color-ByLayer;Цвет линий примитивов по слою;Свойства примитивов;SmallWithoutText;Цвет;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;220
+Тип линий по блоку;-drz-block-Linetype-ByBlock;Тип линий примитивов по блоку;Свойства примитивов;SmallWithoutText;Тип;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;228
+Тип линий примитивов по слою;-drz-block-Linetype-ByLayer;Тип линий примитивов по слою;Свойства примитивов;SmallWithoutText;Тип;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;229
+Вес линий по блоку;-drz-block-Lineweight-ByBlock;Вес линий примитивов по блоку;Свойства примитивов;SmallWithoutText;Вес;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;260
+Вес линий по слою;-drz-block-Lineweight-ByLayer;Вес линий примитивов по слою;Свойства примитивов;SmallWithoutText;Вес;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;270
+Примитивы блока на слой 0;-drz-block-LayerZero;Примитивы блока на слой 0;Свойства примитивов;SmallWithoutText;;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;275
+Ширина полилиний 0;-drz-block-LwGlobalWidth;Ширина полилиний 0;Свойства примитивов;SmallWithoutText;;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;280
+Отключение лога;drz-log-off;Отключение лога;Служебные;LargeWithText;Логирование;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;295
+Включение лога;drz-log-on;Включение лога;Служебные;LargeWithText;Логирование;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;296
+Путь к конфигурационному файлу;drz-config-filename;Путь к конфигурационному файлу;Служебные;SmallWithoutText;Лог;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;300
+Каталог для хранения логов;drz-folder-for-logs;Каталог для хранения логов;Служебные;SmallWithoutText;Лог;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;310
+Настройки логирования;drz-log-settings;Настройки логирования;Служебные;SmallWithoutText;Лог;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;340
+Информация о командах сборки;-drz-block-lstInfo;Информация о командах сборки;Инфо;SmallWithoutText;;;;newbtns.dll;BEDIT;drzTools;;;;;;;;;;ДОБАВИТЬ;345
+Обсуждение PlotSPDS на форуме;drz_discussion_link;Задать вопрос или написать пожелание;Инфо;LargeWithText;;;;newbtns.dll;BEDIT;drzTools;Обсуждение_PlotSPDS;shell_exec;open,https://doctorraz.blogspot.com/2022/10/PlotSPDS.NET.html;;0;Задать вопрос или написать пожелание tool tips;Alt+A;;;ДОБАВИТЬ;350
