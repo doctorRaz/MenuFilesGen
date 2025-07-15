@@ -5,9 +5,6 @@ using System.Text;
 
 namespace MenuFilesGen.Repositories
 {
-
-
-
     public class CommandRepository
     {
 
@@ -44,7 +41,7 @@ namespace MenuFilesGen.Repositories
 
             Console.WriteLine("Введите номер листа:");
             int wscount = 1;
-            foreach (var _ws in workbook.Worksheets)
+            foreach (IXLWorksheet _ws in workbook.Worksheets)
             {
                 Console.WriteLine($"{wscount}.\t{_ws.Name}");
                 wscount++;
@@ -68,7 +65,7 @@ namespace MenuFilesGen.Repositories
 
             CommandDefinitions = new List<CommandDefinition>();
 
-            foreach (var row in rows)
+            foreach (IXLRangeRow row in rows)
             {
                 CommandDefinition res = new CommandDefinition
                 {

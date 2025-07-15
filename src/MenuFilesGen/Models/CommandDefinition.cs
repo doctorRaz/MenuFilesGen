@@ -49,7 +49,11 @@ namespace MenuFilesGen.Models
 
         /// <summary> Тип команды, контекст выполнения , документ/приложение </summary>
         public int CmdType { get; set; }
+
+         /// <summary>подсказки </summary>
         public string ToolTipText { get; set; }
+
+         /// <summary>хоткеи </summary>
         public string Accelerators { get; set; }
 
    

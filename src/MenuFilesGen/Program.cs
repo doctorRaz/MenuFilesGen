@@ -1,4 +1,7 @@
-﻿using System.IO.Compression;
+﻿using MenuFilesGen.Models;
+using MenuFilesGen.Repositories;
+using NickBuhro.Translit;
+using System.IO.Compression;
 using System.Text;
 using System.Xml.Linq;
 
@@ -16,13 +19,11 @@ namespace MenuFilesGen
 
 
 
-            GroupTest test = new GroupTest();
-            //string fileNametst = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.txt";
-            string fileNametst = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.xlsm";
-            //string fileNametst = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.csv";
-            test.Run(fileNametst);
-            return;
-#if !DEBUG
+           
+           
+            
+
+#if DEBUG
 
             OpenFileDialog tableFileDialog = new OpenFileDialog() { Filter = "TXT (*.txt)|*.txt|CSV (*.csv)|*.csv|TSV files (*.tsv)|*.tsv" };
             if (tableFileDialog.ShowDialog() != DialogResult.OK)
@@ -33,276 +34,291 @@ namespace MenuFilesGen
             //сохранять как текст в юникоде
             //обрезать пустые строки
             //string fileName = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.txt";
-            string fileName = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\drzTools_BlockFix.txt";
+            //string fileName = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\drzTools_BlockFix.txt";
+            //string fileNametst = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.txt";
+            string fileName = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.xlsm";
+            //string fileNametst = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.csv";
 
 #endif
+            CommandRepository rep = new CommandRepository(fileName);
+
+            if (rep.CommandDefinitions is null || rep.CommandDefinitions.Count < 1)
+            {
+                Console.WriteLine("Файл не прочитан");
+                Console.WriteLine("Для выхода нажмите любую клавишу");
+                Console.ReadKey();
+                return;
+            }
+
+            // https://stackoverflow.com/questions/1159233/multi-level-grouping-in-linq
+
+            //List<CommandDescription> readdata = GetRes(fileName);//прочитали файл в класс
+
+            string newLine = Environment.NewLine;
 
             string directoryPath = Path.GetDirectoryName(fileName);
-            string csvName = Path.GetFileNameWithoutExtension(fileName);
-            var name = csvName.Split('_');
-
-            string rootName = "";
-            string rootMenu = "";
-            string addinName = "";
-
-            if (name.Length > 1)//костылище(((
-            {
-                rootName = name[0];
-                addinName = name[1];
-                rootMenu = $"{rootName}\\{addinName}";
-            }
-            else
-            {
-                addinName = rootMenu = csvName;
-            }
-
-            // Описания команд,сгруппированных по имени панели
-            List<IGrouping<string, string[]>> commands;
-            using (StreamReader reader = new StreamReader(fileName))
-            {
-                //https://stackoverflow.com/questions/7647716/how-to-remove-empty-lines-from-a-formatted-string
-                commands = reader
-                    .ReadToEnd()
-                    .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
-                    //.Split('\n', StringSplitOptions.RemoveEmptyEntries)
-                    .Skip(1) // Заголовок таблицы
-                             .Select(c => c.Split('\t')) // Разделитель - табуляция
-                                                         //.Select(c => c.Split(';')) // Разделитель - ;
-                                                         //.Where(c => !(c.Count() > 6 && c[6] == "TRUE")) // Пропуск скрытых команд
-                    .Where(c => !(c.Count() > 6 && c[6] == "ИСТИНА")) // Пропуск скрытых команд
-                    .GroupBy(c => c[3])
-                    .ToList();
-            }
+            string addinName = rep.addinName;
 
             string cfgFilePath = $"{directoryPath}\\{addinName}.cfg";
             string cuiFilePath = $"{directoryPath}\\RibbonRoot.cui";
             string cuixFilePath = $"{directoryPath}\\{addinName}.cuix";
 
-            //! в нанокад бага не умеет в ком строке UTF-8 латиницу, поэтому в АСКИ
-            //using (StreamWriter writer = new StreamWriter(cfgFilePath, false, new UTF8Encoding(false)))
-            using (StreamWriter writer = new StreamWriter(cfgFilePath, false, Encoding.GetEncoding(1251)))
+            //собираем в строки конфиг
+
+            //прописываем ленту
+            string ribbon = $"{newLine}[\\ribbon\\{addinName}]" +
+                            $"{newLine}CUIX=s%CFG_PATH%\\{addinName}.cuix" +
+                            $"{newLine}visible=f1";
+
+            //команды
+            string configman = $"{newLine}[\\configman]" +
+                        $"{newLine}[\\configman\\commands]";//todo это лишнее надо проверить
+
+            //горячие клавиши
+            string accelerators = $"{newLine}[\\Accelerators]";//todo добавить столбецхоткеев
+
+            //меню
+            string menu = $"{newLine}[\\menu]";
+
+            //панели
+            string toolbars = $"{newLine};Панели" +
+                                $"{newLine}[\\toolbars]";
+
+            //всплывающее меню панелей
+            string toolbarPopupMenu = $"{newLine};Popup меню" +
+                                    $"{newLine}[\\ToolbarPopupMenu]" +
+                                    $"{newLine}[\\ToolbarPopupMenu\\{addinName}]" +
+                                    $"{newLine}Name=s{addinName}";
+
+            //команды вызова панелей
+            string toolbarsCmd = $"{newLine}; Команды вызова панелей";
+
+            //меню вид панелей
+            string toolbarsViewMenu = $"{newLine};View меню" +
+                                        $"{newLine}[\\menu\\View\\toolbars\\{addinName}]" +
+                                        $"{newLine}Name=s{addinName}";
+
+            foreach (var root in rep.HierarchicalGrouping)
             {
-                #region Регистрация команд
-                //todo сгрупировать сбор записей в один цикл
-                writer.WriteLine(
-                    $"[\\ribbon\\{addinName}]" +
-                    $"\r\nCUIX=s%CFG_PATH%\\{addinName}.cuix" +
-                    "\r\n" +
-                    "\r\n[\\configman]" +
-                    "\r\n[\\configman\\commands]");
+                string rootName = root.root;
+                string rootMenu = $"{addinName}";
 
-                foreach (IGrouping<string, string[]> commandGroup in commands)
-                {
-                    foreach (string[] commandData in commandGroup)
-                    {
+                #region Классическое меню шапка
 
-                        writer.WriteLine(
-                            $"\r\n[\\configman\\commands\\{commandData[1]}]" +
-                            $"\r\nweight=i10" +
-                            $"\r\ncmdtype=i1" +
-                            $"\r\nintername=s{commandData[1]}" +
-                            $"\r\nDispName=s{commandData[0]}" +
-                            $"\r\nStatusText=s{commandData[2]}");
-
-                        if (!string.IsNullOrEmpty(commandData[12]))//иконки из dll
-                        {
-                            writer.WriteLine(
-                              $"BitmapDll=s{commandData[11]}" +
-                              $"\r\nIcon=s{commandData[12]}"
-                              );
-                        }
-                        else if (!string.IsNullOrEmpty(commandData[11])) //прописана  иконка с относительным путем и расширением
-                        {
-                            writer.WriteLine(
-                                $"BitmapDll=s{commandData[11]}");
-                        }
-                        else //иконка не прописана, имя иконки название команды в каталоге \\icons
-                        {
-                            writer.WriteLine(
-                                 $"BitmapDll=sicons\\{commandData[1]}");
-                        }
-                    }
-                }
-
-                #endregion
-                #region Классическое меню
-
-                //header
                 if (!string.IsNullOrEmpty(rootName))
                 {
-                    writer.WriteLine(
-                    "\r\n[\\menu]" +
-                    $"\r\n[\\menu\\{rootName}]" +
-                    $"\r\nName=s{rootName}" +
-                    $"\r\n[\\menu\\{rootMenu}_Menu]" +
-                    $"\r\nName=s{addinName}");
+                    rootMenu = $"{rootName}\\{addinName}";
+
+                    menu += $"{newLine}[\\menu\\{rootName}]" +
+                            $"{newLine}Name=s{rootName}" +
+                            $"{newLine}[\\menu\\{rootMenu}]" +
+                            $"{newLine}Name=s{addinName}";
+
                 }
                 else
                 {
-                    writer.WriteLine(
-                    "\r\n[\\menu]" +
-                    $"\r\n[\\menu\\{rootMenu}_Menu]" +
-                    $"\r\nName=s{addinName}");
+                    menu += $"{newLine}[\\menu\\{rootMenu}]" +
+                            $"{newLine} Name=s{addinName}";
                 }
+                #endregion
 
-
-
-                foreach (IGrouping<string, string[]> commandGroup in commands)
+                foreach (var panel in root.panel)
                 {
-                    writer.WriteLine(
-                        $@"[\menu\{rootMenu}_Menu\{commandGroup.Key}]" +
-                        $"\r\nname=s{commandGroup.Key}");
+                    string panelName = panel.panel;
 
-                    foreach (string[] commandData in commandGroup)
+
+                    string panelNameRu = $"{addinName}_{panelName.Replace(' ', '_')}";//todo бага в меню вид панель с именем команд 
+                    string panelNameEn = Transliteration.CyrillicToLatin(panelNameRu, Language.Russian);
+
+                    string intername = $"ShowToolbar_{panelNameEn}";
+                    string localName = $"Панель_{panelNameRu}";
+
+                    #region Панели
+
+                    //панели
+                    toolbars += $"{newLine}{newLine}[\\toolbars\\{panelNameEn}]" +
+                                $"{newLine}name=s{panelName}";
+
+                    //команды
+                    toolbarsCmd += $"{newLine}{newLine}[\\configman\\commands\\{intername}]" +
+                                    $"{newLine}weight=i10" +
+                                    $"{newLine}cmdtype=i0" +
+                                    $"{newLine}Intername=s{intername}" +
+                                    $"{newLine}StatusText=sОтображение панели {panelName}" +
+                                    $"{newLine}ToolTipText=sОтображение панели {panelName}" +
+                                    $"{newLine}DispName=sОтображение панели {panelName}" +
+                                    $"{newLine}LocalName=s{localName}";
+
+                    //поп меню
+                    toolbarPopupMenu += $"{newLine}[\\ToolbarPopupMenu\\{addinName}\\{intername}]" +
+                     $"{newLine}Name=s{panelName}" +
+                     $"{newLine}InterName=s{intername}";
+                    //вью меню
+                    toolbarsViewMenu += $"{newLine}[\\menu\\View\\toolbars\\{addinName}\\{intername}]" +
+                                        $"{newLine}Name=s{panelName}" +
+                                        $"{newLine}InterName=s{intername}";
+
+                    #endregion
+
+                    #region Классическое меню раздел
+
+                    menu += $"{newLine}{newLine}[\\menu\\{rootMenu}\\{panelName}]" +
+                            $"{newLine}name=s{panelName}";
+
+                    #endregion
+
+                    foreach (CommandDefinition cmd in panel.command)
                     {
-                        writer.WriteLine(
-                            $@"[\menu\{rootMenu}_Menu\{commandGroup.Key}\s{commandData[1]}]" +
-                            $"\r\nname=s{commandData[0]}" +
-                            $"\r\nIntername=s{commandData[1]}");
+                        #region Регистрация команд
+
+                        string _toolTipText = !string.IsNullOrEmpty(cmd.ToolTipText) ? $"{newLine}ToolTipText=s{cmd.ToolTipText}" : "";
+                        string _localName = !string.IsNullOrEmpty(cmd.LocalName) ? $"{newLine}LocalName=s{cmd.LocalName}" : "";
+                        string _realCommandName = !string.IsNullOrEmpty(cmd.RealCommandName) ? $"{newLine}RealCommandName=s{cmd.RealCommandName}" : "";
+                        string _keyword = !string.IsNullOrEmpty(cmd.Keyword) ? $"{newLine}Keyword=s{cmd.Keyword}" : "";
+
+                        configman += $"{newLine}{newLine}[\\configman\\commands\\{cmd.InterName}]" +
+                                     $"{newLine}weight=i{cmd.Weight}" +
+                                     $"{newLine}cmdtype=i{cmd.CmdType}" +
+                                     $"{newLine}intername=s{cmd.InterName}" +
+                                     $"{newLine}DispName=s{cmd.DispName}" +
+                                     $"{newLine}StatusText=s{cmd.StatusText}" +
+                                     _toolTipText +
+                                     _localName +
+                                     _realCommandName +
+                                     _keyword;
+
+                        if (!string.IsNullOrEmpty(cmd.IconName))//иконки из dll
+                        {
+                            configman += $"{newLine}BitmapDll=s{cmd.ResourceDllName}" +
+                                         $"{newLine}Icon=s{cmd.IconName}";
+                        }
+                        else if (!string.IsNullOrEmpty(cmd.ResourceDllName)) //прописана  иконка с относительным путем и расширением
+                        {
+                            configman += $"{newLine}BitmapDll=s{cmd.ResourceDllName}";
+                        }
+                        else //иконка не прописана, имя иконки = название команды в каталоге \\icons
+                        {
+                            configman += $"{newLine}BitmapDll=sicons\\{cmd.InterName}.ico";
+                        }
+                        #endregion
+
+                        if (!string.IsNullOrEmpty(cmd.Accelerators))
+                        {
+                            accelerators += $"{newLine}{cmd.InterName}=s{cmd.Accelerators}";
+
+                        }
+
+                        if (cmd.DontMenu) continue;// не добавлять в меню пропуск
+                        #region Классическое меню
+
+                        menu += $"{newLine}[\\menu\\{rootMenu}\\{panelName}\\s{cmd.InterName}]" +
+                                $"{newLine}name=s{cmd.DispName}" +
+                                $"{newLine}Intername=s{cmd.InterName}";
+
+                        #endregion
+
+                        #region Панели
+                        toolbars += $"{newLine}[\\toolbars\\{panelNameEn}\\{cmd.InterName}]" +
+                                    $"{newLine}Intername=s{cmd.InterName}";
+                        #endregion
                     }
                 }
-
-                #endregion
-
-                #region Панели инструментов
-
-
-                //todo добавить в [\menu\View\toolbars] и ...[\ToolbarPopupMenu\
-                string toolbarLine = "\r\n[\\toolbars]";
-                string toolbarLineCmd = "";
-
-                //writer.WriteLine("\r\n[\\toolbars]");
-
-                foreach (IGrouping<string, string[]> commandGroup in commands)
-                {
-                    var panelName = $"{addinName}_{commandGroup.Key.Replace(' ', '_')}";
-
-
-                    //tool bar
-                    toolbarLine += $"\n[\\toolbars\\{panelName}]" +
-                            $"\r\nname=s{commandGroup.Key}\n" /*+
-                            $"\r\nIntername=s{panelName}"*/;
-
-                    //writer.WriteLine($"[\\toolbars\\{panelName}]" +
-                    //        $"\r\nname=s{commandGroup.Key}" /*+
-                    //        $"\r\nIntername=s{panelName}"*/);
-
-                    //cmd
-                    toolbarLineCmd += $"[\\configman\\commands\\ShowToolbar_{panelName}]\n";
-                    toolbarLineCmd += $"weight=i0\n";
-                    toolbarLineCmd += $"cmdtype=i0\n";
-                    toolbarLineCmd += $"intername=sShowToolbar_{panelName}\n";
-                    /* добавить
-                        LocalName=sПанель_публикации_PlotSPDS
-                        BitmapDll11=sPlotSPDS_Res.dll
-                        Icon12=sPLOT
-                        StatusTextColumn=sПоказать/Скрыть панель PlotSPDS
-                        ; ToolTipText=sПоказать/Скрыт панель PlotSPDS
-                        DispName0=sПоказать/Скрыть панель PlotSPDS
-                    */
-                    foreach (string[] commandData in commandGroup)
-                    {
-                        toolbarLine += $"[\\toolbars\\{panelName}\\{commandData[1]}]" +
-                                     $"\r\nIntername=s{commandData[1]}\n";
-
-                        //writer.WriteLine(
-                        //    $"[\\toolbars\\{panelName}\\{commandData[1]}]" +
-                        //    $"\r\nIntername=s{commandData[1]}");
-                    }
-                }
-                writer.WriteLine(toolbarLine);
-                writer.WriteLine(toolbarLineCmd);
-
-                #endregion
-
-                #region  [\menu\View\toolbars]
-                /*
-                [\menu\View]
-                [\menu\View\toolbars]
-                [\menu\View\toolbars\drzTools]
-                Name=sdrzTools
-                [\menu\View\toolbars\drzTools\ShowToolbar_Correct_Blocks]
-                Name=sCorrect Blocks
-                InterName=sShowToolbar_Correct_Blocks
-
-                */
-                #endregion
-
-
-                #region [\ToolbarPopupMenu\
-
-                #endregion
-
-                //todo [\Accelerators]
             }
 
+            #region Save *.cfg            
 
+            using (StreamWriter writer = new StreamWriter(cfgFilePath, false, Encoding.GetEncoding(65001)))
+            {
+                writer.WriteLine(menu);//меню
+                writer.WriteLine(toolbarPopupMenu); //поп меню
+                writer.WriteLine(toolbarsViewMenu); //виев меню
+
+                writer.WriteLine(toolbars);//панели
+
+                writer.WriteLine(configman);//команды
+                writer.WriteLine(toolbarsCmd);//команды меню
+
+                writer.WriteLine(ribbon);//лента
+                writer.WriteLine(accelerators);//горячие кнопки
+            }
+
+            #endregion
+
+            //группировка по PanelName
+            List<IGrouping<string, CommandDefinition>> groupsPanel = rep.CommandDefinitions
+                                                                    .GroupBy(e => e.PanelName).ToList();
+
+            #region Ribbon
             // Ленточное меню
             //Создание XML документа 
-            var xDoc = new XDocument();
+            XDocument xDoc = new XDocument();
+
             //Корневой элемент
-            var ribbonRoot = new XElement("RibbonRoot");
+            XElement ribbonRoot = new XElement("RibbonRoot");
             xDoc.Add(ribbonRoot);
 
-            var ribbonPanelSourceCollection = new XElement("RibbonPanelSourceCollection");
+            XElement ribbonPanelSourceCollection = new XElement("RibbonPanelSourceCollection");
             ribbonRoot.Add(ribbonPanelSourceCollection);
 
-            var ribbonTabSourceCollection = new XElement("RibbonTabSourceCollection");
+            XElement ribbonTabSourceCollection = new XElement("RibbonTabSourceCollection");
             ribbonRoot.Add(ribbonTabSourceCollection);
 
-            var ribbonTabSource = new XElement("RibbonTabSource");
+            XElement ribbonTabSource = new XElement("RibbonTabSource");
             ribbonTabSource.Add(new XAttribute("Text", addinName));
             ribbonTabSource.Add(new XAttribute("UID", $"{addinName.Replace(" ", "")}_Tab"));
             ribbonTabSourceCollection.Add(ribbonTabSource);
 
-            foreach (IGrouping<string, string[]> commandGroup in commands)
+            foreach (IGrouping<string, CommandDefinition> cmd in groupsPanel)
             {
-                var ribbonPanelSource = new XElement("RibbonPanelSource");
-                ribbonPanelSource.Add(new XAttribute("UID", commandGroup.Key));
-                ribbonPanelSource.Add(new XAttribute("Text", commandGroup.Key));
+                XElement ribbonPanelSource = new XElement("RibbonPanelSource");
+                ribbonPanelSource.Add(new XAttribute("UID", cmd.Key));
+                ribbonPanelSource.Add(new XAttribute("Text", cmd.Key));
                 ribbonPanelSourceCollection.Add(ribbonPanelSource);
 
                 // Временный контейнер для сбора кнопок
-                var panelButtons = new XElement("Temp");
+                XElement panelButtons = new XElement("Temp");
 
                 // Группируем команды по тому, объединяются ли они в RibbonSplitButton5
-                var unitedCommands = commandGroup.GroupBy(c => c[5]).ToList();
+                List<IGrouping<string, CommandDefinition>> unitedCommands = cmd.GroupBy(c => c.RibbonSplitButtonName).ToList();
 
-                foreach (var unitedCommandGroup in unitedCommands)
+                foreach (IGrouping<string, CommandDefinition> unitedCommandGroup in unitedCommands)
                 {
                     XElement container = panelButtons;
                     if (!string.IsNullOrWhiteSpace(unitedCommandGroup.Key))
                     {
-                        var ribbonSplitButton = new XElement("RibbonSplitButton");
+                        XElement ribbonSplitButton = new XElement("RibbonSplitButton");
                         ribbonSplitButton.Add(new XAttribute("Text", unitedCommandGroup.Key));
                         ribbonSplitButton.Add(new XAttribute("Behavior", "SplitFollowStaticText"));
-                        ribbonSplitButton.Add(new XAttribute("ButtonStyle", unitedCommandGroup.First()[4]));
+                        ribbonSplitButton.Add(new XAttribute("ButtonStyle", unitedCommandGroup.First().RibbonSize));
 
                         panelButtons.Add(ribbonSplitButton);
                         container = ribbonSplitButton;
                     }
 
-                    foreach (string[] commandData in unitedCommandGroup)
+                    foreach (CommandDefinition commandData in unitedCommandGroup)
+                    {
+                        if (commandData.DontMenu) continue;
                         container.Add(CreateButton(commandData));
+                    }
                 }
 
-                var sortedButtons = panelButtons
+                Dictionary<bool, IGrouping<bool, XElement>> sortedButtons = panelButtons
                     .Elements()
                     .GroupBy(button => button.Attributes().First(attr => attr.Name == "ButtonStyle").Value.Contains("Small"))
                     .ToDictionary(g => g.Key);
 
                 if (sortedButtons.ContainsKey(false))
                 {
-                    foreach (var button in sortedButtons[false])
+                    foreach (XElement button in sortedButtons[false])
                         ribbonPanelSource.Add(button);
                 }
 
                 if (sortedButtons.ContainsKey(true))
                 {
                     XElement ribbonRowPanel = null;
-                    var ribbonRowPanelButtonsCount = 3;
+                    int ribbonRowPanelButtonsCount = 3;
 
-                    foreach (var button in sortedButtons[true])
+                    foreach (XElement button in sortedButtons[true])
                     {
                         if (ribbonRowPanelButtonsCount == 3)
                         {
@@ -311,7 +327,7 @@ namespace MenuFilesGen
                             ribbonRowPanelButtonsCount = 0;
                         }
 
-                        var ribbonRow = new XElement("RibbonRow");
+                        XElement ribbonRow = new XElement("RibbonRow");
                         ribbonRow.Add(button);
                         ribbonRowPanel.Add(ribbonRow);
 
@@ -319,8 +335,8 @@ namespace MenuFilesGen
                     }
                 }
 
-                var ribbonPanelSourceReference = new XElement("RibbonPanelSourceReference");
-                ribbonPanelSourceReference.Add(new XAttribute("PanelId", commandGroup.Key));
+                XElement ribbonPanelSourceReference = new XElement("RibbonPanelSourceReference");
+                ribbonPanelSourceReference.Add(new XAttribute("PanelId", cmd.Key));
                 ribbonTabSource.Add(ribbonPanelSourceReference);
             }
 
@@ -331,24 +347,30 @@ namespace MenuFilesGen
                 File.Delete(cuixFilePath);
 
             // Создание архива (.cuix), добавление в него сформированного .xml файла
-            using (var zip = ZipFile.Open(cuixFilePath, ZipArchiveMode.Create))
+            using (ZipArchive zip = ZipFile.Open(cuixFilePath, ZipArchiveMode.Create))
             {
                 zip.CreateEntryFromFile(cuiFilePath, "RibbonRoot.cui");
             }
 
             // Удаление ribbon.cui файла, если он существует
             if (File.Exists(cuiFilePath))
+            {
                 File.Delete(cuiFilePath);
+            }
 
-            MessageBox.Show($"Файлы {addinName}.cfg и {addinName}.cuix сохранены в папке {directoryPath}");
+            #endregion
+
+            Console.WriteLine($"Файлы {addinName}.cfg и {addinName}.cuix сохранены в папке {directoryPath}");
+            Console.ReadKey();
+
         }
 
-        public static XElement CreateButton(string[] commandData)
+        public static XElement CreateButton(CommandDefinition commandData)
         {
-            var ribbonCommandButton = new XElement("RibbonCommandButton");
-            ribbonCommandButton.Add(new XAttribute("Text", commandData[0]));
-            ribbonCommandButton.Add(new XAttribute("ButtonStyle", commandData[4]));
-            ribbonCommandButton.Add(new XAttribute("MenuMacroID", commandData[1]));
+            XElement ribbonCommandButton = new XElement("RibbonCommandButton");
+            ribbonCommandButton.Add(new XAttribute("Text", commandData.DispName));
+            ribbonCommandButton.Add(new XAttribute("ButtonStyle", commandData.RibbonSize));
+            ribbonCommandButton.Add(new XAttribute("MenuMacroID", commandData.InterName));
             return ribbonCommandButton;
         }
     }
