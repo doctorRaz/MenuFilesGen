@@ -12,27 +12,9 @@ namespace MenuFilesGen
     {
         public void Run(string fileName)
         {
-
-
-            ColumnNumbers _columnNumbers = new ColumnNumbers();
-            CommandRepository rep = new CommandRepository();
-            string fileExtension = Path.GetExtension(fileName);
-
-            //обработчик по расширению файла перенаправлять в свой читатель
-            if (fileExtension.Contains("xls",StringComparison.OrdinalIgnoreCase))
-            {
-                rep.ReadFromXls(fileName, _columnNumbers);
-            }
-            else if (fileExtension.Contains("csv",StringComparison.OrdinalIgnoreCase))//разделитель ; ASCI
-            {
-                rep.ReadFromCsv(fileName, _columnNumbers);
-            }
-            else//разделитель tab юникод или tsb
-            {
-                rep.ReadFromTsv(fileName, _columnNumbers);
-            }
-
-            if(rep.CommandDefinitions is null || rep.CommandDefinitions.Count<1) 
+              CommandRepository rep = new CommandRepository(fileName);
+         
+            if (rep.CommandDefinitions is null || rep.CommandDefinitions.Count < 1)
             {
                 Console.WriteLine("Файл не прочитан");
                 Console.WriteLine("Для выхода нажмите любую клавишу");
@@ -52,7 +34,7 @@ namespace MenuFilesGen
             string cfgFilePath = $"{directoryPath}\\{addinName}.cfg";
             string cuiFilePath = $"{directoryPath}\\RibbonRoot.cui";
             string cuixFilePath = $"{directoryPath}\\{addinName}.cuix";
-                        
+
             //собираем в строки конфиг
 
             //прописываем ленту
@@ -357,7 +339,7 @@ namespace MenuFilesGen
                 File.Delete(cuiFilePath);
 
             Console.WriteLine($"Файлы {addinName}.cfg и {addinName}.cuix сохранены в папке {directoryPath}");
-
+            Console.ReadKey();
 
 
 
