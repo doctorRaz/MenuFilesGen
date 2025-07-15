@@ -6,11 +6,11 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ApplicationIcon>Icons\Yellow.ico</ApplicationIcon>
+    <ApplicationIcon>Icons\mcsmenu.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Icons\Yellow.ico" />
+    <Content Include="Icons\mcsmenu.ico" />
   </ItemGroup>
 
   <ItemGroup>
