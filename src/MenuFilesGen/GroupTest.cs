@@ -1,12 +1,8 @@
 ﻿using MenuFilesGen.Models;
 using MenuFilesGen.Repositories;
 using NickBuhro.Translit;
-using System;
-using System.Collections.Generic;
 using System.IO.Compression;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace MenuFilesGen
@@ -360,7 +356,7 @@ namespace MenuFilesGen
             if (File.Exists(cuiFilePath))
                 File.Delete(cuiFilePath);
 
-            MessageBox.Show($"Файлы {addinName}.cfg и {addinName}.cuix сохранены в папке {directoryPath}");
+            Console.WriteLine($"Файлы {addinName}.cfg и {addinName}.cuix сохранены в папке {directoryPath}");
 
 
 

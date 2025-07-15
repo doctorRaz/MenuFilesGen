@@ -158,7 +158,49 @@ namespace MenuFilesGen.Repositories
         /// <summary> Чтение файла обмена (csv) разделитель точка с запятой, кодировка ASCI </summary>
         public void ReadFromCsv(string csvFileFullName, ColumnNumbers columnNumbers)
         {
-            throw new NotImplementedException();
+            addinName = Path.GetFileNameWithoutExtension(csvFileFullName);
+
+            List<string[]> datas;
+            using (StreamReader reader = new StreamReader(csvFileFullName, Encoding.GetEncoding(1251)))
+            {
+                datas = reader.ReadToEnd()
+                   .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
+                   .Skip(HEADER_ROW_RANGE)
+                   .Select(x => x.Split(';'))
+                      .Where(c => !(c[columnNumbers.DontTakeColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase)))
+                      .ToList();
+
+            }
+
+            //todo копипаста((
+            CommandDefinitions = new List<CommandDefinition>(
+                datas.Select(o =>
+                     {
+                         CommandDefinition res = new CommandDefinition
+                         {
+                             DispName = o[columnNumbers.DispNameColumn].Trim(),
+                             InterName = o[columnNumbers.InternameColumn].Trim(),
+                             StatusText = o[columnNumbers.StatusTextColumn].Trim(),
+                             IconName = o[columnNumbers.IconColumn].Trim(),
+                             ResourceDllName = o[columnNumbers.ResourseDllNameColumn].Trim(),
+                             PanelName = o[columnNumbers.PanelNameColumn].Trim(),
+
+                             RibbonSplitButtonName = o[columnNumbers.RibbonSplitButtonColumn].Trim(),
+                             RibbonSize = o[columnNumbers.RibbonSizeColumn].Trim(),
+                             Root = o[columnNumbers.RootColumn].Trim(),
+                             DontMenu = o[columnNumbers.DontMenuColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
+                             DontTake = o[columnNumbers.DontTakeColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
+                             LocalName = o[columnNumbers.LocalNameColumn].Trim(),
+                             RealCommandName = o[columnNumbers.RealCommandNameColumn].Trim(),
+                             Keyword = o[columnNumbers.KeywordColumn].Trim(),
+                             Weight = Utils.StringToInt(o[columnNumbers.WeightColumn]/*.Trim()*/, 10),
+                             CmdType = Utils.StringToInt(o[columnNumbers.CmdTypeColumn], 1),
+                             ToolTipText = o[columnNumbers.ToolTipTextColumn].Trim(),
+                             Accelerators = o[columnNumbers.AcceleratorsColumn].Trim(),
+                         };
+                         return res;
+                     })
+                );
 
         }
 
