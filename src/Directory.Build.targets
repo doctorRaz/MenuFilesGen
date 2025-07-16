@@ -1,0 +1,25 @@
+﻿<Project>
+	<PropertyGroup>
+	<!-- не фурычит	 -->
+	<!-- <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath> -->
+		<!--<Version />-->
+		<Deterministic>false</Deterministic>
+		<AssemblyVersion>1.0.*</AssemblyVersion>
+		<GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+		<GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+		<!--<Version />-->
+		<!--<Name space />-->
+	<!--	<RootUser>drz</RootUser>-->
+		<!--<RootNamespace>$(RootUser).$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>-->
+		<!--<Name space />-->	
+		<!-- Description -->
+		<Product>MenuFilesGen</Product>
+		<Company>Kpblc and dRz</Company>
+		<Authors>Владислав Овчинников, Кулик Алексей, Разыграев Андрей</Authors>
+		<Description>Генерация меню и ленты для nanoCAD</Description>
+		<Copyright>Владислав Овчинников, Кулик Алексей, Разыграев Андрей</Copyright>
+		<Trademark>©TBS Software, ©kpblc2000, ©doctorRAZ 2014-2025</Trademark>
+		<!-- Description -->
+		<!--<BaseOutputPath>..\bin.NET\</BaseOutputPath>-->
+	</PropertyGroup>
+</Project>
