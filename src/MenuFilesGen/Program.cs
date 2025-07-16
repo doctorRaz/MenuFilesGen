@@ -1,5 +1,6 @@
 ﻿using MenuFilesGen.Models;
 using MenuFilesGen.Repositories;
+using MenuFilesGen.Service;
 using NickBuhro.Translit;
 using System.IO.Compression;
 using System.Text;
@@ -15,31 +16,39 @@ namespace MenuFilesGen
         [STAThread]
         static void Main(string[] args)
         {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);         
-            
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-#if !DEBUG
+            string fileName = "";
 
-            OpenFileDialog tableFileDialog = new OpenFileDialog() { Filter = "Книга Excel (*.xls*)|*.xls*|Юникод  разделитель табуляция (*.txt;*.tsv)|*.txt;*.tsv|ASCI разделитель точка запятая (*.csv)|*.csv|Все файлы (*.*)|*.*" };
-            if (tableFileDialog.ShowDialog() != DialogResult.OK)
+            Utils Ut = new Utils();
+
+            ArgsCmdLine cs = Ut.ParseCmdLine(args);
+
+            if (string.IsNullOrEmpty(cs.FilesName))
             {
-                Console.WriteLine("Не задан файл");
-                Console.WriteLine("\nДля выхода нажмите любую клавишу...");
-                Console.ReadKey();
-                return;
-            }    
-            string fileName = tableFileDialog.FileName;
+          
+                //#if DEBUG
 
-#else
-            //сохранять как текст в юникоде
-            //обрезать пустые строки
-            //string fileName = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.txt";
-            //string fileName = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\drzTools_BlockFix.txt";
-            //string fileNametst = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.txt";
-            string fileName = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.xlsm";
-            //string fileNametst = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.csv";
+                OpenFileDialog tableFileDialog = new OpenFileDialog() { Filter = "Книга Excel (*.xls*)|*.xls*|Юникод  разделитель табуляция (*.txt;*.tsv)|*.txt;*.tsv|ASCI разделитель точка запятая (*.csv)|*.csv|Все файлы (*.*)|*.*" };
+                if (tableFileDialog.ShowDialog() != DialogResult.OK)
+                {
+                    Console.WriteLine("Не задан файл");
+                    Console.WriteLine("\nДля выхода нажмите любую клавишу...");
+                    Console.ReadKey();
+                    return;
+                }
+                cs.FilesName = tableFileDialog.FileName;
+            }
+            //#else
+            //            //сохранять как текст в юникоде
+            //            //обрезать пустые строки
+            //            //string fileName = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.txt";
+            //            //string fileName = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\drzTools_BlockFix.txt";
+            //            //string fileNametst = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.txt";
+            //            string fileName = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.xlsm";
+            //            //string fileNametst = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.csv";
 
-#endif
+            //#endif
             CommandRepository rep = new CommandRepository(fileName);
 
             if (rep.CommandDefinitions is null || rep.CommandDefinitions.Count < 1)

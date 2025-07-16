@@ -8,7 +8,7 @@ namespace MenuFilesGen.Service
 {
     public class Utils
     {
-        public static int  StringToInt(string str, int def=0)
+        public static int StringToInt(string str, int def = 0)
         {
             int result;
 
@@ -20,7 +20,90 @@ namespace MenuFilesGen.Service
             {
                 return def;
             }
-             
+
         }
+
+        //https://ru.stackoverflow.com/questions/466805/Как-парсить-аргументы-командной-строки
+        /// <summary>
+        /// Parses the command line.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns></returns>
+        public ArgsCmdLine ParseCmdLine(string[] args)
+        {
+            ArgsCmdLine argsCmdLine = new ArgsCmdLine();
+
+            List<string> argsL = args.ToList();
+
+            if (args.Length == 0)
+                return argsCmdLine;
+
+
+            for (int i = 0; i < argsL.Count; i++)
+            {
+                Console.WriteLine(argsL[i]);
+
+                if (File.Exists(argsL[i]))//если файл
+                {
+
+                    argsCmdLine.FilesName = argsL[i];
+
+                }
+
+                else if (args[i].StartsWith("-"))//аргументы ком строки
+                {
+                    var parameterWithoutHyphen = args[i].Substring(1);
+                    var nameValue = parameterWithoutHyphen.Split(':');
+                    if (nameValue.Length > 1)
+                    {
+                        switch (nameValue[0].ToLower())
+                        {
+                            case "xln":
+                                argsCmdLine.XlsPageNumber = StringToInt(nameValue[1], argsCmdLine.XlsPageNumber);
+                                break;
+                            case "hrr":
+                                argsCmdLine.HeaderRowRange = StringToInt(nameValue[1], argsCmdLine.HeaderRowRange);
+                                break;
+                        }
+                    }
+
+                }
+
+            }
+
+            return argsCmdLine;
+        }
+    }
+
+    /// <summary>
+    /// результат парсинга ком строки
+    /// </summary>
+    public class ArgsCmdLine
+    {
+        /// <summary>
+        /// Шаблон для конфига
+        /// </summary>
+        /// <value>
+        /// The name of the files.
+        /// </value>
+        public string FilesName { get; set; } = "";
+
+        /// <summary>
+        /// Количество пропускаемых строк шаблона -hrr:3
+        /// </summary>
+        /// <value>
+        /// The header row range.
+        /// </value>
+        public int HeaderRowRange { get; set; } = 3;
+
+        /// <summary>
+        /// Номер листа шаблона если эксель -xln:1
+        /// </summary>
+        /// <value>
+        /// The XLS page number умолчание 0, такого листа не существует.
+        /// </value>
+        public int XlsPageNumber { get; set; } = 0;
+
+
     }
 }

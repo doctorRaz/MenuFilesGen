@@ -7,6 +7,11 @@ namespace MenuFilesGen.Repositories
 {
     public class CommandRepository
     {
+        public CommandRepository(ArgsCmdLine _cs)
+        {
+        }
+
+
         public CommandRepository(string _fileFullName)
         {
             fileFullName = _fileFullName;

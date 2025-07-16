@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "not cmd": {
+      "commandName": "Project"
+    },
+    "cmd": {
+      "commandName": "Project",
+      "commandLineArgs": "-hrr:2 -xln:1 \"d:\\@Developers\\Programmers\\!NET\\!bundle\\BlockFix.bundle\\Resources\\BlockFix.xlsm\""
+    }
+  }
+}
