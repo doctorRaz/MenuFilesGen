@@ -38,13 +38,13 @@ namespace MenuFilesGen.Repositories
         {
             XLWorkbook workbook = new XLWorkbook(new FileStream(fileFullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
 
-            Console.WriteLine("Введите номер листа:");
             int wscount = 1;
             foreach (IXLWorksheet _ws in workbook.Worksheets)
             {
                 Console.WriteLine($"{wscount}.\t{_ws.Name}");
                 wscount++;
             }
+            Console.Write("Введите номер листа: ");
             string? wsNumber = Console.ReadLine();
 
             int number = Utils.StringToInt(wsNumber);
@@ -58,7 +58,7 @@ namespace MenuFilesGen.Repositories
             IXLWorksheet worksheet = workbook.Worksheet(number);
 
             addinName = worksheet.Name;
-            Console.WriteLine($"Работаю с листом {addinName}");
+            Console.WriteLine($"Работаю с листом: \"{addinName}\"");
 
             IEnumerable<IXLRangeRow> rows = worksheet.RangeUsed().RowsUsed().Skip(HEADER_ROW_RANGE);
 

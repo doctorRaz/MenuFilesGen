@@ -15,19 +15,19 @@ namespace MenuFilesGen
         [STAThread]
         static void Main(string[] args)
         {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-
-
-           
-           
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);         
             
 
 #if !DEBUG
 
             OpenFileDialog tableFileDialog = new OpenFileDialog() { Filter = "Книга Excel (*.xls*)|*.xls*|Юникод  разделитель табуляция (*.txt;*.tsv)|*.txt;*.tsv|ASCI разделитель точка запятая (*.csv)|*.csv|Все файлы (*.*)|*.*" };
             if (tableFileDialog.ShowDialog() != DialogResult.OK)
+            {
+                Console.WriteLine("Не задан файл");
+                Console.WriteLine("\nДля выхода нажмите любую клавишу...");
+                Console.ReadKey();
                 return;
+            }    
             string fileName = tableFileDialog.FileName;
 
 #else
@@ -45,7 +45,7 @@ namespace MenuFilesGen
             if (rep.CommandDefinitions is null || rep.CommandDefinitions.Count < 1)
             {
                 Console.WriteLine("Файл не прочитан");
-                Console.WriteLine("Для выхода нажмите любую клавишу");
+                Console.WriteLine("Для выхода нажмите любую клавишу...");
                 Console.ReadKey();
                 return;
             }
@@ -356,7 +356,11 @@ namespace MenuFilesGen
 
             #endregion
 
-            Console.WriteLine($"Файлы {addinName}.cfg и {addinName}.cuix сохранены в папке {directoryPath}");
+            Console.WriteLine($"\nФайлы:\t{addinName}.cfg" +
+                $"\n\t{addinName}.cuix" +
+                $"\nсохранены в: {directoryPath}");
+            Console.WriteLine("\nДля выхода нажмите любую клавишу..."
+                );
             Console.ReadKey();
 
         }
