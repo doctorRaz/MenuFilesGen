@@ -7,7 +7,6 @@ namespace MenuFilesGen.Repositories
 {
     public class CommandRepository
     {
-
         public CommandRepository(string _fileFullName)
         {
             fileFullName = _fileFullName;
@@ -117,7 +116,7 @@ namespace MenuFilesGen.Repositories
 
             }
 
-            //todo копипаста((
+            //todo копипаста(( оптимизировать, потом
             CommandDefinitions = new List<CommandDefinition>(
                 datas.Select(o =>
                      {
@@ -224,6 +223,13 @@ namespace MenuFilesGen.Repositories
             throw new NotImplementedException();
         }
 
+        // https://stackoverflow.com/questions/1159233/multi-level-grouping-in-linq        
+        /// <summary>
+        /// Группируем по Root потом по панелям
+        /// </summary>
+        /// <value>
+        /// The hierarchical grouping.
+        /// </value>
         public dynamic HierarchicalGrouping
         {
             get
@@ -244,15 +250,59 @@ namespace MenuFilesGen.Repositories
 
             }
         }
+
+        /// <summary>
+        /// Определения команд
+        /// </summary>
+        /// <value>
+        /// The command definitions.
+        /// </value>
         public List<CommandDefinition>? CommandDefinitions { get; private set; }
+
+        /// <summary>
+        /// Not used
+        /// </summary>
+        /// <value>
+        /// The panel definitions.
+        /// </value>
         public List<PanelDefinition>? PanelDefinitions { get; private set; }
+
+        /// <summary>
+        /// Not used
+        /// </summary>
+        /// <value>
+        /// The ribbon palette definitions.
+        /// </value>
         public List<RibbonPaletteDefinition>? RibbonPaletteDefinitions { get; private set; }
 
+        /// <summary>
+        /// Название приложения
+        /// </summary>
+        /// <value>
+        /// The name of the addin.
+        /// </value>
         public string addinName { get; set; }
 
+        /// <summary>
+        /// Номера столбцов для парсинга
+        /// </summary>
+        /// <value>
+        /// The column numbers.
+        /// </value>
         private ColumnNumbers columnNumbers => new ColumnNumbers();
+
+        /// <summary>
+        /// Файл для парсинга
+        /// </summary>
+        /// <value>
+        /// The full name of the file.
+        /// </value>
         private string fileFullName { get; set; }
 
+
+        /// <summary>
+        /// Количество строк пропустить при парсинге
+        /// </summary>
         private const int HEADER_ROW_RANGE = 3;
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace MenuFilesGen.Enums
 {
-    /// <summary> Размеры кнопок в ленте </summary>
+    /// <summary> Размеры кнопок в ленте not used </summary>
     public enum RibbonButtonSize
     {
         /// <summary> Кнопки на ленте нет /summary>

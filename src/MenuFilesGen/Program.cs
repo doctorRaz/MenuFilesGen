@@ -50,10 +50,6 @@ namespace MenuFilesGen
                 return;
             }
 
-            // https://stackoverflow.com/questions/1159233/multi-level-grouping-in-linq
-
-            //List<CommandDescription> readdata = GetRes(fileName);//прочитали файл в класс
-
             string newLine = Environment.NewLine;
 
             string directoryPath = Path.GetDirectoryName(fileName);
@@ -72,10 +68,10 @@ namespace MenuFilesGen
 
             //команды
             string configman = $"{newLine}[\\configman]" +
-                        $"{newLine}[\\configman\\commands]";//todo это лишнее надо проверить
+                        $"{newLine}[\\configman\\commands]";
 
             //горячие клавиши
-            string accelerators = $"{newLine}[\\Accelerators]";//todo добавить столбецхоткеев
+            string accelerators = $"{newLine}[\\Accelerators]";// хоткеи
 
             //меню
             string menu = $"{newLine}[\\menu]";
@@ -127,8 +123,8 @@ namespace MenuFilesGen
                     string panelName = panel.panel;
 
 
-                    string panelNameRu = $"{addinName}_{panelName.Replace(' ', '_')}";//todo бага в меню вид панель с именем команд 
-                    string panelNameEn = Transliteration.CyrillicToLatin(panelNameRu, Language.Russian);
+                    string panelNameRu = $"{addinName}_{panelName.Replace(' ', '_')}";//в имени команды не должно быть пробелов 
+                    string panelNameEn = Transliteration.CyrillicToLatin(panelNameRu, Language.Russian);//intername е должно содержать кириллицы
 
                     string intername = $"ShowToolbar_{panelNameEn}";
                     string localName = $"Панель_{panelNameRu}";
