@@ -25,7 +25,7 @@ namespace MenuFilesGen
 
 #if DEBUG
 
-            OpenFileDialog tableFileDialog = new OpenFileDialog() { Filter = "TXT (*.txt)|*.txt|CSV (*.csv)|*.csv|TSV files (*.tsv)|*.tsv" };
+            OpenFileDialog tableFileDialog = new OpenFileDialog() { Filter = "Книга Excel (*.xls*)|*.xls*|Юникод  разделитель табуляция (*.txt;*.tsv)|*.txt;*.tsv|ASCI разделитель точка запятая (*.csv)|*.csv|Все файлы (*.*)|*.*" };
             if (tableFileDialog.ShowDialog() != DialogResult.OK)
                 return;
             string fileName = tableFileDialog.FileName;
