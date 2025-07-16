@@ -1,4 +1,6 @@
-# MenuFilesGen
+# MenuFilesGen (Fork)
+
+Совместно с [kpblc2000](https://github.com/kpblc2000) утилита творчески переработана, что сделано [смотри тут](https://github.com/doctorRaz/MenuFilesGen/wiki)
 
 Программа для автоматизированной генерации файлов .cfg и .cuix, описывающих меню программной надстройки для nanoCAD.
 Исходными данными для генерации является таблица со структурой, идентичной [примеру (TBS Plus)](https://docs.google.com/spreadsheets/d/17c7IhodIssifwAcz5XvV8-ZGdPzh-evJbF8ZK5u9BIc/edit?usp=sharing)
