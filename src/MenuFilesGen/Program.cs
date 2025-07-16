@@ -23,7 +23,7 @@ namespace MenuFilesGen
            
             
 
-#if DEBUG
+#if !DEBUG
 
             OpenFileDialog tableFileDialog = new OpenFileDialog() { Filter = "Книга Excel (*.xls*)|*.xls*|Юникод  разделитель табуляция (*.txt;*.tsv)|*.txt;*.tsv|ASCI разделитель точка запятая (*.csv)|*.csv|Все файлы (*.*)|*.*" };
             if (tableFileDialog.ShowDialog() != DialogResult.OK)
