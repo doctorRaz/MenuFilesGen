@@ -9,12 +9,10 @@ namespace MenuFilesGen.Repositories
     {
         public CommandRepository(ArgsCmdLine _cs)
         {
-        }
+            fileFullName = _cs.FilesName;
+            HEADER_ROW_RANGE = _cs.HeaderRowRange;
+            xlPage = _cs.XlsPageNumber;
 
-
-        public CommandRepository(string _fileFullName)
-        {
-            fileFullName = _fileFullName;
 
             string fileExtension = Path.GetExtension(fileFullName);
 
@@ -44,26 +42,49 @@ namespace MenuFilesGen.Repositories
             XLWorkbook workbook = new XLWorkbook(new FileStream(fileFullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
 
             int wscount = 1;
-            foreach (IXLWorksheet _ws in workbook.Worksheets)
+            foreach (IXLWorksheet _ws in workbook.Worksheets)//покажем листы
             {
                 Console.WriteLine($"{wscount}.\t{_ws.Name}");
+                //Console.WriteLine($"{wscount}. Имя:\t{_ws.Name}\t\tвидимость=\"{(XLWorksheetVisibilityMod)_ws.Visibility}\"");
                 wscount++;
             }
-            Console.Write("Введите номер листа: ");
-            string? wsNumber = Console.ReadLine();
 
-            int number = Utils.StringToInt(wsNumber);
+            Console.WriteLine("");
 
-            if (number < 1 || number > workbook.Worksheets.Count)//не число
+            bool result = false;
+            ConsoleKey k = ConsoleKey.NoName;
+            do
             {
-                Console.WriteLine("Такого листа нет");
-                return;
-            }
+                if (xlPage == 0)//лист не задан
+                {
+                    Console.Write("Введите номер листа: ");//запросим номер
+                    string? wsNumber = Console.ReadLine();
+                    xlPage = Utils.StringToInt(wsNumber);
+                }
 
-            IXLWorksheet worksheet = workbook.Worksheet(number);
+
+                if (xlPage > 0 && xlPage <= workbook.Worksheets.Count)//в диапазоне
+                {
+                    result = true;
+                }
+                else//вне диапазона
+                {
+                    Console.WriteLine($"Лист {xlPage} не найден!");
+                    Console.Write($"Продолжить - AnyKey\nЗавершить - Esc: ");
+                    xlPage = 0;
+                    k = Console.ReadKey().Key;
+                    Console.WriteLine($"");
+                }
+
+            } while (!(result || k == ConsoleKey.Escape));
+
+            if (!result) return;//выход по Esc уходим
+
+            IXLWorksheet worksheet = workbook.Worksheet(xlPage);
 
             addinName = worksheet.Name;
-            Console.WriteLine($"Работаю с листом: \"{addinName}\"");
+
+            Console.WriteLine($"Работаю с листом: {xlPage} - \"{addinName}\"");
 
             IEnumerable<IXLRangeRow> rows = worksheet.RangeUsed().RowsUsed().Skip(HEADER_ROW_RANGE);
 
@@ -302,12 +323,21 @@ namespace MenuFilesGen.Repositories
         /// <value>
         /// The full name of the file.
         /// </value>
-        private string fileFullName { get; set; }
+        public string fileFullName { get; set; }
 
 
         /// <summary>
         /// Количество строк пропустить при парсинге
         /// </summary>
-        private const int HEADER_ROW_RANGE = 3;
+        private int HEADER_ROW_RANGE { get; set; } = 3;
+
+        private int xlPage { get; set; } = 0;
+    }
+
+    public enum XLWorksheetVisibilityMod
+    {
+        Видим,
+        Скрыт,
+        СуперСкрыт
     }
 }

@@ -18,15 +18,26 @@ namespace MenuFilesGen
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            string fileName = "";
-
             Utils Ut = new Utils();
 
             ArgsCmdLine cs = Ut.ParseCmdLine(args);
 
+            Console.WriteLine($"Аргументы ком строки:" +
+                           $"\n\t-hrr:[сколько строк пропускать, число] - {cs.HeaderRowRange}" +
+                           $"\n\t-xpn:[для XLS* номер листа шаблона, число] - {cs.XlsPageNumber}" +
+                           $"\n\t-exo:[подтверждать выход - 1, не подтверждать - 0] - {cs.EchoOnOff}" +
+                           $"\n\t[\"полный путь к файлу шаблона с расширением\"] - {cs.FilesName}\n");
+
+            //Console.WriteLine($"Текущие настройки:" +
+            //   $"\n\t-hrr:[сколько строк пропускать, число]" +
+            //   $"\n\t-xpn:[для XLS* номер листа шаблона, число]" +
+            //   $"\n\t-exo:[подтверждать выход - 1, не подтверждать - 0]" +
+            //   $"\n\t[\"полный путь к файлу шаблона с расширением\"]");
+
+
             if (string.IsNullOrEmpty(cs.FilesName))
             {
-          
+
                 //#if DEBUG
 
                 OpenFileDialog tableFileDialog = new OpenFileDialog() { Filter = "Книга Excel (*.xls*)|*.xls*|Юникод  разделитель табуляция (*.txt;*.tsv)|*.txt;*.tsv|ASCI разделитель точка запятая (*.csv)|*.csv|Все файлы (*.*)|*.*" };
@@ -34,7 +45,7 @@ namespace MenuFilesGen
                 {
                     Console.WriteLine("Не задан файл");
                     Console.WriteLine("\nДля выхода нажмите любую клавишу...");
-                    Console.ReadKey();
+                    if (cs.EchoOnOff) Console.ReadKey();
                     return;
                 }
                 cs.FilesName = tableFileDialog.FileName;
@@ -49,19 +60,23 @@ namespace MenuFilesGen
             //            //string fileNametst = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.csv";
 
             //#endif
-            CommandRepository rep = new CommandRepository(fileName);
+            CommandRepository rep = new CommandRepository(cs);
 
             if (rep.CommandDefinitions is null || rep.CommandDefinitions.Count < 1)
             {
                 Console.WriteLine("Файл не прочитан");
-                Console.WriteLine("Для выхода нажмите любую клавишу...");
-                Console.ReadKey();
+                if (cs.EchoOnOff)
+                {
+                    Console.WriteLine("Для выхода нажмите любую клавишу...");
+                    Console.ReadKey();
+                }
+
                 return;
             }
 
             string newLine = Environment.NewLine;
 
-            string directoryPath = Path.GetDirectoryName(fileName);
+            string directoryPath = Path.GetDirectoryName(rep.fileFullName);
             string addinName = rep.addinName;
 
             string cfgFilePath = $"{directoryPath}\\{addinName}.cfg";
@@ -368,9 +383,12 @@ namespace MenuFilesGen
             Console.WriteLine($"\nФайлы:\t{addinName}.cfg" +
                 $"\n\t{addinName}.cuix" +
                 $"\nсохранены в: {directoryPath}");
-            Console.WriteLine("\nДля выхода нажмите любую клавишу..."
-                );
-            Console.ReadKey();
+
+            if (cs.EchoOnOff)
+            {
+                Console.WriteLine("\nДля выхода нажмите любую клавишу...");
+                Console.ReadKey();
+            }
 
         }
 

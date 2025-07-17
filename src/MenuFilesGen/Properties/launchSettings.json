@@ -5,7 +5,7 @@
     },
     "cmd": {
       "commandName": "Project",
-      "commandLineArgs": "-hrr:2 -xln:1 \"d:\\@Developers\\Programmers\\!NET\\!bundle\\BlockFix.bundle\\Resources\\BlockFix.xlsm\""
+      "commandLineArgs": "-exo:1 -hrr:3 -xpn:1 \"d:\\@Developers\\Programmers\\!NET\\!bundle\\BlockFix.bundle\\Resources\\BlockFix.xlsm\""
     }
   }
 }

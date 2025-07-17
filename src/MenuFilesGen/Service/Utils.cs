@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +23,11 @@ namespace MenuFilesGen.Service
             }
 
         }
+        public static bool StringToBool(string str, bool def = true)
+        {
+            return str.Trim() == "1";
+
+        }
 
         //https://ru.stackoverflow.com/questions/466805/Как-парсить-аргументы-командной-строки
         /// <summary>
@@ -41,7 +47,7 @@ namespace MenuFilesGen.Service
 
             for (int i = 0; i < argsL.Count; i++)
             {
-                Console.WriteLine(argsL[i]);
+                //Console.WriteLine(argsL[i]);
 
                 if (File.Exists(argsL[i]))//если файл
                 {
@@ -58,11 +64,14 @@ namespace MenuFilesGen.Service
                     {
                         switch (nameValue[0].ToLower())
                         {
-                            case "xln":
+                            case  "xpn":
                                 argsCmdLine.XlsPageNumber = StringToInt(nameValue[1], argsCmdLine.XlsPageNumber);
                                 break;
                             case "hrr":
                                 argsCmdLine.HeaderRowRange = StringToInt(nameValue[1], argsCmdLine.HeaderRowRange);
+                                break;
+                            case "exo":
+                                argsCmdLine.EchoOnOff = StringToBool(nameValue[1], argsCmdLine.EchoOnOff);
                                 break;
                         }
                     }
@@ -103,6 +112,14 @@ namespace MenuFilesGen.Service
         /// The XLS page number умолчание 0, такого листа не существует.
         /// </value>
         public int XlsPageNumber { get; set; } = 0;
+
+        /// <summary>
+        /// Подтверждать выход 
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [echo ON]; otherwise, <c>false</c>.
+        /// </value>
+        public bool EchoOnOff { get; set; } = true;
 
 
     }
