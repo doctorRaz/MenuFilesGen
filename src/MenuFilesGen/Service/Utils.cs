@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MenuFilesGen.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
@@ -9,6 +10,32 @@ namespace MenuFilesGen.Service
 {
     public class Utils
     {
+        /// <summary>
+        /// Описание иконок
+        /// </summary>
+        /// <param name="cmd">Описание команд.</param>
+        /// <returns>  описание иконки</returns>
+        public static string IconDefinition(CommandDefinition cmd)
+        {
+            string configman = "";
+            string newLine = Environment.NewLine;
+
+            if (!string.IsNullOrEmpty(cmd.IconName))//иконки из dll
+            {
+                configman += $"{newLine}BitmapDll=s{cmd.ResourceDllName}" +
+                            $"{newLine}Icon=s{cmd.IconName}";
+            }
+            else if (!string.IsNullOrEmpty(cmd.ResourceDllName)) //прописана  иконка с относительным путем и расширением
+            {
+                configman += $"{newLine}BitmapDll=s{cmd.ResourceDllName}";
+            }
+            else //иконка не прописана, имя иконки = название команды в каталоге \\icons
+            {
+                configman += $"{newLine}BitmapDll=sicons\\{cmd.InterName}.ico";
+            }
+            return configman;
+        }
+
         public static int StringToInt(string str, int def = 0)
         {
             int result;
@@ -64,7 +91,7 @@ namespace MenuFilesGen.Service
                     {
                         switch (nameValue[0].ToLower())
                         {
-                            case  "xpn":
+                            case "xpn":
                                 argsCmdLine.XlsPageNumber = StringToInt(nameValue[1], argsCmdLine.XlsPageNumber);
                                 break;
                             case "hrr":

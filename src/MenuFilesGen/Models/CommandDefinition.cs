@@ -59,6 +59,8 @@ namespace MenuFilesGen.Models
 
          /// <summary> хоткеи </summary>
         public string Accelerators { get; set; }
+
+        //todo добавить addinName
    
     }
 

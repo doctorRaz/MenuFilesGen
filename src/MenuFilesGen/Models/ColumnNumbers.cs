@@ -24,6 +24,7 @@
             CmdTypeColumn = 15;
             ToolTipTextColumn = 16;
             AcceleratorsColumn = 17;
+            //todo добавить addinName
         }
 
         /// <summary> Номер колонки для имени команды </summary>

@@ -31,9 +31,6 @@ namespace MenuFilesGen
 
             if (string.IsNullOrEmpty(cs.FilesName))
             {
-
-                //#if DEBUG
-
                 OpenFileDialog tableFileDialog = new OpenFileDialog() { Filter = "Книга Excel (*.xls*)|*.xls*|Юникод  разделитель табуляция (*.txt;*.tsv)|*.txt;*.tsv|ASCI разделитель точка запятая (*.csv)|*.csv|Все файлы (*.*)|*.*" };
                 if (tableFileDialog.ShowDialog() != DialogResult.OK)
                 {
@@ -44,7 +41,7 @@ namespace MenuFilesGen
                 }
                 cs.FilesName = tableFileDialog.FileName;
             }
- 
+
             CommandRepository rep = new CommandRepository(cs);
 
             if (rep.CommandDefinitions is null || rep.CommandDefinitions.Count < 1)
@@ -98,7 +95,9 @@ namespace MenuFilesGen
 
             //меню вид панелей
             string toolbarsViewMenu = $"{newLine};View меню" +
+                                        /*        $"{newLine}[\\menu\\View\\toolbars\\{addinName}]" +*/
                                         $"{newLine}[\\menu\\View\\toolbars\\{addinName}]" +
+                                        /*    $"{newLine}Name=s{addinName}";*/
                                         $"{newLine}Name=s{addinName}";
 
             foreach (var root in rep.HierarchicalGrouping)
@@ -142,6 +141,8 @@ namespace MenuFilesGen
                     toolbars += $"{newLine}{newLine}[\\toolbars\\{panelNameEn}]" +
                                 $"{newLine}name=s{panelName}";
 
+                    CommandDefinition cmd0 = panel.command[0] as CommandDefinition; //добавлять к команде показа панели иконку, по первой команде панели
+
                     //команды
                     toolbarsCmd += $"{newLine}{newLine}[\\configman\\commands\\{intername}]" +
                                     $"{newLine}weight=i10" +
@@ -150,8 +151,8 @@ namespace MenuFilesGen
                                     $"{newLine}StatusText=sОтображение панели {panelName}" +
                                     $"{newLine}ToolTipText=sОтображение панели {panelName}" +
                                     $"{newLine}DispName=sОтображение панели {panelName}" +
-                                    $"{newLine}LocalName=s{localName}";
-
+                                    $"{newLine}LocalName=s{localName}" +
+                                    $"{Utils.IconDefinition(cmd0)}";
                     //поп меню
                     toolbarPopupMenu += $"{newLine}[\\ToolbarPopupMenu\\{addinName}\\{intername}]" +
                      $"{newLine}Name=s{panelName}" +
@@ -185,24 +186,12 @@ namespace MenuFilesGen
                                      $"{newLine}intername=s{cmd.InterName}" +
                                      $"{newLine}DispName=s{cmd.DispName}" +
                                      $"{newLine}StatusText=s{cmd.StatusText}" +
-                                     _toolTipText +
-                                     _localName +
-                                     _realCommandName +
-                                     _keyword;
+                                     $"{_toolTipText}" +
+                                     $"{_localName}" +
+                                     $"{_realCommandName}" +
+                                     $"{_keyword}" +
+                                     $"{Utils.IconDefinition(cmd)}";
 
-                        if (!string.IsNullOrEmpty(cmd.IconName))//иконки из dll
-                        {
-                            configman += $"{newLine}BitmapDll=s{cmd.ResourceDllName}" +
-                                         $"{newLine}Icon=s{cmd.IconName}";
-                        }
-                        else if (!string.IsNullOrEmpty(cmd.ResourceDllName)) //прописана  иконка с относительным путем и расширением
-                        {
-                            configman += $"{newLine}BitmapDll=s{cmd.ResourceDllName}";
-                        }
-                        else //иконка не прописана, имя иконки = название команды в каталоге \\icons
-                        {
-                            configman += $"{newLine}BitmapDll=sicons\\{cmd.InterName}.ico";
-                        }
                         #endregion
 
                         if (!string.IsNullOrEmpty(cmd.Accelerators))
