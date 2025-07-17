@@ -24,7 +24,8 @@
             CmdTypeColumn = 15;
             ToolTipTextColumn = 16;
             AcceleratorsColumn = 17;
-            //todo добавить addinNameGlobal
+            AddonNameColumn = 18;
+          
         }
 
         /// <summary> Номер колонки для имени команды </summary>
@@ -59,7 +60,7 @@
         /// <summary> команду регистрировать но не показывать ни в меню ни в ленте ни в панелях </summary>
         public int DontMenuColumn { get; }
 
-        /// <summary>  родитель меню  </summary>
+        /// <summary> имя приложения </summary>
         public int AppNameColumn { get; }
 
         /// <summary>  локальное имя команды </summary>
@@ -82,5 +83,8 @@
 
         /// <summary>горячие кнопки</summary>
         public int AcceleratorsColumn { get; }
+
+        /// <summary>имя аддона</summary>
+        public int AddonNameColumn { get; }
     }
 }

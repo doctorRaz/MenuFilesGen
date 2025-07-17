@@ -102,7 +102,7 @@ namespace MenuFilesGen
 
             foreach (var AppName in rep.HierarchicalGrouping)
             {
-                string appName = AppName.appName;
+                string appName = AppName.Name;
                 string appMenu = $"{addinName}";
 
                 #region Классическое меню шапка
@@ -124,7 +124,7 @@ namespace MenuFilesGen
                 }
                 #endregion
 
-                foreach (var panel in AppName.panel)
+                foreach (var panel in AppName.Addon )
                 {
                     string panelName = panel.panel;
 

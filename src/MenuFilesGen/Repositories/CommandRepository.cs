@@ -42,7 +42,8 @@ namespace MenuFilesGen.Repositories
             XLWorkbook workbook = new XLWorkbook();
             try
             {
-            /*XLWorkbook*/ workbook = new XLWorkbook(new FileStream(fileFullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
+                /*XLWorkbook*/
+                workbook = new XLWorkbook(new FileStream(fileFullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
             }
             catch (Exception ex)
             {
@@ -122,6 +123,7 @@ namespace MenuFilesGen.Repositories
 
                     Weight = Utils.StringToInt(row.Cell(columnNumbers.WeightColumn + 1).GetString(), 10),
                     CmdType = Utils.StringToInt(row.Cell(columnNumbers.CmdTypeColumn + 1).GetString(), 1),
+                    AddonName = row.Cell(columnNumbers.AddonNameColumn + 1).GetString().Trim(),
 
                 };
 
@@ -182,6 +184,7 @@ namespace MenuFilesGen.Repositories
                              CmdType = Utils.StringToInt(o[columnNumbers.CmdTypeColumn], 1),
                              ToolTipText = o[columnNumbers.ToolTipTextColumn].Trim(),
                              Accelerators = o[columnNumbers.AcceleratorsColumn].Trim(),
+                             //todo добавить addinName 
                          };
                          return res;
                      })
@@ -255,6 +258,7 @@ namespace MenuFilesGen.Repositories
                         CmdType = Utils.StringToInt(o[columnNumbers.CmdTypeColumn], 1),
                         ToolTipText = o[columnNumbers.ToolTipTextColumn].Trim(),
                         Accelerators = o[columnNumbers.AcceleratorsColumn].Trim(),
+                        //todo добавить addinName 
                     };
                     return res;
                 })
@@ -278,23 +282,47 @@ namespace MenuFilesGen.Repositories
         /// <value>
         /// The hierarchical grouping.
         /// </value>
-        public dynamic HierarchicalGrouping
+        public List<AppDefinition> HierarchicalGrouping
         {
             get
             {
+
                 return CommandDefinitions
                      .GroupBy(e => e.AppName)
-                     .Select(appName => new
+                     .Select(appName => new AppDefinition
                      {
-                         appName = appName.Key,
-                         panel = appName
-                     .GroupBy(e => e.PanelName)
-                     .Select(panel => new
+                         Name = appName.Key,
+                         Addon = appName
+                     .GroupBy(e => e.AddonName)
+                     .Select(addon => new AddonDefinition
                      {
-                         panel = panel.Key,
-                         command = panel.ToList()
+                         Parent = appName.Key,
+                         Name = addon.Key,
+                         Panel = addon  
+                         .GroupBy(e => e.PanelName)
+                         .Select(panel => new PanelDefinition
+                         {
+                             Parent = addon.Key,
+                             Name = panel.Key,
+                             Command =panel.ToList() /*new List<CommandDefinition>(panel)*/,
+
+                         }).ToList()
                      }).ToList()
                      }).ToList();
+
+                //return CommandDefinitions
+                //     .GroupBy(e => e.AppName)
+                //     .Select(appName => new
+                //     {
+                //         appName = appName.Key,
+                //         panel = appName
+                //     .GroupBy(e => e.PanelName)
+                //     .Select(panel => new
+                //     {
+                //         panel = panel.Key,
+                //         command = panel.ToList()
+                //     }).ToList()
+                //     }).ToList();
 
             }
         }
