@@ -100,8 +100,8 @@ namespace MenuFilesGen
                                         $"{newLine}[\\menu\\View\\toolbars\\{addinName}]" +
                                         /*    $"{newLine}Name=s{addinNameGlobal}";*/
                                         $"{newLine}Name=s{addinName}";
-
-            foreach (var AppName in rep.HierarchicalGrouping)
+            //todo начинаем с уровня приложения, добавить уровень
+            foreach (AppDefinition AppName in rep.HierarchicalGrouping)
             {
                 string appName = AppName.Name;
                 string appMenu = $"{addinName}";
