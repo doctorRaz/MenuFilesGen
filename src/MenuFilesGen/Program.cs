@@ -28,12 +28,6 @@ namespace MenuFilesGen
                            $"\n\t-exo:[подтверждать выход - 1, не подтверждать - 0] - {cs.EchoOnOff}" +
                            $"\n\t[\"полный путь к файлу шаблона с расширением\"] - {cs.FilesName}\n");
 
-            //Console.WriteLine($"Текущие настройки:" +
-            //   $"\n\t-hrr:[сколько строк пропускать, число]" +
-            //   $"\n\t-xpn:[для XLS* номер листа шаблона, число]" +
-            //   $"\n\t-exo:[подтверждать выход - 1, не подтверждать - 0]" +
-            //   $"\n\t[\"полный путь к файлу шаблона с расширением\"]");
-
 
             if (string.IsNullOrEmpty(cs.FilesName))
             {
@@ -50,26 +44,15 @@ namespace MenuFilesGen
                 }
                 cs.FilesName = tableFileDialog.FileName;
             }
-            //#else
-            //            //сохранять как текст в юникоде
-            //            //обрезать пустые строки
-            //            //string fileName = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.txt";
-            //            //string fileName = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\drzTools_BlockFix.txt";
-            //            //string fileNametst = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.txt";
-            //            string fileName = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.xlsm";
-            //            //string fileNametst = @"d:\@Developers\Programmers\!NET\!bundle\BlockFix.bundle\Resources\BlockFix.csv";
-
-            //#endif
+ 
             CommandRepository rep = new CommandRepository(cs);
 
             if (rep.CommandDefinitions is null || rep.CommandDefinitions.Count < 1)
             {
-                Console.WriteLine("Файл не прочитан");
-                if (cs.EchoOnOff)
-                {
-                    Console.WriteLine("Для выхода нажмите любую клавишу...");
-                    Console.ReadKey();
-                }
+                Console.WriteLine($"Файл {rep.fileFullName} не прочитан");
+
+                Console.WriteLine("Для выхода нажмите любую клавишу...");
+                Console.ReadKey();
 
                 return;
             }
