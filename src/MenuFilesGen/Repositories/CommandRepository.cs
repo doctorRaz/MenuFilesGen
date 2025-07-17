@@ -39,7 +39,15 @@ namespace MenuFilesGen.Repositories
         /// <summary> Чтение файла обмена (xls)</summary>
         public void ReadFromXls()
         {
-            XLWorkbook workbook = new XLWorkbook(new FileStream(fileFullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
+            XLWorkbook workbook = new XLWorkbook();
+            try
+            {
+            /*XLWorkbook*/ workbook = new XLWorkbook(new FileStream(fileFullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
 
             int wscount = 1;
             foreach (IXLWorksheet _ws in workbook.Worksheets)//покажем листы
@@ -130,16 +138,23 @@ namespace MenuFilesGen.Repositories
         {
 
 
-            List<string[]> datas;
-            using (StreamReader reader = new StreamReader(fileFullName, Encoding.GetEncoding(1251)))
+            List<string[]> datas = null;
+            try
             {
-                datas = reader.ReadToEnd()
-                   .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
-                   .Skip(HEADER_ROW_RANGE)
-                   .Select(x => x.Split(';'))
-                      .Where(c => !(c[columnNumbers.DontTakeColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase)))
-                      .ToList();
+                using (StreamReader reader = new StreamReader(fileFullName, Encoding.GetEncoding(1251)))
+                {
+                    datas = reader.ReadToEnd()
+                       .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
+                       .Skip(HEADER_ROW_RANGE)
+                       .Select(x => x.Split(';'))
+                          .Where(c => !(c[columnNumbers.DontTakeColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase)))
+                          .ToList();
 
+                }
+            }
+            catch (Exception ex)
+            {
+                return;
             }
 
             //todo копипаста(( оптимизировать, потом
@@ -180,15 +195,22 @@ namespace MenuFilesGen.Repositories
         /// <param name="columnNumbers">Настройки парсинга</param>
         public void ReadFromTsv()
         {
-            List<string[]> datas;
-            using (StreamReader reader = new StreamReader(fileFullName, Encoding.UTF8))
+            List<string[]> datas = null;
+            try
             {
-                datas = reader.ReadToEnd()
-                    .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
-                    .Skip(HEADER_ROW_RANGE)
-                    .Select(o => o.Split('\t'))
-                    .Where(c => !(c[columnNumbers.DontTakeColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase)))
-                    .ToList();
+                using (StreamReader reader = new StreamReader(fileFullName, Encoding.UTF8))
+                {
+                    datas = reader.ReadToEnd()
+                        .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
+                        .Skip(HEADER_ROW_RANGE)
+                        .Select(o => o.Split('\t'))
+                        .Where(c => !(c[columnNumbers.DontTakeColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase)))
+                        .ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                return;
             }
 
             PanelDefinitions = new List<PanelDefinition>(
