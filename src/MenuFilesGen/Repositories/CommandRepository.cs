@@ -23,13 +23,13 @@ namespace MenuFilesGen.Repositories
             }
             else if (fileExtension.Contains("csv", StringComparison.OrdinalIgnoreCase))//разделитель ; ASCI
             {
-                addinName = Path.GetFileNameWithoutExtension(fileFullName);
+                addinNameGlobal = Path.GetFileNameWithoutExtension(fileFullName);
 
                 ReadFromCsv();
             }
             else//разделитель tab юникод или tsb
             {
-                addinName = Path.GetFileNameWithoutExtension(fileFullName);
+                addinNameGlobal = Path.GetFileNameWithoutExtension(fileFullName);
 
                 ReadFromTsv();
             }
@@ -90,9 +90,9 @@ namespace MenuFilesGen.Repositories
 
             IXLWorksheet worksheet = workbook.Worksheet(xlPage);
 
-            addinName = worksheet.Name;
+            addinNameGlobal = worksheet.Name;
 
-            Console.WriteLine($"Работаю с листом: {xlPage} - \"{addinName}\"");
+            Console.WriteLine($"Работаю с листом: {xlPage} - \"{addinNameGlobal}\"");
 
             IEnumerable<IXLRangeRow> rows = worksheet.RangeUsed().RowsUsed().Skip(HEADER_ROW_RANGE);
 
@@ -110,7 +110,7 @@ namespace MenuFilesGen.Repositories
                     PanelName = row.Cell(columnNumbers.PanelNameColumn + 1).GetString().Trim(),
                     RibbonSplitButtonName = row.Cell(columnNumbers.RibbonSplitButtonColumn + 1).GetString().Trim(),
                     RibbonSize = row.Cell(columnNumbers.RibbonSizeColumn + 1).GetString().Trim(),
-                    Root = row.Cell(columnNumbers.RootColumn + 1).GetString().Trim(),
+                    AppName = row.Cell(columnNumbers.AppNameColumn + 1).GetString().Trim(),
                     LocalName = row.Cell(columnNumbers.LocalNameColumn + 1).GetString().Trim(),
                     RealCommandName = row.Cell(columnNumbers.RealCommandNameColumn + 1).GetString().Trim(),
                     Keyword = row.Cell(columnNumbers.KeywordColumn + 1).GetString().Trim(),
@@ -172,7 +172,7 @@ namespace MenuFilesGen.Repositories
 
                              RibbonSplitButtonName = o[columnNumbers.RibbonSplitButtonColumn].Trim(),
                              RibbonSize = o[columnNumbers.RibbonSizeColumn].Trim(),
-                             Root = o[columnNumbers.RootColumn].Trim(),
+                             AppName = o[columnNumbers.AppNameColumn].Trim(),
                              DontMenu = o[columnNumbers.DontMenuColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
                              DontTake = o[columnNumbers.DontTakeColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
                              LocalName = o[columnNumbers.LocalNameColumn].Trim(),
@@ -245,7 +245,7 @@ namespace MenuFilesGen.Repositories
 
                         RibbonSplitButtonName = o[columnNumbers.RibbonSplitButtonColumn].Trim(),
                         RibbonSize = o[columnNumbers.RibbonSizeColumn].Trim(),
-                        Root = o[columnNumbers.RootColumn].Trim(),
+                        AppName = o[columnNumbers.AppNameColumn].Trim(),
                         DontMenu = o[columnNumbers.DontMenuColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
                         DontTake = o[columnNumbers.DontTakeColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
                         LocalName = o[columnNumbers.LocalNameColumn].Trim(),
@@ -273,7 +273,7 @@ namespace MenuFilesGen.Repositories
 
         // https://stackoverflow.com/questions/1159233/multi-level-grouping-in-linq        
         /// <summary>
-        /// Группируем по Root потом по панелям
+        /// Группируем по AppName потом по панелям
         /// </summary>
         /// <value>
         /// The hierarchical grouping.
@@ -283,11 +283,11 @@ namespace MenuFilesGen.Repositories
             get
             {
                 return CommandDefinitions
-                     .GroupBy(e => e.Root)
-                     .Select(root => new
+                     .GroupBy(e => e.AppName)
+                     .Select(appName => new
                      {
-                         root = root.Key,
-                         panel = root
+                         appName = appName.Key,
+                         panel = appName
                      .GroupBy(e => e.PanelName)
                      .Select(panel => new
                      {
@@ -329,7 +329,7 @@ namespace MenuFilesGen.Repositories
         /// <value>
         /// The name of the addin.
         /// </value>
-        public string addinName { get; set; }
+        public string addinNameGlobal { get; set; }
 
         /// <summary>
         /// Номера столбцов для парсинга

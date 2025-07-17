@@ -57,7 +57,7 @@ namespace MenuFilesGen
             string newLine = Environment.NewLine;
 
             string directoryPath = Path.GetDirectoryName(rep.fileFullName);
-            string addinName = rep.addinName;
+            string addinName = rep.addinNameGlobal;
 
             string cfgFilePath = $"{directoryPath}\\{addinName}.cfg";
             string cuiFilePath = $"{directoryPath}\\RibbonRoot.cui";
@@ -95,36 +95,36 @@ namespace MenuFilesGen
 
             //меню вид панелей
             string toolbarsViewMenu = $"{newLine};View меню" +
-                                        /*        $"{newLine}[\\menu\\View\\toolbars\\{addinName}]" +*/
+                                        /*        $"{newLine}[\\menu\\View\\toolbars\\{addinNameGlobal}]" +*/
                                         $"{newLine}[\\menu\\View\\toolbars\\{addinName}]" +
-                                        /*    $"{newLine}Name=s{addinName}";*/
+                                        /*    $"{newLine}Name=s{addinNameGlobal}";*/
                                         $"{newLine}Name=s{addinName}";
 
-            foreach (var root in rep.HierarchicalGrouping)
+            foreach (var AppName in rep.HierarchicalGrouping)
             {
-                string rootName = root.root;
-                string rootMenu = $"{addinName}";
+                string appName = AppName.appName;
+                string appMenu = $"{addinName}";
 
                 #region Классическое меню шапка
 
-                if (!string.IsNullOrEmpty(rootName))
+                if (!string.IsNullOrEmpty(appName))
                 {
-                    rootMenu = $"{rootName}\\{addinName}";
+                    appMenu = $"{appName}\\{addinName}";
 
-                    menu += $"{newLine}[\\menu\\{rootName}]" +
-                            $"{newLine}Name=s{rootName}" +
-                            $"{newLine}[\\menu\\{rootMenu}]" +
+                    menu += $"{newLine}[\\menu\\{appName}]" +
+                            $"{newLine}Name=s{appName}" +
+                            $"{newLine}[\\menu\\{appMenu}]" +
                             $"{newLine}Name=s{addinName}";
 
                 }
                 else
                 {
-                    menu += $"{newLine}[\\menu\\{rootMenu}]" +
+                    menu += $"{newLine}[\\menu\\{appMenu}]" +
                             $"{newLine} Name=s{addinName}";
                 }
                 #endregion
 
-                foreach (var panel in root.panel)
+                foreach (var panel in AppName.panel)
                 {
                     string panelName = panel.panel;
 
@@ -166,7 +166,7 @@ namespace MenuFilesGen
 
                     #region Классическое меню раздел
 
-                    menu += $"{newLine}{newLine}[\\menu\\{rootMenu}\\{panelName}]" +
+                    menu += $"{newLine}{newLine}[\\menu\\{appMenu}\\{panelName}]" +
                             $"{newLine}name=s{panelName}";
 
                     #endregion
@@ -203,7 +203,7 @@ namespace MenuFilesGen
                         if (cmd.DontMenu) continue;// не добавлять в меню пропуск
                         #region Классическое меню
 
-                        menu += $"{newLine}[\\menu\\{rootMenu}\\{panelName}\\s{cmd.InterName}]" +
+                        menu += $"{newLine}[\\menu\\{appMenu}\\{panelName}\\s{cmd.InterName}]" +
                                 $"{newLine}name=s{cmd.DispName}" +
                                 $"{newLine}Intername=s{cmd.InterName}";
 

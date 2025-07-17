@@ -16,7 +16,7 @@
             DontMenuColumn = 7;
             ResourseDllNameColumn = 8;
             IconColumn = 9;
-            RootColumn = 10;
+            AppNameColumn = 10;
             LocalNameColumn = 11;
             RealCommandNameColumn = 12;
             KeywordColumn = 13;
@@ -24,7 +24,7 @@
             CmdTypeColumn = 15;
             ToolTipTextColumn = 16;
             AcceleratorsColumn = 17;
-            //todo добавить addinName
+            //todo добавить addinNameGlobal
         }
 
         /// <summary> Номер колонки для имени команды </summary>
@@ -60,7 +60,7 @@
         public int DontMenuColumn { get; }
 
         /// <summary>  родитель меню  </summary>
-        public int RootColumn { get; }
+        public int AppNameColumn { get; }
 
         /// <summary>  локальное имя команды </summary>
         public int LocalNameColumn { get; }

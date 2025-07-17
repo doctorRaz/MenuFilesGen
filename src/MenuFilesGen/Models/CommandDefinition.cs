@@ -35,7 +35,7 @@ namespace MenuFilesGen.Models
         public string IconName { get; set; }
 
         /// <summary> родительское меню </summary>
-        public string Root { get; set; }
+        public string AppName { get; set; }
 
         /// <summary> Локальное имя команды </summary>
         public string LocalName { get; set; }
@@ -60,7 +60,7 @@ namespace MenuFilesGen.Models
          /// <summary> хоткеи </summary>
         public string Accelerators { get; set; }
 
-        //todo добавить addinName
+        //todo добавить addinNameGlobal
    
     }
 
