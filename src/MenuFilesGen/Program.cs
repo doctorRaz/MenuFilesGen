@@ -47,8 +47,9 @@ namespace MenuFilesGen
             if (rep.CommandDefinitions is null || rep.CommandDefinitions.Count < 1)
             {
                 Console.WriteLine($"Файл {rep.fileFullName} не прочитан");
-
-                Console.WriteLine("Для выхода нажмите любую клавишу...");
+                
+                cs.FilesName ="";//чистим путь к шаблону
+                Console.WriteLine("Для выхода нажмите любую клавишу...");//todo зациклить выбор файла?
                 Console.ReadKey();
 
                 return;
