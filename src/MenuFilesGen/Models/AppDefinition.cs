@@ -15,6 +15,6 @@
         /// <value>
         /// The addon.
         /// </value>
-        public List<AddonDefinition> Addon { get; set; }
+        public List<AddonDefinition> Addons { get; set; }
     }
 }

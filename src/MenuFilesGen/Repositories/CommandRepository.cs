@@ -45,6 +45,7 @@ namespace MenuFilesGen.Repositories
             using (StreamWriter writer = new StreamWriter(CfgFilePath, false, Encoding.GetEncoding(65001)))
             {                 
 
+                writer.WriteLine("[\\cfg]");
                 writer.WriteLine(cfg.Menu.LstStr());//меню
                 writer.WriteLine();
                 writer.WriteLine(cfg.ToolbarPopupMenu.LstStr()); //поп меню
@@ -88,7 +89,7 @@ namespace MenuFilesGen.Repositories
                      .Select(appName => new AppDefinition
                      {
                          Name = appName.Key,
-                         Addon = appName
+                         Addons = appName
                      .GroupBy(e => e.AddonName)
                      .Select(addon => new AddonDefinition
                      {
