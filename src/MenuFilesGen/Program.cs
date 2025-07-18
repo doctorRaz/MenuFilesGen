@@ -3,6 +3,7 @@ using MenuFilesGen.Models;
 using MenuFilesGen.Repositories;
 using MenuFilesGen.Service;
 using NickBuhro.Translit;
+using System.CodeDom;
 using System.IO.Compression;
 using System.Text;
 using System.Xml.Linq;
@@ -86,33 +87,105 @@ namespace MenuFilesGen
             string newLine = Environment.NewLine;//переносы
 
 
-            string addinNameGlobal = rep.AddonNameGlobal;
+            string addonNameGlobal = rep.AddonNameGlobal;
 
-            CfgDefinition cfg = new CfgDefinition(addinNameGlobal);//конфиг
-                         
+            CfgDefinition cfg = new CfgDefinition(addonNameGlobal);//конфиг
+
             //todo начинаем с уровня приложения, добавить уровень
-            foreach (AppDefinition AppName in rep.HierarchicalGrouping)//уровень приложения
+            foreach (AppDefinition App in rep.HierarchicalGrouping)//уровень приложения
             {
-                 string appName = AppName.Name;
+                string appName = App.Name;
 
-                #region Классическое меню шапка
-                if(!string.IsNullOrEmpty(appName))
+                // Классическое меню шапка
+                string menuApp = "[\\menu";
+                if (!string.IsNullOrEmpty(appName))
                 {
-                   
-                    var d = cfg.Menu.Last();
-                    var st = $"{cfg.Menu.Last()}\\{appName}]";
-                    var sт = $"Name=s{appName}]";
-                    cfg.Menu.Add($"{cfg.Menu.Last()}\\{appName}]");
+                    menuApp += $"\\{appName}";
+
+                    cfg.Menu.Add($"{menuApp}]");
                     cfg.Menu.Add($"Name=s{appName}");
+                }
+                //+ ***** уровень аддона *****
+                foreach (AddonDefinition Addon in App.Addons)
+                {
+                    string addonName = Addon.Name;
+
+                    string menuAddon = "";
+
+                    if (!string.IsNullOrEmpty(addonName))
+                    {
+                        menuAddon = $"{menuApp}\\{addonName}";
+
+                        cfg.Menu.Add($"{menuAddon}]");
+                        cfg.Menu.Add($"Name=s{addonName}");
+                    }
+                    else
+                    {
+                        menuAddon = menuApp;
+                    }
+                    //+ *******уровень панели *************
+                    foreach (PanelDefinition Panel in Addon.Panel)
+                    {
+                        string panelName = Panel.Name; //имя панели не может быть пустым
+                        string menuPanel = "";
+
+
+                        //menu
+                        menuPanel += $"{menuAddon}\\{panelName}";
+                        cfg.Menu.Add($"{menuPanel}]");
+                        cfg.Menu.Add($"Name=s{panelName}");
+
+                        //toolbar название
+                        string panelNameRu = $"{addonNameGlobal}_{panelName.Replace(' ', '_')}";//в имени команды не должно быть пробелов 
+                        string panelNameEn = Transliteration.CyrillicToLatin(panelNameRu, Language.Russian);//intername не должно содержать кириллицы
+
+                        //toolbar вызов
+                        string toolbarIntername = $"ShowToolbar_{panelNameEn}";
+                        string toolbarLocalName = $"Панель_{panelNameRu}";
+
+                        //регистрация панели
+                        cfg.Toolbars.Add($"[\\toolbars\\{panelNameEn}]");
+                        cfg.Toolbars.Add($"name=s{panelName}");
+
+                        //регистрируем команду вызова панели
+                        cfg.ToolbarsCmd.Add($"[\\configman\\commands\\{toolbarIntername}]");
+                        cfg.ToolbarsCmd.Add($"weight=i10");
+                        cfg.ToolbarsCmd.Add($"cmdtype=i0");
+                        cfg.ToolbarsCmd.Add($"Intername=s{toolbarIntername}");
+                        cfg.ToolbarsCmd.Add($"StatusText=sОтображение панели {panelName}");
+                        cfg.ToolbarsCmd.Add($"ToolTipText=sОтображение панели {panelName}");
+                        cfg.ToolbarsCmd.Add($"DispName=sОтображение панели {panelName}");
+                        cfg.ToolbarsCmd.Add($"LocalName=s{toolbarLocalName}");
+
+                        //добавлять к команде показа панели иконку, по первой команде панели
+                        cfg.ToolbarsCmd.AddRange(Utils.IconDefinition(Panel.Command[0]));
+
+                        //+ ****** поп меню ****************
+                        string panelRoot = string.IsNullOrEmpty(appName) ? addonNameGlobal : appName;
+                        cfg.ToolbarPopupMenu.Add($"[\\ToolbarPopupMenu\\{panelRoot}\\{toolbarIntername}]");
+                        cfg.ToolbarPopupMenu.Add($"Name=s{panelName}");
+                        cfg.ToolbarPopupMenu.Add($"InterName=s{toolbarIntername}");
+
+                        //+ ****** вью меню ****************
+                        cfg.ToolbarsViewMenu.Add($"[\\menu\\View\\toolbars\\{panelRoot}\\{toolbarIntername}]");
+                        cfg.ToolbarsViewMenu.Add($"Name=s{panelName}");
+                        cfg.ToolbarsViewMenu.Add($"InterName=s{toolbarIntername}");
+
+                        //+ **** уровень команды ********
+                        foreach (CommandDefinition cmd in Panel.Command)
+                        {
+
+                        }
+                    }
+
                 }
 
 
-                #endregion
             }
             /*
-            foreach (AppDefinition AppName in rep.HierarchicalGrouping)
+            foreach (AppDefinition App in rep.HierarchicalGrouping)
             {
-                string appName = AppName.Name;
+                string appName = App.Name;
                 string appMenu = $"{AddonNameGlobal}";
 
                 #region Классическое меню шапка
@@ -134,7 +207,7 @@ namespace MenuFilesGen
                 }
                 #endregion
 
-                foreach (var panel in AppName.Addon )
+                foreach (var panel in App.Addons )
                 {
                     string panelName = panel.Name;
 
@@ -151,7 +224,7 @@ namespace MenuFilesGen
                     toolbars += $"{newLine}{newLine}[\\toolbars\\{panelNameEn}]" +
                                 $"{newLine}name=s{panelName}";
 
-                    CommandDefinition cmd0 = panel.command[0] as CommandDefinition; //добавлять к команде показа панели иконку, по первой команде панели
+                    CommandDefinition _cmd = panel.command[0] as CommandDefinition; //добавлять к команде показа панели иконку, по первой команде панели
 
                     //команды
                     toolbarsCmd += $"{newLine}{newLine}[\\configman\\commands\\{intername}]" +
@@ -162,7 +235,7 @@ namespace MenuFilesGen
                                     $"{newLine}ToolTipText=sОтображение панели {panelName}" +
                                     $"{newLine}DispName=sОтображение панели {panelName}" +
                                     $"{newLine}LocalName=s{localName}" +
-                                    $"{Utils.IconDefinition(cmd0)}";
+                                    $"{Utils.IconDefinition(_cmd)}";
                     //поп меню
                     toolbarPopupMenu += $"{newLine}[\\ToolbarPopupMenu\\{AddonNameGlobal}\\{intername}]" +
                      $"{newLine}Name=s{panelName}" +
@@ -268,8 +341,8 @@ namespace MenuFilesGen
             ribbonRoot.Add(ribbonTabSourceCollection);
 
             XElement ribbonTabSource = new XElement("RibbonTabSource");
-            ribbonTabSource.Add(new XAttribute("Text", addinNameGlobal));
-            ribbonTabSource.Add(new XAttribute("UID", $"{addinNameGlobal.Replace(" ", "")}_Tab"));
+            ribbonTabSource.Add(new XAttribute("Text", addonNameGlobal));
+            ribbonTabSource.Add(new XAttribute("UID", $"{addonNameGlobal.Replace(" ", "")}_Tab"));
             ribbonTabSourceCollection.Add(ribbonTabSource);
 
             foreach (IGrouping<string, CommandDefinition> cmd in groupsPanel)
@@ -364,8 +437,8 @@ namespace MenuFilesGen
 
             #endregion
 
-            Console.WriteLine($"\nФайлы:\t{addinNameGlobal}.cfg" +
-                $"\n\t{addinNameGlobal}.cuix" +
+            Console.WriteLine($"\nФайлы:\t{addonNameGlobal}.cfg" +
+                $"\n\t{addonNameGlobal}.cuix" +
                 $"\nсохранены в: {rep.directoryPath}");
 
             if (argsCmdLine.EchoOnOff)
