@@ -5,30 +5,30 @@ namespace MenuFilesGen.Service
     public class Utils
     {
 
-      
+
 
         /// <summary>
         /// Описание иконок
         /// </summary>
         /// <param name="cmd">Описание команд.</param>
         /// <returns>  описание иконки</returns>
-        public static string IconDefinition(CommandDefinition cmd)
+        public static List<string> IconDefinition(CommandDefinition cmd)
         {
-            string configman = "";
-            
+            List<string> configman = new List<string>();
+
 
             if (!string.IsNullOrEmpty(cmd.IconName))//иконки из dll
             {
-                configman += $"{newLine}BitmapDll=s{cmd.ResourceDllName}" +
-                            $"{newLine}Icon=s{cmd.IconName}";
+                configman.Add($"BitmapDll=s{cmd.ResourceDllName}");
+                configman.Add($"Icon=s{cmd.IconName}");
             }
             else if (!string.IsNullOrEmpty(cmd.ResourceDllName)) //прописана  иконка с относительным путем и расширением
             {
-                configman += $"{newLine}BitmapDll=s{cmd.ResourceDllName}";
+                configman.Add($"BitmapDll=s{cmd.ResourceDllName}");
             }
             else //иконка не прописана, имя иконки = название команды в каталоге \\icons
             {
-                configman += $"{newLine}BitmapDll=sicons\\{cmd.InterName}.ico";
+                configman.Add($"BitmapDll=sicons\\{cmd.InterName}.ico");
             }
             return configman;
         }
@@ -107,7 +107,7 @@ namespace MenuFilesGen.Service
             return argsCmdLine;
         }
 
-      static  string    newLine = Environment.NewLine;
+        //static string newLine = Environment.NewLine;
     }
 
     /// <summary>
