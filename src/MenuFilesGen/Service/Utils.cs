@@ -1,15 +1,12 @@
 ﻿using MenuFilesGen.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MenuFilesGen.Service
 {
     public class Utils
     {
+
+      
+
         /// <summary>
         /// Описание иконок
         /// </summary>
@@ -18,7 +15,7 @@ namespace MenuFilesGen.Service
         public static string IconDefinition(CommandDefinition cmd)
         {
             string configman = "";
-            string newLine = Environment.NewLine;
+            
 
             if (!string.IsNullOrEmpty(cmd.IconName))//иконки из dll
             {
@@ -109,6 +106,8 @@ namespace MenuFilesGen.Service
 
             return argsCmdLine;
         }
+
+      static  string    newLine = Environment.NewLine;
     }
 
     /// <summary>

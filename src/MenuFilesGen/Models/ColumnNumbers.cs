@@ -25,7 +25,7 @@
             ToolTipTextColumn = 16;
             AcceleratorsColumn = 17;
             AddonNameColumn = 18;
-          
+
         }
 
         /// <summary> Номер колонки для имени команды </summary>

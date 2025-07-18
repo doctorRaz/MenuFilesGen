@@ -20,7 +20,7 @@ namespace MenuFilesGen.Models
         public string RibbonSize { get; set; }
 
         /// <summary>название сплитера ленты </summary>
-        public string RibbonSplitButtonName  { get; set; }
+        public string RibbonSplitButtonName { get; set; }
 
         /// <summary> не регистрировать команду, пропустить </summary>
         public bool DontTake { get; set; }
@@ -34,7 +34,7 @@ namespace MenuFilesGen.Models
         /// <summary> Имя иконки </summary>
         public string IconName { get; set; }
 
-        /// <summary> родительское меню </summary>
+        /// <summary> приложение </summary>
         public string AppName { get; set; }
 
         /// <summary> Локальное имя команды </summary>
@@ -57,12 +57,14 @@ namespace MenuFilesGen.Models
         /// <summary>подсказки </summary>
         public string ToolTipText { get; set; }
 
-         /// <summary> хоткеи </summary>
+        /// <summary> хоткеи </summary>
         public string Accelerators { get; set; }
-         /// <summary> хоткеи </summary>
+
+
+        /// <summary> аддон </summary>
         public string AddonName { get; set; }
 
-   
+
     }
 
 

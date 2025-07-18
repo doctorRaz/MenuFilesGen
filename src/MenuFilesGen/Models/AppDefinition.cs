@@ -4,7 +4,7 @@
     public class AppDefinition
     {
         /// <summary> Родительская панель. Если null, то панель не является подчиненной </summary>
-        public string Parent { get; set; }
+        //public string Parent { get; set; }
 
         /// <summary> Имя панели </summary>
         public string Name { get; set; }

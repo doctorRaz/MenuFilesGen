@@ -8,6 +8,6 @@
         /// <summary> Имя панели </summary>
         public string Name { get; set; }
 
-        public List< CommandDefinition> Command { get; set; }
+        public List<CommandDefinition> Command { get; set; }
     }
 }
