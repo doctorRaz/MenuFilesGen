@@ -89,44 +89,25 @@ namespace MenuFilesGen
             string addinNameGlobal = rep.AddonNameGlobal;
 
             CfgDefinition cfg = new CfgDefinition(addinNameGlobal);//конфиг
-
-            //собираем в строки конфиг
-
-        
-
-            ////команды
-            //cfg.Configman = $"{newLine}[\\configman]" +
-            //             $"{newLine}[\\configman\\commands]";
-
-            //горячие клавиши
-            //string accelerators = $"{newLine}[\\Accelerators]";// хоткеи
-
-            //меню
-            //string Menu = $"{newLine}[\\menu]";
-
-            //панели
-            //cfg.Toolbars = $"{newLine};Панели" +
-            //                    $"{newLine}[\\toolbars]";
-
-            //всплывающее меню панелей
-            //cfg.ToolbarPopupMenu = $"{newLine};Popup меню" +
-            //                        $"{newLine}[\\ToolbarPopupMenu]" +
-            //                        $"{newLine}[\\ToolbarPopupMenu\\{addinNameGlobal}]" +
-            //                        $"{newLine}Name=s{addinNameGlobal}";
-
-            //команды вызова панелей
-            //string toolbarsCmd = $"{newLine}; Команды вызова панелей";
-
-            //меню вид панелей
-            //string toolbarsViewMenu = $"{newLine};View меню" +
-            //                            /*        $"{newLine}[\\menu\\View\\toolbars\\{AddonNameGlobal}]" +*/
-            //                            $"{newLine}[\\menu\\View\\toolbars\\{addinNameGlobal}]" +
-            //                            /*    $"{newLine}Name=s{AddonNameGlobal}";*/
-            //                            $"{newLine}Name=s{addinNameGlobal}";
+                         
             //todo начинаем с уровня приложения, добавить уровень
             foreach (AppDefinition AppName in rep.HierarchicalGrouping)//уровень приложения
             {
+                 string appName = AppName.Name;
 
+                #region Классическое меню шапка
+                if(!string.IsNullOrEmpty(appName))
+                {
+                   
+                    var d = cfg.Menu.Last();
+                    var st = $"{cfg.Menu.Last()}\\{appName}]";
+                    var sт = $"Name=s{appName}]";
+                    cfg.Menu.Add($"{cfg.Menu.Last()}\\{appName}]");
+                    cfg.Menu.Add($"Name=s{appName}");
+                }
+
+
+                #endregion
             }
             /*
             foreach (AppDefinition AppName in rep.HierarchicalGrouping)
