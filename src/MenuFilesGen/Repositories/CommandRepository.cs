@@ -43,26 +43,18 @@ namespace MenuFilesGen.Repositories
         public void SaveToCfg(CfgDefinition cfg)
         {
             using (StreamWriter writer = new StreamWriter(CfgFilePath, false, Encoding.GetEncoding(65001)))
-            {                 
-
+            { 
                 writer.WriteLine("[\\cfg]");
                 writer.WriteLine(cfg.Menu.LstStr());//меню
-                writer.WriteLine();
                 writer.WriteLine(cfg.ToolbarPopupMenu.LstStr()); //поп меню
-                writer.WriteLine( );
                 writer.WriteLine(cfg.ToolbarsViewMenu.LstStr()); //виев меню
-                writer.WriteLine( );
 
                 writer.WriteLine(cfg.Toolbars.LstStr());//панели
-                writer.WriteLine( );
                             
                 writer.WriteLine(cfg.Configman.LstStr());//команды
-                writer.WriteLine();
                 writer.WriteLine(cfg.ToolbarsCmd.LstStr());//команды меню
-                writer.WriteLine( );
 
                 writer.WriteLine(cfg.Ribbon.LstStr());//лента
-                writer.WriteLine();
                 writer.WriteLine(cfg.Accelerators.LstStr());//горячие кнопки
             }
         }

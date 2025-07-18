@@ -91,13 +91,27 @@ namespace MenuFilesGen
 
             CfgDefinition cfg = new CfgDefinition(addonNameGlobal);//конфиг
 
-            //todo начинаем с уровня приложения, добавить уровень
+            //++ ********** уровень приложения *********
+
             foreach (AppDefinition App in rep.HierarchicalGrouping)//уровень приложения
             {
                 string appName = App.Name;
 
+                string panelRootApp = string.IsNullOrEmpty(appName) ? addonNameGlobal : appName;//роот для попап и вид панелей
+
+                //+попап панелей
+                string popupPanelRoot = $"[\\ToolbarPopupMenu\\{panelRootApp}";
+                cfg.ToolbarPopupMenu.Add($"{popupPanelRoot}]");
+                cfg.ToolbarPopupMenu.Add($"Name=s{panelRootApp}");
+
+                //+ меню вид
+                string viewPanelRoot = $"[\\menu\\View\\toolbars\\{panelRootApp}";
+                cfg.ToolbarsViewMenu.Add($"{viewPanelRoot}]");
+                cfg.ToolbarsViewMenu.Add($"Name=s{panelRootApp}");
+
                 // Классическое меню шапка
                 string menuApp = "[\\menu";
+
                 if (!string.IsNullOrEmpty(appName))
                 {
                     menuApp += $"\\{appName}";
@@ -105,7 +119,7 @@ namespace MenuFilesGen
                     cfg.Menu.Add($"{menuApp}]");
                     cfg.Menu.Add($"Name=s{appName}");
                 }
-                //+ ***** уровень аддона *****
+                //++ ***** уровень аддона *****
                 foreach (AddonDefinition Addon in App.Addons)
                 {
                     string addonName = Addon.Name;
@@ -123,31 +137,36 @@ namespace MenuFilesGen
                     {
                         menuAddon = menuApp;
                     }
-                    //+ *******уровень панели *************
+                    //++ *******уровень панели *************
                     foreach (PanelDefinition Panel in Addon.Panel)
                     {
                         string panelName = Panel.Name; //имя панели не может быть пустым
                         string menuPanel = "";
 
 
-                        //menu
+                        //+menu
                         menuPanel += $"{menuAddon}\\{panelName}";
                         cfg.Menu.Add($"{menuPanel}]");
                         cfg.Menu.Add($"Name=s{panelName}");
 
-                        //toolbar название
+                        //todo 1. обрабатывать панельки надо в отдельном цикле
+                        //цикл тут сборка меню
+                        //цикл по App привязка панелек к меню вид и попап
+                        //цикл по панелькам наполнение панелек, регистрация команд, привязка команд к панелькам
+
+                        //+toolbar название
                         string panelNameRu = $"{addonNameGlobal}_{panelName.Replace(' ', '_')}";//в имени команды не должно быть пробелов 
                         string panelNameEn = Transliteration.CyrillicToLatin(panelNameRu, Language.Russian);//intername не должно содержать кириллицы
 
-                        //toolbar вызов
+                        //+toolbar вызов
                         string toolbarIntername = $"ShowToolbar_{panelNameEn}";
                         string toolbarLocalName = $"Панель_{panelNameRu}";
 
-                        //регистрация панели
+                        //+регистрация панели
                         cfg.Toolbars.Add($"[\\toolbars\\{panelNameEn}]");
                         cfg.Toolbars.Add($"name=s{panelName}");
 
-                        //регистрируем команду вызова панели
+                        //+регистрируем команду вызова панели
                         cfg.ToolbarsCmd.Add($"[\\configman\\commands\\{toolbarIntername}]");
                         cfg.ToolbarsCmd.Add($"weight=i10");
                         cfg.ToolbarsCmd.Add($"cmdtype=i0");
@@ -161,13 +180,12 @@ namespace MenuFilesGen
                         cfg.ToolbarsCmd.AddRange(Utils.IconDefinition(Panel.Command[0]));
 
                         //+ ****** поп меню ****************
-                        string panelRoot = string.IsNullOrEmpty(appName) ? addonNameGlobal : appName;
-                        cfg.ToolbarPopupMenu.Add($"[\\ToolbarPopupMenu\\{panelRoot}\\{toolbarIntername}]");
+                        cfg.ToolbarPopupMenu.Add($"{popupPanelRoot}\\{toolbarIntername}]");
                         cfg.ToolbarPopupMenu.Add($"Name=s{panelName}");
                         cfg.ToolbarPopupMenu.Add($"InterName=s{toolbarIntername}");
 
                         //+ ****** вью меню ****************
-                        cfg.ToolbarsViewMenu.Add($"[\\menu\\View\\toolbars\\{panelRoot}\\{toolbarIntername}]");
+                        cfg.ToolbarsViewMenu.Add($"{viewPanelRoot}\\{toolbarIntername}]");
                         cfg.ToolbarsViewMenu.Add($"Name=s{panelName}");
                         cfg.ToolbarsViewMenu.Add($"InterName=s{toolbarIntername}");
 

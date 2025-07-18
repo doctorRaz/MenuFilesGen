@@ -13,6 +13,7 @@ namespace MenuFilesGen.Models
             #region Configman команды
             Configman = new List<string>
             {
+                "",
                 ";Команды",
                 $"[\\configman]" ,
                 $"[\\configman\\commands]"
@@ -22,6 +23,7 @@ namespace MenuFilesGen.Models
             #region Ribbon прописка ленты
             Ribbon = new List<string>()
             {
+                "",
                 ";Лента",
                 $"[\\ribbon\\{addinNameGlobal}]" ,
                 $"CUIX=s%CFG_PATH%\\{addinNameGlobal}.cuix" ,
@@ -32,6 +34,7 @@ namespace MenuFilesGen.Models
             #region Toolbars панели
             Toolbars = new List<string>()
             {
+                "",
                 $";Панели" ,
                 $"[\\toolbars]"
             };
@@ -40,16 +43,18 @@ namespace MenuFilesGen.Models
             #region  ToolbarPopupMenu всплывающее меню панелей
             ToolbarPopupMenu = new List<string>()
             {
+                "",
                 $";всплывающее меню панелей" ,
                 $"[\\ToolbarPopupMenu]" ,
-                $"[\\ToolbarPopupMenu\\{addinNameGlobal}]" ,
-                $"Name=s{addinNameGlobal}"
+                //$"[\\ToolbarPopupMenu\\{addinNameGlobal}]" ,
+                //$"Name=s{addinNameGlobal}"
             };
             #endregion
 
             #region Accelerators горячие клавиши
             Accelerators = new List<string>()
             {
+                "",
                 ";горячие клавиши",
                 $"[\\Accelerators]"
             };
@@ -58,6 +63,7 @@ namespace MenuFilesGen.Models
             #region Menu
             Menu = new List<string>()
             {
+                "",
                 ";Меню",
                 $"[\\menu]"
             };
@@ -66,6 +72,7 @@ namespace MenuFilesGen.Models
             #region toolbarsCmd команды вызова панелей
             ToolbarsCmd = new List<string>()
             {
+                "",
                 ";команды вызова панелей",
             };
             #endregion
@@ -73,9 +80,12 @@ namespace MenuFilesGen.Models
             #region toolbarsViewMenu меню вид панелей
             ToolbarsViewMenu = new List<string>()
             {
+                "",
                 $";View меню" ,
-                $"[\\menu\\View\\toolbars\\{addinNameGlobal}]" ,
-                $"Name=s{addinNameGlobal}"
+                 $"[\\menu\\View]",
+                $"[\\menu\\View\\toolbars]" ,
+                //$"[\\menu\\View\\toolbars\\{addinNameGlobal}]" ,
+                //$"Name=s{addinNameGlobal}"
             };
             #endregion
 
