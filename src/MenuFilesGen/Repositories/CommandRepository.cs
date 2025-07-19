@@ -71,7 +71,7 @@ namespace MenuFilesGen.Repositories
         /// <value>
         /// The hierarchical grouping.
         /// </value>
-        public List<AppDefinition> HierarchicalGrouping
+        public List<AppDefinition> GroupingAppAddonPanel
         {
             get
             {

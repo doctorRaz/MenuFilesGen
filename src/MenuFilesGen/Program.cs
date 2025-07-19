@@ -19,29 +19,28 @@ namespace MenuFilesGen
         static void Main(string[] args)
         {
 #if DEBUG
-            string newLine0 = Environment.NewLine;//переносы
+            {
+                string pan = "Название панели на хеячсмитьбюйцукен гшщзхъфывапролджэ ЙЦУКЕНГШЩЗФЫВАПРОЛДЮЖЭЯЧСМИТЬБЮ,!№;%:?*()_++++++++++ ";
 
-            List<string> Ribbon = new List<string>() { $"{2}[\\ribbon\\{10}]" ,
-                            $"{2}CUIX=s%CFG_PATH%\\{2}.cuix" ,
-                            $"{2}visible=f1" };
-            Ribbon.Add("test");
-            var dd = String.Join(newLine0, Ribbon);
-
-            //Cyrillic.Convert;
-            var conversion = new Conversion();
+                string tr = CurToLaninConverter.CyrilicToLatin(pan);
 
 
-            string latin = "a,b,v,g,d,đ,e,ž,z,i,j,k,l,m,n,o,p,r,s,t,ć,u,f,h,c,č,š,Lj,Nj,Dž,lj,nj,dž";
-            string ru = "ю я й сорок тыся апизян тестъ апвъ  пвпь пвпвь";
 
-            var latin0 = Transliteration.CyrillicToLatin("Предками данная мудрость народная!", Language.Russian);
-            var rr = Transliteration.CyrillicToLatin(ru);
-            string en = ru.ToRussianLatin();
 
-            var cyrillicExtension = latin.ToSerbianCyrilic(); //Convert with extension method
-            var cyrillic = conversion.SerbianLatinToCyrillic(latin); //Convert with forwarded string
-            var latinConvert = conversion.SerbianCyrillicToLatin(cyrillic);
-            var latinExtension = cyrillic.ToSerbianLatin();
+                //Cyrillic.Convert;
+                var conversion = new Conversion();
+
+
+                var rr = Transliteration.CyrillicToLatin(pan);
+
+                string en = pan.ToRussianLatin();
+
+                var lc = conversion.RussianCyrillicToLatin(pan);
+
+                Console.WriteLine(rr.ToString());
+                Console.WriteLine(en.ToString());
+                Console.WriteLine(lc.ToString());
+            }
 
 #endif
 
@@ -91,9 +90,12 @@ namespace MenuFilesGen
 
             CfgDefinition cfg = new CfgDefinition(addonNameGlobal);//конфиг
 
+            #region Формируем меню   
+            // группировка приложение аддон панель
+            
             //++ ********** уровень приложения *********
 
-            foreach (AppDefinition App in rep.HierarchicalGrouping)//уровень приложения
+            foreach (AppDefinition App in rep.GroupingAppAddonPanel)//уровень приложения
             {
                 string appName = App.Name;
 
@@ -200,8 +202,21 @@ namespace MenuFilesGen
 
 
             }
+            
+            #endregion
+
+            #region Формируем панельки и прописываем команды
+            //todo группировка по панелькам
+
+            
+            #endregion
+
+            #region Привязываем панельки к попап и виев
+            //группировка по App и панелькам
+            
+            #endregion
             /*
-            foreach (AppDefinition App in rep.HierarchicalGrouping)
+            foreach (AppDefinition App in rep.GroupingAppAddonPanel)
             {
                 string appName = App.Name;
                 string appMenu = $"{AddonNameGlobal}";
