@@ -80,21 +80,20 @@ namespace MenuFilesGen.Repositories
                      .GroupBy(e => e.AppName)
                      .Select(appName => new AppDefinition
                      {
-                         Name = appName.Key,
+                         Name =string.IsNullOrEmpty(appName.Key) ? AddonNameGlobal: appName.Key,
                          Addons = appName
                      .GroupBy(e => e.AddonName)
                      .Select(addon => new AddonDefinition
                      {
-                         Parent = appName.Key,
-                         Name = string.IsNullOrEmpty(addon.Key) ? AddonNameGlobal : addon.Key,
+                         Parent = string.IsNullOrEmpty(appName.Key) ? AddonNameGlobal: appName.Key,
+                         Name = addon.Key,
                          Panel = addon
                          .GroupBy(e => e.PanelName)
                          .Select(panel => new PanelDefinition
                          {
-                             Parent = string.IsNullOrEmpty(addon.Key) ? AddonNameGlobal : addon.Key,
+                             Parent =   addon.Key,
                              Name = panel.Key,
                              Command = panel.ToList() /*new List<CommandDefinition>(panel)*/,
-
                          }).ToList()
                      }).ToList()
                      }).ToList();
