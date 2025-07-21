@@ -16,5 +16,6 @@
         /// The addon.
         /// </value>
         public List<AddonDefinition> Addons { get; set; }
+        public List<PanelDefinition> Panels { get; set; }
     }
 }

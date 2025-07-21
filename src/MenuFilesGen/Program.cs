@@ -83,13 +83,15 @@ namespace MenuFilesGen
                 return;
             }
 
-            string newLine = Environment.NewLine;//переносы
+            //string newLine = Environment.NewLine;//переносы
 
 
             string addonNameGlobal = rep.AddonNameGlobal;
 
-            CfgDefinition cfg = new CfgDefinition(addonNameGlobal);//конфиг
+            var cfgCreater = new CfgCreater(rep.CommandDefinitions, rep.AddonNameGlobal);
 
+            //CfgDefinition Cfg = new CfgDefinition(addonNameGlobal);//конфиг
+            /*
             #region Формируем меню   
             // группировка приложение аддон панель
 
@@ -207,39 +209,32 @@ namespace MenuFilesGen
             }
             Utils.CfgConsoleWrier(cfg);
             #endregion
+            */
+         
 
-            #region Формируем панельки и прописываем команды
-            //todo группировка по панелькам
-
-
-            #endregion
-
-            #region Привязываем панельки к попап и виев
-            //группировка по App и панелькам
-
-            #endregion
+          
             /*
-            foreach (AppDefinition App in rep.GroupingAppAddonPanel)
+            foreach (AppDefinition App in rep.groupingAppAddonPanel)
             {
                 string appName = App.Name;
-                string appMenu = $"{AddonNameGlobal}";
+                string appMenu = $"{addonNameGlobal}";
 
                 #region Классическое меню шапка
 
                 if (!string.IsNullOrEmpty(appName))
                 {
-                    appMenu = $"{appName}\\{AddonNameGlobal}";
+                    appMenu = $"{appName}\\{addonNameGlobal}";
 
                     menu += $"{newLine}[\\menu\\{appName}]" +
                             $"{newLine}Name=s{appName}" +
                             $"{newLine}[\\menu\\{appMenu}]" +
-                            $"{newLine}Name=s{AddonNameGlobal}";
+                            $"{newLine}Name=s{addonNameGlobal}";
 
                 }
                 else
                 {
                     menu += $"{newLine}[\\menu\\{appMenu}]" +
-                            $"{newLine} Name=s{AddonNameGlobal}";
+                            $"{newLine} Name=s{addonNameGlobal}";
                 }
                 #endregion
 
@@ -248,7 +243,7 @@ namespace MenuFilesGen
                     string panelName = panel.Name;
 
 
-                    string panelNameRu = $"{AddonNameGlobal}_{panelName.Replace(' ', '_')}";//в имени команды не должно быть пробелов 
+                    string panelNameRu = $"{addonNameGlobal}_{panelName.Replace(' ', '_')}";//в имени команды не должно быть пробелов 
                     string panelNameEn = Transliteration.CyrillicToLatin(panelNameRu, Language.Russian);//intername е должно содержать кириллицы
 
                     string intername = $"ShowToolbar_{panelNameEn}";
@@ -273,11 +268,11 @@ namespace MenuFilesGen
                                     $"{newLine}LocalName=s{localName}" +
                                     $"{Utils.IconDefinition(_cmd)}";
                     //поп меню
-                    toolbarPopupMenu += $"{newLine}[\\ToolbarPopupMenu\\{AddonNameGlobal}\\{intername}]" +
+                    toolbarPopupMenu += $"{newLine}[\\ToolbarPopupMenu\\{addonNameGlobal}\\{intername}]" +
                      $"{newLine}Name=s{panelName}" +
                      $"{newLine}InterName=s{intername}";
                     //вью меню
-                    toolbarsViewMenu += $"{newLine}[\\menu\\View\\toolbars\\{AddonNameGlobal}\\{intername}]" +
+                    toolbarsViewMenu += $"{newLine}[\\menu\\View\\toolbars\\{addonNameGlobal}\\{intername}]" +
                                         $"{newLine}Name=s{panelName}" +
                                         $"{newLine}InterName=s{intername}";
 
@@ -336,9 +331,11 @@ namespace MenuFilesGen
                 }
             }
             */
+
+             Utils.CfgConsoleWrier(cfgCreater.Cfg);
             #region Save *.cfg            
 
-            rep.SaveToCfg(cfg);
+            rep.SaveToCfg(cfgCreater.Cfg);
             /*
                         using (StreamWriter writer = new StreamWriter(rep.CfgFilePath, false, Encoding.GetEncoding(65001)))
                         {

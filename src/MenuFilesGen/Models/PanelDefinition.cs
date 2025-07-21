@@ -32,15 +32,5 @@ namespace MenuFilesGen.Models
 
         public List<CommandDefinition> Command { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is panel added.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is panel added; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsPanelAdded { get; set; }
-
-        
-
     }
 }

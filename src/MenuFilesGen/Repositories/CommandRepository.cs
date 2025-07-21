@@ -43,14 +43,14 @@ namespace MenuFilesGen.Repositories
         public void SaveToCfg(CfgDefinition cfg)
         {
             using (StreamWriter writer = new StreamWriter(CfgFilePath, false, Encoding.GetEncoding(65001)))
-            { 
+            {
                 writer.WriteLine("[\\cfg]");
                 writer.WriteLine(cfg.Menu.LstStr());//меню
                 writer.WriteLine(cfg.ToolbarPopupMenu.LstStr()); //поп меню
                 writer.WriteLine(cfg.ToolbarsViewMenu.LstStr()); //виев меню
 
                 writer.WriteLine(cfg.Toolbars.LstStr());//панели
-                            
+
                 writer.WriteLine(cfg.Configman.LstStr());//команды
                 writer.WriteLine(cfg.ToolbarsCmd.LstStr());//команды меню
 
@@ -66,12 +66,12 @@ namespace MenuFilesGen.Repositories
 
         // https://stackoverflow.com/questions/1159233/multi-level-grouping-in-linq        
         /// <summary>
-        /// Группируем по AppName потом по панелям
+        /// Группируем по приложеию, AppName , по панелям
         /// </summary>
         /// <value>
         /// The hierarchical grouping.
         /// </value>
-        public List<AppDefinition> GroupingAppAddonPanel
+        public List<AppDefinition> GroupingAppAddonPanel//x
         {
             get
             {
@@ -80,23 +80,63 @@ namespace MenuFilesGen.Repositories
                      .GroupBy(e => e.AppName)
                      .Select(appName => new AppDefinition
                      {
-                         Name =string.IsNullOrEmpty(appName.Key) ? AddonNameGlobal: appName.Key,
+                         Name = string.IsNullOrEmpty(appName.Key) ? AddonNameGlobal : appName.Key,
                          Addons = appName
                      .GroupBy(e => e.AddonName)
                      .Select(addon => new AddonDefinition
                      {
-                         Parent = string.IsNullOrEmpty(appName.Key) ? AddonNameGlobal: appName.Key,
+                         Parent = string.IsNullOrEmpty(appName.Key) ? AddonNameGlobal : appName.Key,
                          Name = addon.Key,
                          Panel = addon
                          .GroupBy(e => e.PanelName)
                          .Select(panel => new PanelDefinition
                          {
-                             Parent =   addon.Key,
+                             Parent = addon.Key,
                              Name = panel.Key,
                              Command = panel.ToList() /*new List<CommandDefinition>(panel)*/,
                          }).ToList()
                      }).ToList()
                      }).ToList();
+
+            }
+        }
+
+        public List<AppDefinition> GroupingAppPanel//x
+        {
+            get
+            {
+
+                return CommandDefinitions
+                     .GroupBy(e => e.AppName)
+                     .Select(appName => new AppDefinition
+                     {
+                         Name = string.IsNullOrEmpty(appName.Key) ? AddonNameGlobal : appName.Key,
+                         Panels = appName
+                      .GroupBy(e => e.PanelName)
+                         .Select(panel => new PanelDefinition
+                         {
+                             Parent = appName.Key,
+                             Name = panel.Key,
+                             Command = panel.ToList() /*new List<CommandDefinition>(panel)*/,
+                         }).ToList()
+
+                     }).ToList();
+
+            }
+        }
+
+        public List<PanelDefinition> GroupingPanel//x
+        {
+            get
+            {
+                return CommandDefinitions
+
+                      .GroupBy(e => e.PanelName)
+                         .Select(panel => new PanelDefinition
+                         {
+                             Name = panel.Key,
+                             Command = panel.ToList(),
+                         }).ToList();
 
             }
         }
@@ -163,7 +203,7 @@ namespace MenuFilesGen.Repositories
         /// <value>
         /// The CFG file path.
         /// </value>
-        public string CfgFilePath => Path.Combine(directoryPath, AddonNameGlobal + ".cfg");//   $"{directoryPath}\\{AddonNameGlobal}.cfg";
+        public string CfgFilePath => Path.Combine(directoryPath, AddonNameGlobal + ".cfg");//   $"{directoryPath}\\{addonNameGlobal}.Cfg";
 
         /// <summary>
         /// файл заготовка ленты.
