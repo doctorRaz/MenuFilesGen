@@ -10,14 +10,7 @@ namespace MenuFilesGen.Repositories
         void AppAddonPanel()
         {
             #region Формируем меню   
-
-            Cfg.Menu = new List<string>
-            {
-                // группировка приложение аддон панель
-                "",
-                ";Меню",
-                $"[\\menu]"
-            };
+                        
             //++ ********** уровень приложения *********
 
             foreach (AppDefinition App in groupingAppAddonPanel)//уровень приложения

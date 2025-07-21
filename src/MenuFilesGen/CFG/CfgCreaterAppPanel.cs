@@ -11,30 +11,8 @@ namespace MenuFilesGen.Repositories
         {
             #region Привязываем панельки к попап и  view по приложениям 
 
-            #region  ToolbarPopupMenu всплывающее меню панелей
-            Cfg.ToolbarPopupMenu = new List<string>()
-              {
-                  "",
-                  $";всплывающее меню панелей" ,
-                  $"[\\ToolbarPopupMenu]" ,
-                  //$"[\\ToolbarPopupMenu\\{addinNameGlobal}]" ,
-                  //$"Name=s{addinNameGlobal}"
-              };
-            #endregion
-            #region toolbarsViewMenu меню вид панелей
-
-            Cfg.ToolbarsViewMenu = new List<string>()
-                  {
-                      "",
-                      $";View меню" ,
-                       $"[\\menu\\View]",
-                      $"[\\menu\\View\\toolbars]" ,
-                      //$"[\\menu\\View\\toolbars\\{addinNameGlobal}]" ,
-                      //$"Name=s{addinNameGlobal}"
-                  };
-            #endregion
-
-            //группировка по App и панелькам
+           
+            //по App
             foreach (AppDefinition app in groupingAppPanel)
             {
                 string appName = app.Name;

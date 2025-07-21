@@ -14,10 +14,8 @@ namespace MenuFilesGen.Repositories
             commandDefinitions = cmds;
             addonNameGlobal = _addonNameGlobal;
 
-            Cfg = new CfgDefinition();//конфиг
-
-            cfgHeader();//осталась только лента
-
+            Cfg = new CfgDefinition(addonNameGlobal);//конфиг
+         
             PanelCmd();
 
             AppPanel();

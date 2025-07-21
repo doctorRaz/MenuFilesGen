@@ -12,49 +12,6 @@ namespace MenuFilesGen.Repositories
         {
             #region Формируем панельки и прописываем команды
 
-            #region Toolbars панели
-
-            string toolbars = $"[\\toolbars";
-            Cfg.Toolbars = new List<string>
-            {
-                $"",
-                $"; Панели",
-                $"{toolbars}]"
-            };
-
-            #endregion
-
-            #region toolbarsCmd команды вызова панелей
-
-            Cfg.ToolbarsCmd = new List<string>
-            {
-                "",
-                ";команды вызова панелей"
-            };
-
-            #endregion
-
-            #region Configman команды
-            string configman = "[\\configman\\commands";
-            Cfg.Configman = new List<string>
-            {
-                "",
-                ";Команды",
-                "[\\configman]",
-                $"{configman}]"
-            };
-
-            #endregion
-
-            #region Accelerators горячие клавиши
-            Cfg.Accelerators = new List<string>
-            {
-                "",
-                ";горячие клавиши",
-                "[\\Accelerators]"
-            };
-
-            #endregion
 
             //todo группировка по панелькам
             foreach (PanelDefinition panel in groupingPanel)
