@@ -17,14 +17,15 @@
             ResourseDllNameColumn = 8;
             IconColumn = 9;
             AppNameColumn = 10;
-            LocalNameColumn = 11;
-            RealCommandNameColumn = 12;
-            KeywordColumn = 13;
-            WeightColumn = 14;
-            CmdTypeColumn = 15;
-            ToolTipTextColumn = 16;
-            AcceleratorsColumn = 17;
-            AddonNameColumn = 18;
+            AddonNameColumn = 11;
+            LocalNameColumn = 12;
+            RealCommandNameColumn = 13;
+            KeywordColumn = 14;
+            WeightColumn = 15;
+            CmdTypeColumn = 16;
+            ToolTipTextColumn = 17;
+            AcceleratorsColumn = 18;
+
 
         }
 
