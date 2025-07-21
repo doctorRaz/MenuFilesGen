@@ -1,9 +1,6 @@
-﻿using Cyrillic.Convert;
-using MenuFilesGen.Models;
+﻿using MenuFilesGen.Models;
 using MenuFilesGen.Repositories;
 using MenuFilesGen.Service;
-using NickBuhro.Translit;
-using System.CodeDom;
 using System.IO.Compression;
 using System.Text;
 using System.Xml.Linq;
@@ -18,32 +15,6 @@ namespace MenuFilesGen
         [STAThread]
         static void Main(string[] args)
         {
-#if DEBUG
-            {
-                string pan = "Название панели на хеячсмитьбюйцукен гшщзхъфывапролджэ ЙЦУКЕНГШЩЗФЫВАПРОЛДЮЖЭЯЧСМИТЬБЮ,!№;%:?*()_++++++++++ ";
-
-                string tr = CurToLaninConverter.CyrilicToLatin(pan);
-
-
-
-
-                //Cyrillic.Convert;
-                var conversion = new Conversion();
-
-
-                var rr = Transliteration.CyrillicToLatin(pan);
-
-                string en = pan.ToRussianLatin();
-
-                var lc = conversion.RussianCyrillicToLatin(pan);
-
-                Console.WriteLine(rr.ToString());
-                Console.WriteLine(en.ToString());
-                Console.WriteLine(lc.ToString());
-            }
-
-#endif
-
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
@@ -83,275 +54,15 @@ namespace MenuFilesGen
                 return;
             }
 
-            //string newLine = Environment.NewLine;//переносы
-
-
             string addonNameGlobal = rep.AddonNameGlobal;
 
-            var cfgCreater = new CfgCreater(rep.CommandDefinitions, rep.AddonNameGlobal);
+            CfgCreater cfgCreater = new CfgCreater(rep.CommandDefinitions, rep.AddonNameGlobal);
 
-            //CfgDefinition Cfg = new CfgDefinition(addonNameGlobal);//конфиг
-            /*
-            #region Формируем меню   
-            // группировка приложение аддон панель
-
-            //++ ********** уровень приложения *********
-
-            foreach (AppDefinition App in rep.GroupingAppAddonPanel)//уровень приложения
-            {
-                string appName = App.Name;
-
-                //+попап панелей
-                string popupPanelRoot = $"[\\ToolbarPopupMenu\\{appName}";
-                cfg.ToolbarPopupMenu.Add("");
-                cfg.ToolbarPopupMenu.Add($"{popupPanelRoot}]");
-                cfg.ToolbarPopupMenu.Add($"Name=s{appName}");
-
-                //+ меню вид
-                string viewPanelRoot = $"[\\menu\\View\\toolbars\\{appName}";
-                cfg.ToolbarsViewMenu.Add("");
-                cfg.ToolbarsViewMenu.Add($"{viewPanelRoot}]");
-                cfg.ToolbarsViewMenu.Add($"Name=s{appName}");
-
-                // Классическое меню шапка
-                string menuApp = "[\\menu";
-
-                menuApp += $"\\{appName}";
-                cfg.Menu.Add("");
-                cfg.Menu.Add($"{menuApp}]");
-                cfg.Menu.Add($"Name=s{appName}");
-
-
-                //++ ***** уровень аддона *****
-                foreach (AddonDefinition Addon in App.Addons)
-                {
-                    string addonName = Addon.Name;
-
-                    string menuAddon = "";
-
-                    if (!string.IsNullOrEmpty(addonName))//аддон есть
-                    {
-                        menuAddon = $"{menuApp}\\{addonName}";
-
-                        cfg.Menu.Add($"{menuAddon}]");
-                        cfg.Menu.Add($"Name=s{addonName}");
-                    }
-                    else
-                    {
-                        menuAddon = menuApp;
-                    }
-                    //++ *******уровень панели *************
-                    foreach (PanelDefinition Panel in Addon.Panel)
-                    {
-                        string panelName = Panel.Name; //имя панели не может быть пустым
-                        string menuPanel = "";
-
-
-                        //+menu
-                        menuPanel = $"{menuAddon}\\{panelName}";
-                        cfg.Menu.Add($"{menuPanel}]");
-                        cfg.Menu.Add($"Name=s{panelName}");
-
-                        //todo 1. обрабатывать панельки надо в отдельном цикле
-                        //цикл тут сборка меню
-                        //цикл по App привязка панелек к меню вид и попап
-                        //цикл по панелькам наполнение панелек, регистрация команд, привязка команд к панелькам
-
-                        if (!Panel.IsPanelAdded)//панель не была добавлена?
-                        {
-                            Panel.IsPanelAdded = true;
-
-                            //+toolbar название
-                            //string panelNameRu = $"{addonNameGlobal}_{panelName.Replace(' ', '_')}";//в имени команды не должно быть пробелов 
-                            //string panelNameEn = Transliteration.CyrillicToLatin(panelNameRu, Language.Russian);//intername не должно содержать кириллицы
-
-                            //+toolbar вызов
-                            //string toolbarIntername = $"ShowToolbar_{panelNameEn}";
-                            //string toolbarLocalName = $"Панель_{panelNameRu}";
-
-                            //+регистрация панели
-                            cfg.Toolbars.Add($"[\\toolbars\\{Panel.NameEn}]");
-                            cfg.Toolbars.Add($"name=s{panelName}");
-
-                            //+регистрируем команду вызова панели
-                            cfg.ToolbarsCmd.Add($"[\\configman\\commands\\{Panel.Intername}]");
-                            cfg.ToolbarsCmd.Add($"weight=i10");
-                            cfg.ToolbarsCmd.Add($"cmdtype=i0");
-                            cfg.ToolbarsCmd.Add($"Intername=s{Panel.Intername}");
-                            cfg.ToolbarsCmd.Add($"StatusText=sОтображение панели {panelName}");
-                            cfg.ToolbarsCmd.Add($"ToolTipText=sОтображение панели {panelName}");
-                            cfg.ToolbarsCmd.Add($"DispName=sОтображение панели {panelName}");
-                            cfg.ToolbarsCmd.Add($"LocalName=s{Panel.LocalName}");
-
-                            //добавлять к команде показа панели иконку, по первой команде панели
-                            cfg.ToolbarsCmd.AddRange(Utils.IconDefinition(Panel.Command[0]));
-
-                        }
-                        //+ ****** поп меню ****************
-                        cfg.ToolbarPopupMenu.Add($"{popupPanelRoot}\\{Panel.Intername}]");
-                        cfg.ToolbarPopupMenu.Add($"Name=s{panelName}");
-                        cfg.ToolbarPopupMenu.Add($"InterName=s{Panel.Intername}");
-
-                        //+ ****** вью меню ****************
-                        cfg.ToolbarsViewMenu.Add($"{viewPanelRoot}\\{Panel.Intername}]");
-                        cfg.ToolbarsViewMenu.Add($"Name=s{panelName}");
-                        cfg.ToolbarsViewMenu.Add($"InterName=s{Panel.Intername}");
-                        //+ **** уровень команды ********
-                        foreach (CommandDefinition cmd in Panel.Command)
-                        {
-
-                        }
-                    }
-
-                }
-
-
-            }
-            Utils.CfgConsoleWrier(cfg);
-            #endregion
-            */
-         
-
-          
-            /*
-            foreach (AppDefinition App in rep.groupingAppAddonPanel)
-            {
-                string appName = App.Name;
-                string appMenu = $"{addonNameGlobal}";
-
-                #region Классическое меню шапка
-
-                if (!string.IsNullOrEmpty(appName))
-                {
-                    appMenu = $"{appName}\\{addonNameGlobal}";
-
-                    menu += $"{newLine}[\\menu\\{appName}]" +
-                            $"{newLine}Name=s{appName}" +
-                            $"{newLine}[\\menu\\{appMenu}]" +
-                            $"{newLine}Name=s{addonNameGlobal}";
-
-                }
-                else
-                {
-                    menu += $"{newLine}[\\menu\\{appMenu}]" +
-                            $"{newLine} Name=s{addonNameGlobal}";
-                }
-                #endregion
-
-                foreach (var panel in App.Addons )
-                {
-                    string panelName = panel.Name;
-
-
-                    string panelNameRu = $"{addonNameGlobal}_{panelName.Replace(' ', '_')}";//в имени команды не должно быть пробелов 
-                    string panelNameEn = Transliteration.CyrillicToLatin(panelNameRu, Language.Russian);//intername е должно содержать кириллицы
-
-                    string intername = $"ShowToolbar_{panelNameEn}";
-                    string localName = $"Панель_{panelNameRu}";
-
-                    #region Панели
-
-                    //панели
-                    toolbars += $"{newLine}{newLine}[\\toolbars\\{panelNameEn}]" +
-                                $"{newLine}name=s{panelName}";
-
-                    CommandDefinition _cmd = panel.command[0] as CommandDefinition; //добавлять к команде показа панели иконку, по первой команде панели
-
-                    //команды
-                    toolbarsCmd += $"{newLine}{newLine}[\\configman\\commands\\{intername}]" +
-                                    $"{newLine}weight=i10" +
-                                    $"{newLine}cmdtype=i0" +
-                                    $"{newLine}Intername=s{intername}" +
-                                    $"{newLine}StatusText=sОтображение панели {panelName}" +
-                                    $"{newLine}ToolTipText=sОтображение панели {panelName}" +
-                                    $"{newLine}DispName=sОтображение панели {panelName}" +
-                                    $"{newLine}LocalName=s{localName}" +
-                                    $"{Utils.IconDefinition(_cmd)}";
-                    //поп меню
-                    toolbarPopupMenu += $"{newLine}[\\ToolbarPopupMenu\\{addonNameGlobal}\\{intername}]" +
-                     $"{newLine}Name=s{panelName}" +
-                     $"{newLine}InterName=s{intername}";
-                    //вью меню
-                    toolbarsViewMenu += $"{newLine}[\\menu\\View\\toolbars\\{addonNameGlobal}\\{intername}]" +
-                                        $"{newLine}Name=s{panelName}" +
-                                        $"{newLine}InterName=s{intername}";
-
-                    #endregion
-
-                    #region Классическое меню раздел
-
-                    menu += $"{newLine}{newLine}[\\menu\\{appMenu}\\{panelName}]" +
-                            $"{newLine}name=s{panelName}";
-
-                    #endregion
-
-                    foreach (CommandDefinition cmd in panel.command)
-                    {
-                        #region Регистрация команд
-
-                        string _toolTipText = !string.IsNullOrEmpty(cmd.ToolTipText) ? $"{newLine}ToolTipText=s{cmd.ToolTipText}" : "";
-                        string _localName = !string.IsNullOrEmpty(cmd.LocalName) ? $"{newLine}LocalName=s{cmd.LocalName}" : "";
-                        string _realCommandName = !string.IsNullOrEmpty(cmd.RealCommandName) ? $"{newLine}RealCommandName=s{cmd.RealCommandName}" : "";
-                        string _keyword = !string.IsNullOrEmpty(cmd.Keyword) ? $"{newLine}Keyword=s{cmd.Keyword}" : "";
-
-                        configman += $"{newLine}{newLine}[\\configman\\commands\\{cmd.InterName}]" +
-                                     $"{newLine}weight=i{cmd.Weight}" +
-                                     $"{newLine}cmdtype=i{cmd.CmdType}" +
-                                     $"{newLine}intername=s{cmd.InterName}" +
-                                     $"{newLine}DispName=s{cmd.DispName}" +
-                                     $"{newLine}StatusText=s{cmd.StatusText}" +
-                                     $"{_toolTipText}" +
-                                     $"{_localName}" +
-                                     $"{_realCommandName}" +
-                                     $"{_keyword}" +
-                                     $"{Utils.IconDefinition(cmd)}";
-
-                        #endregion
-
-                        if (!string.IsNullOrEmpty(cmd.Accelerators))
-                        {
-                            accelerators += $"{newLine}{cmd.InterName}=s{cmd.Accelerators}";
-
-                        }
-
-                        if (cmd.DontMenu) continue;// не добавлять в меню пропуск
-                        #region Классическое меню
-
-                        menu += $"{newLine}[\\menu\\{appMenu}\\{panelName}\\s{cmd.InterName}]" +
-                                $"{newLine}name=s{cmd.DispName}" +
-                                $"{newLine}Intername=s{cmd.InterName}";
-
-                        #endregion
-
-                        #region Панели
-                        toolbars += $"{newLine}[\\toolbars\\{panelNameEn}\\{cmd.InterName}]" +
-                                    $"{newLine}Intername=s{cmd.InterName}";
-                        #endregion
-                    }
-                }
-            }
-            */
-
-             Utils.CfgConsoleWrier(cfgCreater.Cfg);
+            Utils.CfgConsoleWrier(cfgCreater.Cfg);
             #region Save *.cfg            
 
             rep.SaveToCfg(cfgCreater.Cfg);
-            /*
-                        using (StreamWriter writer = new StreamWriter(rep.CfgFilePath, false, Encoding.GetEncoding(65001)))
-                        {
-                            writer.WriteLine(menu);//меню
-                            writer.WriteLine(toolbarPopupMenu); //поп меню
-                            writer.WriteLine(toolbarsViewMenu); //виев меню
 
-                            writer.WriteLine(toolbars);//панели
-
-                            writer.WriteLine(configman);//команды
-                            writer.WriteLine(toolbarsCmd);//команды меню
-
-                            writer.WriteLine(ribbon);//лента
-                            writer.WriteLine(accelerators);//горячие кнопки
-                        }
-            */
             #endregion
 
             //группировка по PanelName
@@ -407,7 +118,7 @@ namespace MenuFilesGen
 
                     foreach (CommandDefinition commandData in unitedCommandGroup)
                     {
-                        if (commandData.DontMenu) continue;
+                        if (commandData.HideCommand) continue;
                         container.Add(CreateButton(commandData));
                     }
                 }

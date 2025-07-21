@@ -1,14 +1,9 @@
 ﻿using MenuFilesGen.Models;
-using MenuFilesGen.Service;
-using System.Text;
 
 namespace MenuFilesGen.Repositories
 {
     public partial class CfgCreater
     {
-
-
-
         /// <summary>
         /// привязка команд к меню
         /// </summary>
@@ -69,8 +64,10 @@ namespace MenuFilesGen.Repositories
                         //+ **** уровень команды ********
                         foreach (CommandDefinition cmd in Panel.Command)
                         {
-                            if (cmd.DontMenu) continue;// не добавлять в меню пропуск
+                            if (cmd.HideCommand) continue;// не добавлять в меню пропуск
+
                             #region Классическое меню
+
                             Cfg.Menu.Add($"{menuPanel}\\s{cmd.InterName}]");
                             Cfg.Menu.Add($"name=s{cmd.DispName}");
                             Cfg.Menu.Add($"Intername=s{cmd.InterName}");

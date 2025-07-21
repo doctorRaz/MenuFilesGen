@@ -89,7 +89,7 @@ namespace MenuFilesGen.Repositories
                     ToolTipText = row.Cell(columnNumbers.ToolTipTextColumn + 1).GetString().Trim(),
                     Accelerators = row.Cell(columnNumbers.AcceleratorsColumn + 1).GetString().Trim(),
 
-                    DontMenu = row.Cell(columnNumbers.DontMenuColumn + 1).GetString().Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
+                    HideCommand = row.Cell(columnNumbers.HideCommandColumn + 1).GetString().Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
                     DontTake = row.Cell(columnNumbers.DontTakeColumn + 1).GetString().Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
 
                     Weight = Utils.StringToInt(row.Cell(columnNumbers.WeightColumn + 1).GetString(), 10),

@@ -1,13 +1,10 @@
 ﻿using MenuFilesGen.Models;
 using MenuFilesGen.Service;
-using System.Text;
 
 namespace MenuFilesGen.Repositories
 {
     public partial class CfgCreater
     {
-
-
         /// <summary>
         /// Заполняем панельки, регистрируем команды
         /// </summary>
@@ -63,7 +60,7 @@ namespace MenuFilesGen.Repositories
             foreach (PanelDefinition panel in groupingPanel)
             {
                 //  регистрация панельки
-                Cfg.Toolbars.Add($"{toolbars}\\{panel.NameEn}]");
+                Cfg.Toolbars.Add($"[\\toolbars\\{panel.NameEn}]");
                 Cfg.Toolbars.Add($"name=s{panel.Name}]");
 
                 //регистрация ее команды
@@ -85,13 +82,8 @@ namespace MenuFilesGen.Repositories
                 {
                     #region Регистрация команд
 
-                    //string _toolTipText = !string.IsNullOrEmpty(cmd.ToolTipText) ? $"ToolTipText=s{cmd.ToolTipText}" : "";
-                    //string _localName = !string.IsNullOrEmpty(cmd.LocalName) ? $"LocalName=s{cmd.LocalName}" : "";
-                    //string _realCommandName = !string.IsNullOrEmpty(cmd.RealCommandName) ? $"RealCommandName=s{cmd.RealCommandName}" : "";
-                    //string _keyword = !string.IsNullOrEmpty(cmd.Keyword) ? $"Keyword=s{cmd.Keyword}" : "";
-
                     Cfg.Configman.Add("");
-                    Cfg.Configman.Add($"{configman}\\{cmd.InterName}]");
+                    Cfg.Configman.Add($"[\\configman\\commands\\{cmd.InterName}]");
                     Cfg.Configman.Add($"weight=i{cmd.Weight}");
                     Cfg.Configman.Add($"cmdtype=i{cmd.CmdType}");
                     Cfg.Configman.Add($"intername=s{cmd.InterName}");
@@ -112,24 +104,18 @@ namespace MenuFilesGen.Repositories
                     if (!string.IsNullOrEmpty(cmd.Accelerators))
                     {
                         Cfg.Accelerators.Add($"{cmd.InterName}=s{cmd.Accelerators}");
-
                     }
 
-                    if (cmd.DontMenu) continue;// не добавлять в меню пропуск
+                    if (cmd.HideCommand) continue;// не добавлять в меню пропуск
 
                     #region Панели
-                    Cfg.Toolbars.Add($"{toolbars}\\{panel.NameEn}\\{cmd.InterName}]"); 
-                      Cfg.Toolbars.Add($"Intername=s{cmd.InterName}");
+                    Cfg.Toolbars.Add($"[\\toolbars\\{panel.NameEn}\\{cmd.InterName}]");
+                    Cfg.Toolbars.Add($"Intername=s{cmd.InterName}");
                     #endregion
                 }
-
             }
 
             #endregion
         }
-
-
-
-
     }
 }

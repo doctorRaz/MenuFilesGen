@@ -46,7 +46,7 @@ namespace MenuFilesGen.Repositories
                              RibbonSplitButtonName = o[columnNumbers.RibbonSplitButtonColumn].Trim(),
                              RibbonSize = o[columnNumbers.RibbonSizeColumn].Trim(),
                              AppName = o[columnNumbers.AppNameColumn].Trim(),
-                             DontMenu = o[columnNumbers.DontMenuColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
+                             HideCommand = o[columnNumbers.HideCommandColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
                              DontTake = o[columnNumbers.DontTakeColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
                              LocalName = o[columnNumbers.LocalNameColumn].Trim(),
                              RealCommandName = o[columnNumbers.RealCommandNameColumn].Trim(),

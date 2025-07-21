@@ -11,12 +11,12 @@ namespace MenuFilesGen.Service
             Console.WriteLine(cfg.Menu.LstStr());//меню
             Console.WriteLine(cfg.ToolbarPopupMenu.LstStr()); //поп меню
             Console.WriteLine(cfg.ToolbarsViewMenu.LstStr()); //виев меню
-            
+
             Console.WriteLine(cfg.Toolbars.LstStr());//панели
-            
+
             Console.WriteLine(cfg.Configman.LstStr());//команды
             Console.WriteLine(cfg.ToolbarsCmd.LstStr());//команды меню
-            
+
             Console.WriteLine(cfg.Ribbon.LstStr());//лента
             Console.WriteLine(cfg.Accelerators.LstStr());//горячие кнопки
         }

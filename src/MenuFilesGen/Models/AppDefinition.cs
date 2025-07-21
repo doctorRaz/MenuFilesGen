@@ -16,6 +16,13 @@
         /// The addon.
         /// </value>
         public List<AddonDefinition> Addons { get; set; }
+
+        /// <summary>
+        /// Gets or sets the panels.
+        /// </summary>
+        /// <value>
+        /// The panels.
+        /// </value>
         public List<PanelDefinition> Panels { get; set; }
     }
 }

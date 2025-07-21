@@ -1,16 +1,14 @@
 ﻿using MenuFilesGen.Models;
-using MenuFilesGen.Service;
-using System.Text;
 
 namespace MenuFilesGen.Repositories
 {
     public partial class CfgCreater
     {
-         
+
 
         // https://stackoverflow.com/questions/1159233/multi-level-grouping-in-linq        
         /// <summary>
-        /// Группируем по приложеию, AppName , по панелям
+        /// Группируем по приложению, аддону , панелям
         /// </summary>
         /// <value>
         /// The hierarchical grouping.
@@ -45,6 +43,12 @@ namespace MenuFilesGen.Repositories
             }
         }
 
+        /// <summary>
+        /// группировка по приложению, панелям
+        /// </summary>
+        /// <value>
+        /// The grouping application panel.
+        /// </value>
         List<AppDefinition> groupingAppPanel
         {
             get
@@ -69,6 +73,12 @@ namespace MenuFilesGen.Repositories
             }
         }
 
+        /// <summary>
+        /// группировка по панелям
+        /// </summary>
+        /// <value>
+        /// The grouping panel.
+        /// </value>
         List<PanelDefinition> groupingPanel
         {
             get
@@ -83,9 +93,6 @@ namespace MenuFilesGen.Repositories
                          }).ToList();
 
             }
-        } 
-
-
-
+        }
     }
 }

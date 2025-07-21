@@ -1,6 +1,4 @@
 ﻿using MenuFilesGen.Models;
-using MenuFilesGen.Service;
-using System.Text;
 
 namespace MenuFilesGen.Repositories
 {
@@ -46,13 +44,13 @@ namespace MenuFilesGen.Repositories
                 Cfg.ToolbarPopupMenu.Add($"{popupPanelRoot}]");
                 Cfg.ToolbarPopupMenu.Add($"Name=s{appName}");
 
-
                 //+ меню вид
                 string viewPanelRoot = $"[\\menu\\View\\toolbars\\{appName}";
                 Cfg.ToolbarsViewMenu.Add("");
                 Cfg.ToolbarsViewMenu.Add($"{viewPanelRoot}]");
                 Cfg.ToolbarsViewMenu.Add($"Name=s{appName}");
 
+                //по панелькам
                 foreach (PanelDefinition panel in app.Panels)
                 {
                     //+ ****** поп меню ****************
@@ -64,15 +62,9 @@ namespace MenuFilesGen.Repositories
                     Cfg.ToolbarsViewMenu.Add($"{viewPanelRoot}\\{panel.Intername}]");
                     Cfg.ToolbarsViewMenu.Add($"Name=s{panel.Name}");
                     Cfg.ToolbarsViewMenu.Add($"InterName=s{panel.Intername}");
-
                 }
-
             }
             #endregion
         }
-
-
-
-
     }
 }

@@ -13,7 +13,7 @@
             RibbonSizeColumn = 4;
             RibbonSplitButtonColumn = 5;
             DontTakeColumn = 6;
-            DontMenuColumn = 7;
+            HideCommandColumn = 7;
             ResourseDllNameColumn = 8;
             IconColumn = 9;
             AppNameColumn = 10;
@@ -58,7 +58,7 @@
         public int IconColumn { get; }
 
         /// <summary> команду регистрировать но не показывать ни в меню ни в ленте ни в панелях </summary>
-        public int DontMenuColumn { get; }
+        public int HideCommandColumn { get; }
 
         /// <summary> имя приложения </summary>
         public int AppNameColumn { get; }

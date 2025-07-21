@@ -22,11 +22,11 @@ namespace MenuFilesGen.Models
         /// <summary>название сплитера ленты </summary>
         public string RibbonSplitButtonName { get; set; }
 
-        /// <summary> не регистрировать команду, пропустить </summary>
+        /// <summary> не регистрировать команду </summary>
         public bool DontTake { get; set; }
 
-        /// <summary> Команду зарегистрировать, но не показывать нигде </summary>
-        public bool DontMenu { get; set; }
+        /// <summary> Команду зарегистрировать, но не показывать в UI </summary>
+        public bool HideCommand { get; set; }
 
         /// <summary> Имя ресурсной dll. Обязательна, если установлена IconName </summary>
         public string ResourceDllName { get; set; }
