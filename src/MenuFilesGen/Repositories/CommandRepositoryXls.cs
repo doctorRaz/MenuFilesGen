@@ -22,7 +22,7 @@ namespace MenuFilesGen.Repositories
             }
 
             int wscount = 1;
-            foreach (IXLWorksheet _ws in workbook.Worksheets)//покажем листы
+            foreach (IXLWorksheet _ws in workbook.Worksheets)//покажем в консоли номера листов с названиями
             {
                 Console.WriteLine($"{wscount}.\t{_ws.Name}");
                 //Console.WriteLine($"{wscount}. Имя:\t{_ws.Name}\t\tвидимость=\"{(XLWorksheetVisibilityMod)_ws.Visibility}\"");
