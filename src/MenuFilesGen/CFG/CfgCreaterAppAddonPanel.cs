@@ -10,7 +10,7 @@ namespace MenuFilesGen.Repositories
         void AppAddonPanel()
         {
             #region Формируем меню   
-                        
+
             //++ ********** уровень приложения *********
 
             foreach (AppDefinition App in groupingAppAddonPanel)//уровень приложения
@@ -25,50 +25,55 @@ namespace MenuFilesGen.Repositories
                 Cfg.Menu.Add($"Name=s{appName}");
 
                 //++ ***** уровень аддона *****
+                string menuAddon = "";
+                string addonName = "";
+                string menuPanel = "";
                 foreach (AddonDefinition Addon in App.Addons)
                 {
-                    List<string> addonNames =Addon.Name.Split('|').ToList();
-                    string addonName =addonNames[0];
+                    addonName = Addon.Name;
 
-                    string menuAddon = "";
 
                     if (!string.IsNullOrEmpty(addonName))//аддон есть
                     {
-
-                        menuAddon = $"{menuApp}\\{addonName}";
-
-                        Cfg.Menu.Add("");
-
-                        if(addonNames.Count() > 1)
+                        if (menuAddon != $"{menuApp}\\{addonName}")
                         {
-                            Cfg.Menu.Add($"{menuApp}\\sep_{addonName}");
+                            menuAddon = $"{menuApp}\\{addonName}";
+
+                            Cfg.Menu.Add("");
+                            if (Addon.IsAddonSeparator)//separator
+                            {
+                                Cfg.Menu.Add($"{menuApp}\\sep_{addonName}]");
+                            }
+                            Cfg.Menu.Add($"{menuAddon}]");
+                            Cfg.Menu.Add($"Name=s{addonName}");
                         }
-                        Cfg.Menu.Add($"{menuAddon}]");
-                        Cfg.Menu.Add($"Name=s{addonName}");
                     }
                     else
                     {
                         menuAddon = menuApp;
                     }
+
                     //++ *******уровень панели *************
-                    foreach (PanelDefinition Panel in Addon.Panel)
+                    string panelName = "";
+                    foreach (PanelDefinition panel in Addon.Panel)
                     {
-                        var panelNames = Panel.Name.Split('|').ToList();
-                        string panelName = panelNames[0]; //имя панели не может быть пустым
-                        string menuPanel = "";
+                        panelName = panel.Name; //имя панели не может быть пустым
 
 
                         //+menu
-                        menuPanel = $"{menuAddon}\\{panelName}";
-                        if(panelNames.Count() > 1)
+                        if (menuPanel != $"{menuAddon}\\{panelName}")//пропуск если было
                         {
-                            Cfg.Menu.Add($"{menuAddon}\\sep_{panelName}");
+                            menuPanel = $"{menuAddon}\\{panelName}";
+                            if (panel.IsPanelSeparator)
+                            {
+                                Cfg.Menu.Add($"{menuAddon}\\sep_{panelName}]");
+                            }
+                            Cfg.Menu.Add($"{menuPanel}]");
+                            Cfg.Menu.Add($"Name=s{panelName}");
                         }
-                        Cfg.Menu.Add($"{menuPanel}]");
-                        Cfg.Menu.Add($"Name=s{panelName}");
 
                         //+ **** уровень команды ********
-                        foreach (CommandDefinition cmd in Panel.Command)
+                        foreach (CommandDefinition cmd in panel.Command)
                         {
                             if (cmd.HideCommand) continue;// не добавлять в меню пропуск
 
