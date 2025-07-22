@@ -58,11 +58,11 @@ namespace MenuFilesGen
                 return;
             }
 
-            string addonNameGlobal = rep.AddonNameGlobal;
+            string addonNameGlobal = rep.AddonNameGlobal;//+
 
             CfgCreater cfgCreater = new CfgCreater(rep.CommandDefinitions, rep.AddonNameGlobal);
 
-            Utils.CfgConsoleWrier(cfgCreater.Cfg);
+            Utils.CfgConsoleWrier(cfgCreater.Cfg);//вывод в консоль отладка
             #region Save *.cfg            
 
             rep.SaveToCfg(cfgCreater.Cfg);
