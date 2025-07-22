@@ -27,14 +27,22 @@ namespace MenuFilesGen.Repositories
                 //++ ***** уровень аддона *****
                 foreach (AddonDefinition Addon in App.Addons)
                 {
-                    string addonName = Addon.Name;
+                    List<string> addonNames =Addon.Name.Split('|').ToList();
+                    string addonName =addonNames[0];
 
                     string menuAddon = "";
 
                     if (!string.IsNullOrEmpty(addonName))//аддон есть
                     {
+
                         menuAddon = $"{menuApp}\\{addonName}";
 
+                        Cfg.Menu.Add("");
+
+                        if(addonNames.Count() > 1)
+                        {
+                            Cfg.Menu.Add($"{menuApp}\\sep_{addonName}");
+                        }
                         Cfg.Menu.Add($"{menuAddon}]");
                         Cfg.Menu.Add($"Name=s{addonName}");
                     }
@@ -45,12 +53,17 @@ namespace MenuFilesGen.Repositories
                     //++ *******уровень панели *************
                     foreach (PanelDefinition Panel in Addon.Panel)
                     {
-                        string panelName = Panel.Name; //имя панели не может быть пустым
+                        var panelNames = Panel.Name.Split('|').ToList();
+                        string panelName = panelNames[0]; //имя панели не может быть пустым
                         string menuPanel = "";
 
 
                         //+menu
                         menuPanel = $"{menuAddon}\\{panelName}";
+                        if(panelNames.Count() > 1)
+                        {
+                            Cfg.Menu.Add($"{menuAddon}\\sep_{panelName}");
+                        }
                         Cfg.Menu.Add($"{menuPanel}]");
                         Cfg.Menu.Add($"Name=s{panelName}");
 
@@ -60,10 +73,20 @@ namespace MenuFilesGen.Repositories
                             if (cmd.HideCommand) continue;// не добавлять в меню пропуск
 
                             #region Классическое меню
+                            var interNames = cmd.InterName.Split('|');
+                            string interName = interNames[0];
 
-                            Cfg.Menu.Add($"{menuPanel}\\s{cmd.InterName}]");
+                            if(interNames.Count() > 1)
+                            {
+                                Cfg.Menu.Add($"{menuPanel}\\sep_{interName}]");
+                            }
+                            Cfg.Menu.Add($"{menuPanel}\\s{interName}]");
                             Cfg.Menu.Add($"name=s{cmd.DispName}");
-                            Cfg.Menu.Add($"Intername=s{cmd.InterName}");
+                            Cfg.Menu.Add($"Intername=s{interName}"); 
+                            
+                            //Cfg.Menu.Add($"{menuPanel}\\s{cmd.InterName}]");
+                            //Cfg.Menu.Add($"name=s{cmd.DispName}");
+                            //Cfg.Menu.Add($"Intername=s{cmd.InterName}");
 
                             #endregion
                         }
