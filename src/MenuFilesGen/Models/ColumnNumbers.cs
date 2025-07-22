@@ -13,18 +13,20 @@
             RibbonSizeColumn = 4;
             RibbonSplitButtonColumn = 5;
             DontTakeColumn = 6;
-            DontMenuColumn = 7;
+            HideCommandColumn = 7;
             ResourseDllNameColumn = 8;
             IconColumn = 9;
             AppNameColumn = 10;
-            LocalNameColumn = 11;
-            RealCommandNameColumn = 12;
-            KeywordColumn = 13;
-            WeightColumn = 14;
-            CmdTypeColumn = 15;
-            ToolTipTextColumn = 16;
-            AcceleratorsColumn = 17;
-            //todo добавить addinNameGlobal
+            AddonNameColumn = 11;
+            LocalNameColumn = 12;
+            RealCommandNameColumn = 13;
+            KeywordColumn = 14;
+            WeightColumn = 15;
+            CmdTypeColumn = 16;
+            ToolTipTextColumn = 17;
+            AcceleratorsColumn = 18;
+
+
         }
 
         /// <summary> Номер колонки для имени команды </summary>
@@ -57,9 +59,9 @@
         public int IconColumn { get; }
 
         /// <summary> команду регистрировать но не показывать ни в меню ни в ленте ни в панелях </summary>
-        public int DontMenuColumn { get; }
+        public int HideCommandColumn { get; }
 
-        /// <summary>  родитель меню  </summary>
+        /// <summary> имя приложения </summary>
         public int AppNameColumn { get; }
 
         /// <summary>  локальное имя команды </summary>
@@ -82,5 +84,8 @@
 
         /// <summary>горячие кнопки</summary>
         public int AcceleratorsColumn { get; }
+
+        /// <summary>имя аддона</summary>
+        public int AddonNameColumn { get; }
     }
 }

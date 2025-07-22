@@ -1,7 +1,6 @@
 ﻿using MenuFilesGen.Models;
 using MenuFilesGen.Repositories;
 using MenuFilesGen.Service;
-using NickBuhro.Translit;
 using System.IO.Compression;
 using System.Text;
 using System.Xml.Linq;
@@ -18,221 +17,54 @@ namespace MenuFilesGen
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            Utils Ut = new Utils();
+            Utils utils = new Utils();
 
-            ArgsCmdLine cs = Ut.ParseCmdLine(args);
+            ArgsCmdLine argsCmdLine = utils.ParseCmdLine(args);//читаем аргументы ком строки
 
-            Console.WriteLine($"Аргументы ком строки:" +
-                           $"\n\t-hrr:[сколько строк пропускать, число] - {cs.HeaderRowRange}" +
-                           $"\n\t-xpn:[для XLS* номер листа шаблона, число] - {cs.XlsPageNumber}" +
-                           $"\n\t-exo:[подтверждать выход - 1, не подтверждать - 0] - {cs.EchoOnOff}" +
-                           $"\n\t[\"полный путь к файлу шаблона с расширением\"] - {cs.FilesName}\n");
+            Console.WriteLine
+                    (
+                        $"Аргументы ком строки:" +
+                        $"\n\t-hrr:[сколько строк пропускать, число] - {argsCmdLine.HeaderRowRange}" +
+                        $"\n\t-xpn:[для XLS* номер листа шаблона, число] - {argsCmdLine.XlsPageNumber}" +
+                        $"\n\t-exo:[подтверждать выход - 1, не подтверждать - 0] - {argsCmdLine.EchoOnOff}" +
+                        $"\n\t[\"полный путь к файлу шаблона с расширением\"] - {argsCmdLine.FileName}\n" +
+                        $"\n\t[\"путь к выходному каталогу\"] - {argsCmdLine.DirectoryPath}\n"
+                    );
 
-
-            if (string.IsNullOrEmpty(cs.FilesName))
+            if (string.IsNullOrEmpty(argsCmdLine.FileName))//если имя файла не аргумент
             {
                 OpenFileDialog tableFileDialog = new OpenFileDialog() { Filter = "Книга Excel (*.xls*)|*.xls*|Юникод  разделитель табуляция (*.txt;*.tsv)|*.txt;*.tsv|ASCI разделитель точка запятая (*.csv)|*.csv|Все файлы (*.*)|*.*" };
                 if (tableFileDialog.ShowDialog() != DialogResult.OK)
                 {
                     Console.WriteLine("Не задан файл");
                     Console.WriteLine("\nДля выхода нажмите любую клавишу...");
-                    if (cs.EchoOnOff) Console.ReadKey();
+                    if (argsCmdLine.EchoOnOff) Console.ReadKey();
                     return;
                 }
-                cs.FilesName = tableFileDialog.FileName;
+                argsCmdLine.FileName = tableFileDialog.FileName;//файл шаблона в аргументы
             }
 
-            CommandRepository rep = new CommandRepository(cs);
+            CommandRepository rep = new CommandRepository(argsCmdLine);//парсим файл
 
-            if (rep.CommandDefinitions is null || rep.CommandDefinitions.Count < 1)
+            if (rep.CommandDefinitions is null || rep.CommandDefinitions.Count < 1)//если ничего не напарсили
             {
-                Console.WriteLine($"Файл {rep.fileFullName} не прочитан");
+                Console.WriteLine($"Файл {rep.FileFullName} не прочитан");
 
-                Console.WriteLine("Для выхода нажмите любую клавишу...");
+                argsCmdLine.FileName = "";//чистим путь к шаблону, на случай если будем запрашивать его в цикле
+                Console.WriteLine("Для выхода нажмите любую клавишу...");//todo зациклить выбор файла?
                 Console.ReadKey();
 
                 return;
             }
 
-            string newLine = Environment.NewLine;
+            string addonNameGlobal = rep.AddonNameGlobal;//x 
 
-            string directoryPath = Path.GetDirectoryName(rep.fileFullName);
-            string addinName = rep.addinNameGlobal;
+            CfgCreater cfgCreater = new CfgCreater(rep.CommandDefinitions, rep.AddonNameGlobal);
 
-            string cfgFilePath = $"{directoryPath}\\{addinName}.cfg";
-            string cuiFilePath = $"{directoryPath}\\RibbonRoot.cui";
-            string cuixFilePath = $"{directoryPath}\\{addinName}.cuix";
-
-            //собираем в строки конфиг
-
-            //прописываем ленту
-            string ribbon = $"{newLine}[\\ribbon\\{addinName}]" +
-                            $"{newLine}CUIX=s%CFG_PATH%\\{addinName}.cuix" +
-                            $"{newLine}visible=f1";
-
-            //команды
-            string configman = $"{newLine}[\\configman]" +
-                        $"{newLine}[\\configman\\commands]";
-
-            //горячие клавиши
-            string accelerators = $"{newLine}[\\Accelerators]";// хоткеи
-
-            //меню
-            string menu = $"{newLine}[\\menu]";
-
-            //панели
-            string toolbars = $"{newLine};Панели" +
-                                $"{newLine}[\\toolbars]";
-
-            //всплывающее меню панелей
-            string toolbarPopupMenu = $"{newLine};Popup меню" +
-                                    $"{newLine}[\\ToolbarPopupMenu]" +
-                                    $"{newLine}[\\ToolbarPopupMenu\\{addinName}]" +
-                                    $"{newLine}Name=s{addinName}";
-
-            //команды вызова панелей
-            string toolbarsCmd = $"{newLine}; Команды вызова панелей";
-
-            //меню вид панелей
-            string toolbarsViewMenu = $"{newLine};View меню" +
-                                        /*        $"{newLine}[\\menu\\View\\toolbars\\{addinNameGlobal}]" +*/
-                                        $"{newLine}[\\menu\\View\\toolbars\\{addinName}]" +
-                                        /*    $"{newLine}Name=s{addinNameGlobal}";*/
-                                        $"{newLine}Name=s{addinName}";
-
-            foreach (var AppName in rep.HierarchicalGrouping)
-            {
-                string appName = AppName.appName;
-                string appMenu = $"{addinName}";
-
-                #region Классическое меню шапка
-
-                if (!string.IsNullOrEmpty(appName))
-                {
-                    appMenu = $"{appName}\\{addinName}";
-
-                    menu += $"{newLine}[\\menu\\{appName}]" +
-                            $"{newLine}Name=s{appName}" +
-                            $"{newLine}[\\menu\\{appMenu}]" +
-                            $"{newLine}Name=s{addinName}";
-
-                }
-                else
-                {
-                    menu += $"{newLine}[\\menu\\{appMenu}]" +
-                            $"{newLine} Name=s{addinName}";
-                }
-                #endregion
-
-                foreach (var panel in AppName.panel)
-                {
-                    string panelName = panel.panel;
-
-
-                    string panelNameRu = $"{addinName}_{panelName.Replace(' ', '_')}";//в имени команды не должно быть пробелов 
-                    string panelNameEn = Transliteration.CyrillicToLatin(panelNameRu, Language.Russian);//intername е должно содержать кириллицы
-
-                    string intername = $"ShowToolbar_{panelNameEn}";
-                    string localName = $"Панель_{panelNameRu}";
-
-                    #region Панели
-
-                    //панели
-                    toolbars += $"{newLine}{newLine}[\\toolbars\\{panelNameEn}]" +
-                                $"{newLine}name=s{panelName}";
-
-                    CommandDefinition cmd0 = panel.command[0] as CommandDefinition; //добавлять к команде показа панели иконку, по первой команде панели
-
-                    //команды
-                    toolbarsCmd += $"{newLine}{newLine}[\\configman\\commands\\{intername}]" +
-                                    $"{newLine}weight=i10" +
-                                    $"{newLine}cmdtype=i0" +
-                                    $"{newLine}Intername=s{intername}" +
-                                    $"{newLine}StatusText=sОтображение панели {panelName}" +
-                                    $"{newLine}ToolTipText=sОтображение панели {panelName}" +
-                                    $"{newLine}DispName=sОтображение панели {panelName}" +
-                                    $"{newLine}LocalName=s{localName}" +
-                                    $"{Utils.IconDefinition(cmd0)}";
-                    //поп меню
-                    toolbarPopupMenu += $"{newLine}[\\ToolbarPopupMenu\\{addinName}\\{intername}]" +
-                     $"{newLine}Name=s{panelName}" +
-                     $"{newLine}InterName=s{intername}";
-                    //вью меню
-                    toolbarsViewMenu += $"{newLine}[\\menu\\View\\toolbars\\{addinName}\\{intername}]" +
-                                        $"{newLine}Name=s{panelName}" +
-                                        $"{newLine}InterName=s{intername}";
-
-                    #endregion
-
-                    #region Классическое меню раздел
-
-                    menu += $"{newLine}{newLine}[\\menu\\{appMenu}\\{panelName}]" +
-                            $"{newLine}name=s{panelName}";
-
-                    #endregion
-
-                    foreach (CommandDefinition cmd in panel.command)
-                    {
-                        #region Регистрация команд
-
-                        string _toolTipText = !string.IsNullOrEmpty(cmd.ToolTipText) ? $"{newLine}ToolTipText=s{cmd.ToolTipText}" : "";
-                        string _localName = !string.IsNullOrEmpty(cmd.LocalName) ? $"{newLine}LocalName=s{cmd.LocalName}" : "";
-                        string _realCommandName = !string.IsNullOrEmpty(cmd.RealCommandName) ? $"{newLine}RealCommandName=s{cmd.RealCommandName}" : "";
-                        string _keyword = !string.IsNullOrEmpty(cmd.Keyword) ? $"{newLine}Keyword=s{cmd.Keyword}" : "";
-
-                        configman += $"{newLine}{newLine}[\\configman\\commands\\{cmd.InterName}]" +
-                                     $"{newLine}weight=i{cmd.Weight}" +
-                                     $"{newLine}cmdtype=i{cmd.CmdType}" +
-                                     $"{newLine}intername=s{cmd.InterName}" +
-                                     $"{newLine}DispName=s{cmd.DispName}" +
-                                     $"{newLine}StatusText=s{cmd.StatusText}" +
-                                     $"{_toolTipText}" +
-                                     $"{_localName}" +
-                                     $"{_realCommandName}" +
-                                     $"{_keyword}" +
-                                     $"{Utils.IconDefinition(cmd)}";
-
-                        #endregion
-
-                        if (!string.IsNullOrEmpty(cmd.Accelerators))
-                        {
-                            accelerators += $"{newLine}{cmd.InterName}=s{cmd.Accelerators}";
-
-                        }
-
-                        if (cmd.DontMenu) continue;// не добавлять в меню пропуск
-                        #region Классическое меню
-
-                        menu += $"{newLine}[\\menu\\{appMenu}\\{panelName}\\s{cmd.InterName}]" +
-                                $"{newLine}name=s{cmd.DispName}" +
-                                $"{newLine}Intername=s{cmd.InterName}";
-
-                        #endregion
-
-                        #region Панели
-                        toolbars += $"{newLine}[\\toolbars\\{panelNameEn}\\{cmd.InterName}]" +
-                                    $"{newLine}Intername=s{cmd.InterName}";
-                        #endregion
-                    }
-                }
-            }
-
+            Utils.CfgConsoleWrier(cfgCreater.Cfg);//вывод в консоль отладка
             #region Save *.cfg            
 
-            using (StreamWriter writer = new StreamWriter(cfgFilePath, false, Encoding.GetEncoding(65001)))
-            {
-                writer.WriteLine(menu);//меню
-                writer.WriteLine(toolbarPopupMenu); //поп меню
-                writer.WriteLine(toolbarsViewMenu); //виев меню
-
-                writer.WriteLine(toolbars);//панели
-
-                writer.WriteLine(configman);//команды
-                writer.WriteLine(toolbarsCmd);//команды меню
-
-                writer.WriteLine(ribbon);//лента
-                writer.WriteLine(accelerators);//горячие кнопки
-            }
+            rep.SaveToCfg(cfgCreater.Cfg);
 
             #endregion
 
@@ -256,8 +88,8 @@ namespace MenuFilesGen
             ribbonRoot.Add(ribbonTabSourceCollection);
 
             XElement ribbonTabSource = new XElement("RibbonTabSource");
-            ribbonTabSource.Add(new XAttribute("Text", addinName));
-            ribbonTabSource.Add(new XAttribute("UID", $"{addinName.Replace(" ", "")}_Tab"));
+            ribbonTabSource.Add(new XAttribute("Text", addonNameGlobal));
+            ribbonTabSource.Add(new XAttribute("UID", $"{addonNameGlobal.Replace(" ", "")}_Tab"));
             ribbonTabSourceCollection.Add(ribbonTabSource);
 
             foreach (IGrouping<string, CommandDefinition> cmd in groupsPanel)
@@ -289,7 +121,7 @@ namespace MenuFilesGen
 
                     foreach (CommandDefinition commandData in unitedCommandGroup)
                     {
-                        if (commandData.DontMenu) continue;
+                        if (commandData.HideCommand) continue;
                         container.Add(CreateButton(commandData));
                     }
                 }
@@ -332,31 +164,31 @@ namespace MenuFilesGen
                 ribbonTabSource.Add(ribbonPanelSourceReference);
             }
 
-            xDoc.Save(cuiFilePath);
+            xDoc.Save(rep.CuiFilePath);
 
             // Удаление .cuix файла, если он существует
-            if (File.Exists(cuixFilePath))
-                File.Delete(cuixFilePath);
+            if (File.Exists(rep.CuixFilePath))
+                File.Delete(rep.CuixFilePath);
 
             // Создание архива (.cuix), добавление в него сформированного .xml файла
-            using (ZipArchive zip = ZipFile.Open(cuixFilePath, ZipArchiveMode.Create))
+            using (ZipArchive zip = ZipFile.Open(rep.CuixFilePath, ZipArchiveMode.Create))
             {
-                zip.CreateEntryFromFile(cuiFilePath, "RibbonRoot.cui");
+                zip.CreateEntryFromFile(rep.CuiFilePath, "RibbonRoot.cui");
             }
 
             // Удаление ribbon.cui файла, если он существует
-            if (File.Exists(cuiFilePath))
+            if (File.Exists(rep.CuiFilePath))
             {
-                File.Delete(cuiFilePath);
+                File.Delete(rep.CuiFilePath);
             }
 
             #endregion
 
-            Console.WriteLine($"\nФайлы:\t{addinName}.cfg" +
-                $"\n\t{addinName}.cuix" +
-                $"\nсохранены в: {directoryPath}");
+            Console.WriteLine($"\nФайлы:\t{addonNameGlobal}.cfg" +
+                $"\n\t{addonNameGlobal}.cuix" +
+                $"\nсохранены в: {rep.directoryPath}");
 
-            if (cs.EchoOnOff)
+            if (argsCmdLine.EchoOnOff)
             {
                 Console.WriteLine("\nДля выхода нажмите любую клавишу...");
                 Console.ReadKey();

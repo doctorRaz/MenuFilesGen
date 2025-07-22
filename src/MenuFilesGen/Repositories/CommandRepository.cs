@@ -1,20 +1,19 @@
-﻿using ClosedXML.Excel;
-using MenuFilesGen.Models;
+﻿using MenuFilesGen.Models;
 using MenuFilesGen.Service;
 using System.Text;
 
 namespace MenuFilesGen.Repositories
 {
-    public class CommandRepository
+    public partial class CommandRepository
     {
         public CommandRepository(ArgsCmdLine _cs)
         {
-            fileFullName = _cs.FilesName;
+            FileFullName = _cs.FileName;
             HEADER_ROW_RANGE = _cs.HeaderRowRange;
             xlPage = _cs.XlsPageNumber;
+            directoryPath = !string.IsNullOrEmpty(_cs.DirectoryPath) ? _cs.DirectoryPath : Path.GetDirectoryName(FileFullName);
 
-
-            string fileExtension = Path.GetExtension(fileFullName);
+            string fileExtension = Path.GetExtension(FileFullName);
 
             //обработчик по расширению файла перенаправлять в свой читатель
             if (fileExtension.Contains("xls", StringComparison.OrdinalIgnoreCase))
@@ -23,281 +22,49 @@ namespace MenuFilesGen.Repositories
             }
             else if (fileExtension.Contains("csv", StringComparison.OrdinalIgnoreCase))//разделитель ; ASCI
             {
-                addinNameGlobal = Path.GetFileNameWithoutExtension(fileFullName);
+                AddonNameGlobal = Path.GetFileNameWithoutExtension(FileFullName);
 
                 ReadFromCsv();
             }
-            else//разделитель tab юникод или tsb
+            else//разделитель tab юникод или tsv
             {
-                addinNameGlobal = Path.GetFileNameWithoutExtension(fileFullName);
+                AddonNameGlobal = Path.GetFileNameWithoutExtension(FileFullName);
 
                 ReadFromTsv();
             }
 
         }
 
-        /// <summary> Чтение файла обмена (xls)</summary>
-        public void ReadFromXls()
-        {
-            XLWorkbook workbook = new XLWorkbook();
-            try
-            {
-            /*XLWorkbook*/ workbook = new XLWorkbook(new FileStream(fileFullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
-            }
-            catch (Exception ex)
-            {
-                return;
-            }
-
-            int wscount = 1;
-            foreach (IXLWorksheet _ws in workbook.Worksheets)//покажем листы
-            {
-                Console.WriteLine($"{wscount}.\t{_ws.Name}");
-                //Console.WriteLine($"{wscount}. Имя:\t{_ws.Name}\t\tвидимость=\"{(XLWorksheetVisibilityMod)_ws.Visibility}\"");
-                wscount++;
-            }
-
-            Console.WriteLine("");
-
-            bool result = false;
-            ConsoleKey k = ConsoleKey.NoName;
-            do
-            {
-                if (xlPage == 0)//лист не задан
-                {
-                    Console.Write("Введите номер листа: ");//запросим номер
-                    string? wsNumber = Console.ReadLine();
-                    xlPage = Utils.StringToInt(wsNumber);
-                }
-
-
-                if (xlPage > 0 && xlPage <= workbook.Worksheets.Count)//в диапазоне
-                {
-                    result = true;
-                }
-                else//вне диапазона
-                {
-                    Console.WriteLine($"Лист {xlPage} не найден!");
-                    Console.Write($"Продолжить - AnyKey\nЗавершить - Esc: ");
-                    xlPage = 0;
-                    k = Console.ReadKey().Key;
-                    Console.WriteLine($"");
-                }
-
-            } while (!(result || k == ConsoleKey.Escape));
-
-            if (!result) return;//выход по Esc уходим
-
-            IXLWorksheet worksheet = workbook.Worksheet(xlPage);
-
-            addinNameGlobal = worksheet.Name;
-
-            Console.WriteLine($"Работаю с листом: {xlPage} - \"{addinNameGlobal}\"");
-
-            IEnumerable<IXLRangeRow> rows = worksheet.RangeUsed().RowsUsed().Skip(HEADER_ROW_RANGE);
-
-            CommandDefinitions = new List<CommandDefinition>();
-
-            foreach (IXLRangeRow row in rows)
-            {
-                CommandDefinition res = new CommandDefinition
-                {
-                    DispName = row.Cell(columnNumbers.DispNameColumn + 1).GetString().Trim(),
-                    InterName = row.Cell(columnNumbers.InternameColumn + 1).GetString().Trim(),
-                    StatusText = row.Cell(columnNumbers.StatusTextColumn + 1).GetString().Trim(),
-                    IconName = row.Cell(columnNumbers.IconColumn + 1).GetString().Trim(),
-                    ResourceDllName = row.Cell(columnNumbers.ResourseDllNameColumn + 1).GetString().Trim(),
-                    PanelName = row.Cell(columnNumbers.PanelNameColumn + 1).GetString().Trim(),
-                    RibbonSplitButtonName = row.Cell(columnNumbers.RibbonSplitButtonColumn + 1).GetString().Trim(),
-                    RibbonSize = row.Cell(columnNumbers.RibbonSizeColumn + 1).GetString().Trim(),
-                    AppName = row.Cell(columnNumbers.AppNameColumn + 1).GetString().Trim(),
-                    LocalName = row.Cell(columnNumbers.LocalNameColumn + 1).GetString().Trim(),
-                    RealCommandName = row.Cell(columnNumbers.RealCommandNameColumn + 1).GetString().Trim(),
-                    Keyword = row.Cell(columnNumbers.KeywordColumn + 1).GetString().Trim(),
-                    ToolTipText = row.Cell(columnNumbers.ToolTipTextColumn + 1).GetString().Trim(),
-                    Accelerators = row.Cell(columnNumbers.AcceleratorsColumn + 1).GetString().Trim(),
-
-                    DontMenu = row.Cell(columnNumbers.DontMenuColumn + 1).GetString().Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
-                    DontTake = row.Cell(columnNumbers.DontTakeColumn + 1).GetString().Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
-
-                    Weight = Utils.StringToInt(row.Cell(columnNumbers.WeightColumn + 1).GetString(), 10),
-                    CmdType = Utils.StringToInt(row.Cell(columnNumbers.CmdTypeColumn + 1).GetString(), 1),
-
-                };
-
-                if (res.DontTake)//пропуск исключенных
-                {
-                    continue;
-                }
-                CommandDefinitions.Add(res);
-            }
-        }
-
-        /// <summary> Чтение файла обмена (csv) разделитель точка с запятой, кодировка ASCI </summary>
-        public void ReadFromCsv()
-        {
-
-
-            List<string[]> datas = null;
-            try
-            {
-                using (StreamReader reader = new StreamReader(fileFullName, Encoding.GetEncoding(1251)))
-                {
-                    datas = reader.ReadToEnd()
-                       .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
-                       .Skip(HEADER_ROW_RANGE)
-                       .Select(x => x.Split(';'))
-                          .Where(c => !(c[columnNumbers.DontTakeColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase)))
-                          .ToList();
-
-                }
-            }
-            catch (Exception ex)
-            {
-                return;
-            }
-
-            //todo копипаста(( оптимизировать, потом
-            CommandDefinitions = new List<CommandDefinition>(
-                datas.Select(o =>
-                     {
-                         CommandDefinition res = new CommandDefinition
-                         {
-                             DispName = o[columnNumbers.DispNameColumn].Trim(),
-                             InterName = o[columnNumbers.InternameColumn].Trim(),
-                             StatusText = o[columnNumbers.StatusTextColumn].Trim(),
-                             IconName = o[columnNumbers.IconColumn].Trim(),
-                             ResourceDllName = o[columnNumbers.ResourseDllNameColumn].Trim(),
-                             PanelName = o[columnNumbers.PanelNameColumn].Trim(),
-
-                             RibbonSplitButtonName = o[columnNumbers.RibbonSplitButtonColumn].Trim(),
-                             RibbonSize = o[columnNumbers.RibbonSizeColumn].Trim(),
-                             AppName = o[columnNumbers.AppNameColumn].Trim(),
-                             DontMenu = o[columnNumbers.DontMenuColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
-                             DontTake = o[columnNumbers.DontTakeColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
-                             LocalName = o[columnNumbers.LocalNameColumn].Trim(),
-                             RealCommandName = o[columnNumbers.RealCommandNameColumn].Trim(),
-                             Keyword = o[columnNumbers.KeywordColumn].Trim(),
-                             Weight = Utils.StringToInt(o[columnNumbers.WeightColumn], 10),
-                             CmdType = Utils.StringToInt(o[columnNumbers.CmdTypeColumn], 1),
-                             ToolTipText = o[columnNumbers.ToolTipTextColumn].Trim(),
-                             Accelerators = o[columnNumbers.AcceleratorsColumn].Trim(),
-                         };
-                         return res;
-                     })
-                );
-
-        }
-
-        // По здравому размышлению понял, что получение колонок для парсера интересно только здесь. Переделываю ;)
-        /// <summary> Чтение файла обмена (tsv) разделитель табуляция, кодировка UTF8 </summary>
-        /// <param name="fileFullName">Полный путь к обрабатываемому файлу</param>
-        /// <param name="columnNumbers">Настройки парсинга</param>
-        public void ReadFromTsv()
-        {
-            List<string[]> datas = null;
-            try
-            {
-                using (StreamReader reader = new StreamReader(fileFullName, Encoding.UTF8))
-                {
-                    datas = reader.ReadToEnd()
-                        .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
-                        .Skip(HEADER_ROW_RANGE)
-                        .Select(o => o.Split('\t'))
-                        .Where(c => !(c[columnNumbers.DontTakeColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase)))
-                        .ToList();
-                }
-            }
-            catch (Exception ex)
-            {
-                return;
-            }
-
-            PanelDefinitions = new List<PanelDefinition>(
-            datas
-                .Select(o => o[columnNumbers.PanelNameColumn])
-                .Distinct()
-                .Select(o => new PanelDefinition()
-                { Name = o })
-        );
-
-            RibbonPaletteDefinitions = new List<RibbonPaletteDefinition>(
-                datas
-                    .Select(o => o[columnNumbers.RibbonSplitButtonColumn])
-                    .Distinct()
-                    .Select(o => new RibbonPaletteDefinition()
-                    {
-                        Name = o
-                    })
-                );
-
-            CommandDefinitions = new List<CommandDefinition>(
-                datas.Select(o =>
-                {
-                    CommandDefinition res = new CommandDefinition
-                    {
-                        DispName = o[columnNumbers.DispNameColumn].Trim(),
-                        InterName = o[columnNumbers.InternameColumn].Trim(),
-                        StatusText = o[columnNumbers.StatusTextColumn].Trim(),
-                        IconName = o[columnNumbers.IconColumn].Trim(),
-                        ResourceDllName = o[columnNumbers.ResourseDllNameColumn].Trim(),
-                        PanelName = o[columnNumbers.PanelNameColumn].Trim(),
-
-                        RibbonSplitButtonName = o[columnNumbers.RibbonSplitButtonColumn].Trim(),
-                        RibbonSize = o[columnNumbers.RibbonSizeColumn].Trim(),
-                        AppName = o[columnNumbers.AppNameColumn].Trim(),
-                        DontMenu = o[columnNumbers.DontMenuColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
-                        DontTake = o[columnNumbers.DontTakeColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
-                        LocalName = o[columnNumbers.LocalNameColumn].Trim(),
-                        RealCommandName = o[columnNumbers.RealCommandNameColumn].Trim(),
-                        Keyword = o[columnNumbers.KeywordColumn].Trim(),
-                        Weight = Utils.StringToInt(o[columnNumbers.WeightColumn], 10),
-                        CmdType = Utils.StringToInt(o[columnNumbers.CmdTypeColumn], 1),
-                        ToolTipText = o[columnNumbers.ToolTipTextColumn].Trim(),
-                        Accelerators = o[columnNumbers.AcceleratorsColumn].Trim(),
-                    };
-                    return res;
-                })
-            );
-        }
-
-        public void SaveToCfg(string cfgFileName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SaveToCuix(string cuixFileName)
-        {
-            throw new NotImplementedException();
-        }
-
-        // https://stackoverflow.com/questions/1159233/multi-level-grouping-in-linq        
         /// <summary>
-        /// Группируем по AppName потом по панелям
+        /// Saves to CFG.
         /// </summary>
-        /// <value>
-        /// The hierarchical grouping.
-        /// </value>
-        public dynamic HierarchicalGrouping
+        /// <param name="cfgFileName">Name of the CFG file.</param>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public void SaveToCfg(CfgDefinition cfg)
         {
-            get
+            using (StreamWriter writer = new StreamWriter(CfgFilePath, false, Encoding.GetEncoding(65001)))
             {
-                return CommandDefinitions
-                     .GroupBy(e => e.AppName)
-                     .Select(appName => new
-                     {
-                         appName = appName.Key,
-                         panel = appName
-                     .GroupBy(e => e.PanelName)
-                     .Select(panel => new
-                     {
-                         panel = panel.Key,
-                         command = panel.ToList()
-                     }).ToList()
-                     }).ToList();
+                writer.WriteLine("[\\cfg]");
+                writer.WriteLine(cfg.Menu.LstStr());//меню
+                writer.WriteLine(cfg.ToolbarPopupMenu.LstStr()); //поп меню
+                writer.WriteLine(cfg.ToolbarsViewMenu.LstStr()); //виев меню
 
+                writer.WriteLine(cfg.Toolbars.LstStr());//панели
+
+                writer.WriteLine(cfg.Configman.LstStr());//команды
+                writer.WriteLine(cfg.ToolbarsCmd.LstStr());//команды меню
+
+                writer.WriteLine(cfg.Ribbon.LstStr());//лента
+                writer.WriteLine(cfg.Accelerators.LstStr());//горячие кнопки
             }
         }
+
+        public void SaveToCuix()
+        {
+            throw new NotImplementedException();
+        }
+
+
 
         /// <summary>
         /// Определения команд
@@ -329,7 +96,7 @@ namespace MenuFilesGen.Repositories
         /// <value>
         /// The name of the addin.
         /// </value>
-        public string addinNameGlobal { get; set; }
+        public string AddonNameGlobal { get; set; }
 
         /// <summary>
         /// Номера столбцов для парсинга
@@ -345,8 +112,39 @@ namespace MenuFilesGen.Repositories
         /// <value>
         /// The full name of the file.
         /// </value>
-        public string fileFullName { get; set; }
+        public string FileFullName { get; set; }
 
+        /// <summary>
+        /// директория конфигов
+        /// </summary>
+        /// <value>
+        /// The directory path.
+        /// </value>
+        public string directoryPath { get; private set; } = "";
+
+        /// <summary>
+        /// файл конфигурации.
+        /// </summary>
+        /// <value>
+        /// The CFG file path.
+        /// </value>
+        public string CfgFilePath => Path.Combine(directoryPath, AddonNameGlobal + ".cfg");//   $"{directoryPath}\\{addonNameGlobal}.Cfg";
+
+        /// <summary>
+        /// файл заготовка ленты.
+        /// </summary>
+        /// <value>
+        /// The cui file path.
+        /// </value>
+        public string CuiFilePath => Path.Combine(directoryPath, "RibbonRoot.cui");
+
+        /// <summary>
+        /// файл ленты zip
+        /// </summary>
+        /// <value>
+        /// The cuix file path.
+        /// </value>
+        public string CuixFilePath => Path.Combine(directoryPath, AddonNameGlobal + ".cuix");
 
         /// <summary>
         /// Количество строк пропустить при парсинге
@@ -354,12 +152,8 @@ namespace MenuFilesGen.Repositories
         private int HEADER_ROW_RANGE { get; set; } = 3;
 
         private int xlPage { get; set; } = 0;
+
+        private string newLine = Environment.NewLine;
     }
 
-    public enum XLWorksheetVisibilityMod
-    {
-        Видим,
-        Скрыт,
-        СуперСкрыт
-    }
 }

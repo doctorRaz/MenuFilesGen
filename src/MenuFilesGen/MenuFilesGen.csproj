@@ -17,6 +17,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="ClosedXML" Version="0.105.0" />
+		<PackageReference Include="Cyrillic.Convert" Version="3.1.0" />
 		<PackageReference Include="NickBuhro.Translit" Version="1.0.0" />
 	</ItemGroup>
 

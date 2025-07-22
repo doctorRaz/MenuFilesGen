@@ -1,4 +1,5 @@
 ﻿using MenuFilesGen.Enums;
+using MenuFilesGen.Service;
 
 namespace MenuFilesGen.Models
 {
@@ -8,33 +9,54 @@ namespace MenuFilesGen.Models
         /// <summary> Имя команды, как оно будет показываться в меню </summary>
         public string DispName { get; set; }
 
+        #region InterName
         /// <summary> Внутреннее имя команды, как оно определено в dll / nrx / lsp </summary>
-        public string InterName { get; set; }
+        public string InterName => InterNames[0].Trim();
+
+        List<string> InterNames => InterNameRaw.RawSplit();
+        public string InterNameRaw { get; set; } = "";
+
+        public bool IsCommandSeparator => InterNames.Count > 1;
+
+        #endregion
+
+
         /// <summary> Описание команды, показываемое в качестве всплывающей подсказки </summary>
         public string StatusText { get; set; }
 
+        #region PanelName
+
+
         /// <summary> имя панели/подменю </summary>
-        public string PanelName { get; set; }
+        public string PanelName => PanelNames[0].Trim();
+
+        List<string> PanelNames => PanelNameRaw.RawSplit();
+        public string PanelNameRaw { get; set; } = "";
+
+        public bool IsPanelSeparator => PanelNames.Count > 1;
+
+        #endregion
+
 
         /// <summary> Размер кнопки на ленте. None - кнопки не будет </summary>
         public string RibbonSize { get; set; }
 
         /// <summary>название сплитера ленты </summary>
-        public string RibbonSplitButtonName  { get; set; }
+        public string RibbonSplitButtonName { get; set; }
 
-        /// <summary> не регистрировать команду, пропустить </summary>
+        /// <summary> не регистрировать команду </summary>
         public bool DontTake { get; set; }
 
-        /// <summary> Команду зарегистрировать, но не показывать нигде </summary>
-        public bool DontMenu { get; set; }
+        /// <summary> Команду зарегистрировать, но не показывать в UI </summary>
+        public bool HideCommand { get; set; }
 
-        /// <summary> Имя ресурсной dll. Обязательна, если установлена IconName </summary>
+        /// <summary> Имя ресурсной dll. Обязательна, если установлен IconName </summary>
         public string ResourceDllName { get; set; }
 
         /// <summary> Имя иконки </summary>
         public string IconName { get; set; }
 
-        /// <summary> родительское меню </summary>
+        /// <summary> приложение </summary>
         public string AppName { get; set; }
 
         /// <summary> Локальное имя команды </summary>
@@ -57,11 +79,22 @@ namespace MenuFilesGen.Models
         /// <summary>подсказки </summary>
         public string ToolTipText { get; set; }
 
-         /// <summary> хоткеи </summary>
+        /// <summary> хоткеи </summary>
         public string Accelerators { get; set; }
 
-        //todo добавить addinNameGlobal
-   
+        #region AddonName
+
+        /// <summary> аддон </summary>
+        //public string AddonName => AddonNames[0].Trim();//x
+
+        //List<string> AddonNames => AddonNameRaw.RawSplit();
+
+        public string AddonNameRaw { get; set; } = "";
+
+        //public bool IsAddonSeparator => AddonNames.Count > 1;//x
+
+        #endregion
+
     }
 
 

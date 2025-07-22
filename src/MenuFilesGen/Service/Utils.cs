@@ -1,37 +1,49 @@
 ﻿using MenuFilesGen.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MenuFilesGen.Service
 {
     public class Utils
     {
+        public static void CfgConsoleWrier(CfgDefinition cfg)
+        {
+            Console.Clear();
+            Console.WriteLine("[\\cfg]");
+            Console.WriteLine(cfg.Menu.LstStr());//меню
+            Console.WriteLine(cfg.ToolbarPopupMenu.LstStr()); //поп меню
+            Console.WriteLine(cfg.ToolbarsViewMenu.LstStr()); //виев меню
+
+            Console.WriteLine(cfg.Toolbars.LstStr());//панели
+
+            Console.WriteLine(cfg.Configman.LstStr());//команды
+            Console.WriteLine(cfg.ToolbarsCmd.LstStr());//команды меню
+
+            Console.WriteLine(cfg.Ribbon.LstStr());//лента
+            Console.WriteLine(cfg.Accelerators.LstStr());//горячие кнопки
+        }
+
+
         /// <summary>
         /// Описание иконок
         /// </summary>
         /// <param name="cmd">Описание команд.</param>
         /// <returns>  описание иконки</returns>
-        public static string IconDefinition(CommandDefinition cmd)
+        public static List<string> IconDefinition(CommandDefinition cmd)
         {
-            string configman = "";
-            string newLine = Environment.NewLine;
+            List<string> configman = new List<string>();
+
 
             if (!string.IsNullOrEmpty(cmd.IconName))//иконки из dll
             {
-                configman += $"{newLine}BitmapDll=s{cmd.ResourceDllName}" +
-                            $"{newLine}Icon=s{cmd.IconName}";
+                configman.Add($"BitmapDll=s{cmd.ResourceDllName}");
+                configman.Add($"Icon=s{cmd.IconName}");
             }
             else if (!string.IsNullOrEmpty(cmd.ResourceDllName)) //прописана  иконка с относительным путем и расширением
             {
-                configman += $"{newLine}BitmapDll=s{cmd.ResourceDllName}";
+                configman.Add($"BitmapDll=s{cmd.ResourceDllName}");
             }
             else //иконка не прописана, имя иконки = название команды в каталоге \\icons
             {
-                configman += $"{newLine}BitmapDll=sicons\\{cmd.InterName}.ico";
+                configman.Add($"BitmapDll=sicons\\{cmd.InterName}.ico");
             }
             return configman;
         }
@@ -79,8 +91,12 @@ namespace MenuFilesGen.Service
                 if (File.Exists(argsL[i]))//если файл
                 {
 
-                    argsCmdLine.FilesName = argsL[i];
+                    argsCmdLine.FileName = argsL[i];
 
+                }
+                else if (Directory.Exists(args[i]))
+                {
+                    argsCmdLine.DirectoryPath = argsL[i];
                 }
 
                 else if (args[i].StartsWith("-"))//аргументы ком строки
@@ -109,6 +125,8 @@ namespace MenuFilesGen.Service
 
             return argsCmdLine;
         }
+
+        //static string newLine = Environment.NewLine;
     }
 
     /// <summary>
@@ -122,7 +140,12 @@ namespace MenuFilesGen.Service
         /// <value>
         /// The name of the files.
         /// </value>
-        public string FilesName { get; set; } = "";
+        public string FileName { get; set; } = "";
+
+        /// <summary>
+        /// директория конфигов, может задаваться аргументом ком строки
+        /// </summary>
+        public string DirectoryPath { get; set; } = "";
 
         /// <summary>
         /// Количество пропускаемых строк шаблона -hrr:3
