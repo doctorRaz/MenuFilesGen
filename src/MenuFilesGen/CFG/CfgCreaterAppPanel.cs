@@ -11,7 +11,7 @@ namespace MenuFilesGen.Repositories
         {
             #region Привязываем панельки к попап и  view по приложениям 
 
-           
+
             //по App
             foreach (AppDefinition app in groupingAppPanel)
             {
@@ -29,17 +29,32 @@ namespace MenuFilesGen.Repositories
                 Cfg.ToolbarsViewMenu.Add($"Name=s{appName}");
 
                 //по панелькам
+                string panelIntername = "";
                 foreach (PanelDefinition panel in app.Panels)
                 {
+                    if (panelIntername == panel.Intername)//уже было
+                    {
+                        continue;
+                    }
+                    string panelName = panel.Name;
+                    panelIntername = panel.Intername;
                     //+ ****** поп меню ****************
-                    Cfg.ToolbarPopupMenu.Add($"{popupPanelRoot}\\{panel.Intername}]");
-                    Cfg.ToolbarPopupMenu.Add($"Name=s{panel.Name}");
-                    Cfg.ToolbarPopupMenu.Add($"InterName=s{panel.Intername}");
+                    if (panel.IsPanelSeparator)
+                    {
+                        Cfg.ToolbarPopupMenu.Add($"{popupPanelRoot}\\sep_{panelIntername}]");
+                    }
+                    Cfg.ToolbarPopupMenu.Add($"{popupPanelRoot}\\{panelIntername}]");
+                    Cfg.ToolbarPopupMenu.Add($"Name=s{panelName}");
+                    Cfg.ToolbarPopupMenu.Add($"InterName=s{panelIntername}");
 
                     //+ ****** вью меню ****************
-                    Cfg.ToolbarsViewMenu.Add($"{viewPanelRoot}\\{panel.Intername}]");
-                    Cfg.ToolbarsViewMenu.Add($"Name=s{panel.Name}");
-                    Cfg.ToolbarsViewMenu.Add($"InterName=s{panel.Intername}");
+                    if (panel.IsPanelSeparator)
+                    {
+                        Cfg.ToolbarsViewMenu.Add($"{viewPanelRoot}\\sep_{panelIntername}]");
+                    }
+                    Cfg.ToolbarsViewMenu.Add($"{viewPanelRoot}\\{panelIntername}]");
+                    Cfg.ToolbarsViewMenu.Add($"Name=s{panelName}");
+                    Cfg.ToolbarsViewMenu.Add($"InterName=s{panelIntername}");
                 }
             }
             #endregion

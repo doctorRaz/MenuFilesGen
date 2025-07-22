@@ -13,6 +13,7 @@ namespace MenuFilesGen.Models
         List<string> Names => NameRaw.RawSplit();
 
         public bool IsAddonSeparator => Names.Count > 1;
+
         public string Name => Names[0].Trim();
 
         /// <summary>

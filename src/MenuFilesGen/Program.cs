@@ -15,10 +15,6 @@ namespace MenuFilesGen
         [STAThread]
         static void Main(string[] args)
         {
-            string d = "";// "dsds | d | xzxz";
-            var dd = d.RawSplit();
-            var d0= dd[0];
-
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             Utils utils = new Utils();

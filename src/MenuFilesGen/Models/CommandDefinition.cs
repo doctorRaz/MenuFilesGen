@@ -85,12 +85,13 @@ namespace MenuFilesGen.Models
         #region AddonName
 
         /// <summary> аддон </summary>
-        public string AddonName => AddonNames[0].Trim();
+        //public string AddonName => AddonNames[0].Trim();//x
 
-        List<string> AddonNames => AddonNameRaw.RawSplit();
+        //List<string> AddonNames => AddonNameRaw.RawSplit();
+
         public string AddonNameRaw { get; set; } = "";
 
-        public bool IsAddonSeparator => AddonNames.Count > 1;
+        //public bool IsAddonSeparator => AddonNames.Count > 1;//x
 
         #endregion
 

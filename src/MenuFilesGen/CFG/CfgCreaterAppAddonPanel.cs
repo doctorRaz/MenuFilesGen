@@ -73,20 +73,16 @@ namespace MenuFilesGen.Repositories
                             if (cmd.HideCommand) continue;// не добавлять в меню пропуск
 
                             #region Классическое меню
-                            var interNames = cmd.InterName.Split('|');
-                            string interName = interNames[0];
 
-                            if(interNames.Count() > 1)
+                            string interName = cmd.InterName;
+
+                            if (cmd.IsCommandSeparator)
                             {
                                 Cfg.Menu.Add($"{menuPanel}\\sep_{interName}]");
                             }
                             Cfg.Menu.Add($"{menuPanel}\\s{interName}]");
                             Cfg.Menu.Add($"name=s{cmd.DispName}");
-                            Cfg.Menu.Add($"Intername=s{interName}"); 
-                            
-                            //Cfg.Menu.Add($"{menuPanel}\\s{cmd.InterName}]");
-                            //Cfg.Menu.Add($"name=s{cmd.DispName}");
-                            //Cfg.Menu.Add($"Intername=s{cmd.InterName}");
+                            Cfg.Menu.Add($"Intername=s{interName}");
 
                             #endregion
                         }
