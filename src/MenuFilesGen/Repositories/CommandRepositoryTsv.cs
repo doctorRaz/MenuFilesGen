@@ -72,7 +72,7 @@ namespace MenuFilesGen.Repositories
                         CmdType = Utils.StringToInt(o[columnNumbers.CmdTypeColumn], 1),
                         ToolTipText = o[columnNumbers.ToolTipTextColumn].Trim(),
                         Accelerators = o[columnNumbers.AcceleratorsColumn].Trim(),
-                        //todo добавить addinName 
+                        AddonName = o[columnNumbers.AddonNameColumn].Trim(),
                     };
                     return res;
                 })
