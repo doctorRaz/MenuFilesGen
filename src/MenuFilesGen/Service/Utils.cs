@@ -94,6 +94,10 @@ namespace MenuFilesGen.Service
                     argsCmdLine.FileName = argsL[i];
 
                 }
+                else if (Directory.Exists(args[i]))
+                {
+                    argsCmdLine.DirectoryPath = argsL[i];
+                }
 
                 else if (args[i].StartsWith("-"))//аргументы ком строки
                 {
@@ -137,6 +141,11 @@ namespace MenuFilesGen.Service
         /// The name of the files.
         /// </value>
         public string FileName { get; set; } = "";
+
+        /// <summary>
+        /// директория конфигов, может задаваться аргументом ком строки
+        /// </summary>
+        public string DirectoryPath { get; set; } = "";
 
         /// <summary>
         /// Количество пропускаемых строк шаблона -hrr:3

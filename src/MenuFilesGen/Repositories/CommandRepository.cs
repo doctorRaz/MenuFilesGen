@@ -11,7 +11,7 @@ namespace MenuFilesGen.Repositories
             FileFullName = _cs.FileName;
             HEADER_ROW_RANGE = _cs.HeaderRowRange;
             xlPage = _cs.XlsPageNumber;
-
+            directoryPath=!string.IsNullOrEmpty( _cs.DirectoryPath) ? _cs.DirectoryPath:Path.GetDirectoryName(FileFullName);
 
             string fileExtension = Path.GetExtension(FileFullName);
 
@@ -26,7 +26,7 @@ namespace MenuFilesGen.Repositories
 
                 ReadFromCsv();
             }
-            else//разделитель tab юникод или tsb
+            else//разделитель tab юникод или tsv
             {
                 AddonNameGlobal = Path.GetFileNameWithoutExtension(FileFullName);
 
@@ -120,7 +120,7 @@ namespace MenuFilesGen.Repositories
         /// <value>
         /// The directory path.
         /// </value>
-        public string directoryPath => Path.GetDirectoryName(FileFullName);
+        public string directoryPath { get; private set; } = "";
 
         /// <summary>
         /// файл конфигурации.

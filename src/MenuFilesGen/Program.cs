@@ -22,11 +22,15 @@ namespace MenuFilesGen
 
             ArgsCmdLine argsCmdLine = utils.ParseCmdLine(args);//читаем аргументы ком строки
 
-            Console.WriteLine($"Аргументы ком строки:" +
-                           $"\n\t-hrr:[сколько строк пропускать, число] - {argsCmdLine.HeaderRowRange}" +
-                           $"\n\t-xpn:[для XLS* номер листа шаблона, число] - {argsCmdLine.XlsPageNumber}" +
-                           $"\n\t-exo:[подтверждать выход - 1, не подтверждать - 0] - {argsCmdLine.EchoOnOff}" +
-                           $"\n\t[\"полный путь к файлу шаблона с расширением\"] - {argsCmdLine.FileName}\n");
+            Console.WriteLine
+                    (
+                        $"Аргументы ком строки:" +
+                        $"\n\t-hrr:[сколько строк пропускать, число] - {argsCmdLine.HeaderRowRange}" +
+                        $"\n\t-xpn:[для XLS* номер листа шаблона, число] - {argsCmdLine.XlsPageNumber}" +
+                        $"\n\t-exo:[подтверждать выход - 1, не подтверждать - 0] - {argsCmdLine.EchoOnOff}" +
+                        $"\n\t[\"полный путь к файлу шаблона с расширением\"] - {argsCmdLine.FileName}\n" +
+                        $"\n\t[\"путь к выходному каталогу\"] - {argsCmdLine.DirectoryPath}\n"
+                    );
 
             if (string.IsNullOrEmpty(argsCmdLine.FileName))//если имя файла не аргумент
             {
