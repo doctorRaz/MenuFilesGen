@@ -15,7 +15,7 @@ namespace MenuFilesGen.Repositories
             addonNameGlobal = _addonNameGlobal;
 
             Cfg = new CfgDefinition(addonNameGlobal);//конфиг
-         
+
             PanelCmd();
 
             AppPanel();

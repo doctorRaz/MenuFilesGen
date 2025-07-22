@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace MenuFilesGen.Service
+﻿namespace MenuFilesGen.Service
 {
 
     /// <summary>

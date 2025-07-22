@@ -13,11 +13,11 @@ namespace MenuFilesGen.Models
         /// <summary> Внутреннее имя команды, как оно определено в dll / nrx / lsp </summary>
         public string InterName => InterNames[0].Trim();
 
-          List< string> InterNames => InterNameRaw.RawSplit();
+        List<string> InterNames => InterNameRaw.RawSplit();
         public string InterNameRaw { get; set; } = "";
 
-        public bool IsCommandSeparator=>InterNames.Count > 1;
-        
+        public bool IsCommandSeparator => InterNames.Count > 1;
+
         #endregion
 
 
@@ -25,7 +25,7 @@ namespace MenuFilesGen.Models
         public string StatusText { get; set; }
 
         #region PanelName
-        
+
 
         /// <summary> имя панели/подменю </summary>
         public string PanelName => PanelNames[0].Trim();

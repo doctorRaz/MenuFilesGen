@@ -56,7 +56,7 @@ namespace MenuFilesGen.Repositories
                              ToolTipText = o[columnNumbers.ToolTipTextColumn].Trim(),
                              Accelerators = o[columnNumbers.AcceleratorsColumn].Trim(),
                              AddonNameRaw = o[columnNumbers.AddonNameColumn].Trim(),
-                             
+
                          };
                          return res;
                      })

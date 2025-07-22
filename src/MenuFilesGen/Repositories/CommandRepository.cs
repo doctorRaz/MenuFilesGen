@@ -11,7 +11,7 @@ namespace MenuFilesGen.Repositories
             FileFullName = _cs.FileName;
             HEADER_ROW_RANGE = _cs.HeaderRowRange;
             xlPage = _cs.XlsPageNumber;
-            directoryPath=!string.IsNullOrEmpty( _cs.DirectoryPath) ? _cs.DirectoryPath:Path.GetDirectoryName(FileFullName);
+            directoryPath = !string.IsNullOrEmpty(_cs.DirectoryPath) ? _cs.DirectoryPath : Path.GetDirectoryName(FileFullName);
 
             string fileExtension = Path.GetExtension(FileFullName);
 
@@ -64,7 +64,7 @@ namespace MenuFilesGen.Repositories
             throw new NotImplementedException();
         }
 
-      
+
 
         /// <summary>
         /// Определения команд

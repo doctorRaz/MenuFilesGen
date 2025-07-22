@@ -12,7 +12,7 @@
         public CfgDefinition(string addonNameGlobal)
         {
             //потому что не могу инициализировать не статическим полем или свойством класса
-            Ribbon  = new List<string>()
+            Ribbon = new List<string>()
                                     {
                                         "",
                                         ";Лента",
@@ -83,7 +83,7 @@
 
 
         /// <summary>регистрация ленты</summary>
-        public List<string> Ribbon { get; set; } 
+        public List<string> Ribbon { get; set; }
 
     }
 }
