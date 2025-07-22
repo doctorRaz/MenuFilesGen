@@ -8,7 +8,7 @@ namespace MenuFilesGen.Repositories
     {
         public CommandRepository(ArgsCmdLine _cs)
         {
-            FileFullName = _cs.FilesName;
+            FileFullName = _cs.FileName;
             HEADER_ROW_RANGE = _cs.HeaderRowRange;
             xlPage = _cs.XlsPageNumber;
 
@@ -231,10 +231,4 @@ namespace MenuFilesGen.Repositories
         private string newLine = Environment.NewLine;
     }
 
-    public enum XLWorksheetVisibilityMod
-    {
-        Видим,
-        Скрыт,
-        СуперСкрыт
-    }
 }

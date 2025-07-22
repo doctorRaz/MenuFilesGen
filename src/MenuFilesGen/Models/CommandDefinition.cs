@@ -10,6 +10,7 @@ namespace MenuFilesGen.Models
 
         /// <summary> Внутреннее имя команды, как оно определено в dll / nrx / lsp </summary>
         public string InterName { get; set; }
+
         /// <summary> Описание команды, показываемое в качестве всплывающей подсказки </summary>
         public string StatusText { get; set; }
 
@@ -28,7 +29,7 @@ namespace MenuFilesGen.Models
         /// <summary> Команду зарегистрировать, но не показывать в UI </summary>
         public bool HideCommand { get; set; }
 
-        /// <summary> Имя ресурсной dll. Обязательна, если установлена IconName </summary>
+        /// <summary> Имя ресурсной dll. Обязательна, если установлен IconName </summary>
         public string ResourceDllName { get; set; }
 
         /// <summary> Имя иконки </summary>

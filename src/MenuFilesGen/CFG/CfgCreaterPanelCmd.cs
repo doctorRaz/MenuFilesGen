@@ -12,8 +12,6 @@ namespace MenuFilesGen.Repositories
         {
             #region Формируем панельки и прописываем команды
 
-
-            //todo группировка по панелькам
             foreach (PanelDefinition panel in groupingPanel)
             {
                 //  регистрация панельки

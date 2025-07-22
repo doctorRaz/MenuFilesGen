@@ -26,9 +26,9 @@ namespace MenuFilesGen
                            $"\n\t-hrr:[сколько строк пропускать, число] - {argsCmdLine.HeaderRowRange}" +
                            $"\n\t-xpn:[для XLS* номер листа шаблона, число] - {argsCmdLine.XlsPageNumber}" +
                            $"\n\t-exo:[подтверждать выход - 1, не подтверждать - 0] - {argsCmdLine.EchoOnOff}" +
-                           $"\n\t[\"полный путь к файлу шаблона с расширением\"] - {argsCmdLine.FilesName}\n");
+                           $"\n\t[\"полный путь к файлу шаблона с расширением\"] - {argsCmdLine.FileName}\n");
 
-            if (string.IsNullOrEmpty(argsCmdLine.FilesName))//если имя файла не аргумент
+            if (string.IsNullOrEmpty(argsCmdLine.FileName))//если имя файла не аргумент
             {
                 OpenFileDialog tableFileDialog = new OpenFileDialog() { Filter = "Книга Excel (*.xls*)|*.xls*|Юникод  разделитель табуляция (*.txt;*.tsv)|*.txt;*.tsv|ASCI разделитель точка запятая (*.csv)|*.csv|Все файлы (*.*)|*.*" };
                 if (tableFileDialog.ShowDialog() != DialogResult.OK)
@@ -38,7 +38,7 @@ namespace MenuFilesGen
                     if (argsCmdLine.EchoOnOff) Console.ReadKey();
                     return;
                 }
-                argsCmdLine.FilesName = tableFileDialog.FileName;//файл шаблона в аргументы
+                argsCmdLine.FileName = tableFileDialog.FileName;//файл шаблона в аргументы
             }
 
             CommandRepository rep = new CommandRepository(argsCmdLine);//парсим файл
@@ -47,7 +47,7 @@ namespace MenuFilesGen
             {
                 Console.WriteLine($"Файл {rep.FileFullName} не прочитан");
 
-                argsCmdLine.FilesName = "";//чистим путь к шаблону, на случай если будем запрашивать его в цикле
+                argsCmdLine.FileName = "";//чистим путь к шаблону, на случай если будем запрашивать его в цикле
                 Console.WriteLine("Для выхода нажмите любую клавишу...");//todo зациклить выбор файла?
                 Console.ReadKey();
 

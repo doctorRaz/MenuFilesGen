@@ -91,7 +91,7 @@ namespace MenuFilesGen.Service
                 if (File.Exists(argsL[i]))//если файл
                 {
 
-                    argsCmdLine.FilesName = argsL[i];
+                    argsCmdLine.FileName = argsL[i];
 
                 }
 
@@ -136,7 +136,7 @@ namespace MenuFilesGen.Service
         /// <value>
         /// The name of the files.
         /// </value>
-        public string FilesName { get; set; } = "";
+        public string FileName { get; set; } = "";
 
         /// <summary>
         /// Количество пропускаемых строк шаблона -hrr:3
