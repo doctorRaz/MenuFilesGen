@@ -24,17 +24,17 @@ namespace MenuFilesGen.Repositories
                      {
                          Name = string.IsNullOrEmpty(appName.Key) ? addonNameGlobal : appName.Key,
                          Addons = appName
-                     .GroupBy(e => e.AddonName)
+                     .GroupBy(e => e.AddonNameRaw)
                      .Select(addon => new AddonDefinition
                      {
                          Parent = string.IsNullOrEmpty(appName.Key) ? addonNameGlobal : appName.Key,
-                         Name = addon.Key,
+                         NameRaw = addon.Key,
                          Panel = addon
-                         .GroupBy(e => e.PanelName)
+                         .GroupBy(e => e.PanelNameRaw)
                          .Select(panel => new PanelDefinition
                          {
                              Parent = addon.Key,
-                             Name = panel.Key,
+                             NameRaw = panel.Key,
                              Command = panel.ToList() /*new List<CommandDefinition>(panel)*/,
                          }).ToList()
                      }).ToList()
@@ -60,11 +60,11 @@ namespace MenuFilesGen.Repositories
                      {
                          Name = string.IsNullOrEmpty(appName.Key) ? addonNameGlobal : appName.Key,
                          Panels = appName
-                      .GroupBy(e => e.PanelName)
+                      .GroupBy(e => e.PanelNameRaw)
                          .Select(panel => new PanelDefinition
                          {
                              Parent = appName.Key,
-                             Name = panel.Key,
+                             NameRaw = panel.Key,
                              Command = panel.ToList() /*new List<CommandDefinition>(panel)*/,
                          }).ToList()
 
@@ -85,10 +85,10 @@ namespace MenuFilesGen.Repositories
             {
                 return commandDefinitions
 
-                      .GroupBy(e => e.PanelName)
+                      .GroupBy(e => e.PanelNameRaw)
                          .Select(panel => new PanelDefinition
                          {
-                             Name = panel.Key,
+                             NameRaw = panel.Key,
                              Command = panel.ToList(),
                          }).ToList();
 

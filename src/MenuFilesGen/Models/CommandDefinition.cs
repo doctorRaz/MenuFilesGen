@@ -1,4 +1,5 @@
 ﻿using MenuFilesGen.Enums;
+using MenuFilesGen.Service;
 
 namespace MenuFilesGen.Models
 {
@@ -8,14 +9,34 @@ namespace MenuFilesGen.Models
         /// <summary> Имя команды, как оно будет показываться в меню </summary>
         public string DispName { get; set; }
 
+        #region InterName
         /// <summary> Внутреннее имя команды, как оно определено в dll / nrx / lsp </summary>
-        public string InterName { get; set; }
+        public string InterName => InterNames[0].Trim();
+
+          List< string> InterNames => InterNameRaw.RawSplit();
+        public string InterNameRaw { get; set; } = "";
+
+        public bool IsCommandSeparator=>InterNames.Count > 1;
+        
+        #endregion
+
 
         /// <summary> Описание команды, показываемое в качестве всплывающей подсказки </summary>
         public string StatusText { get; set; }
 
+        #region PanelName
+        
+
         /// <summary> имя панели/подменю </summary>
-        public string PanelName { get; set; }
+        public string PanelName => PanelNames[0].Trim();
+
+        List<string> PanelNames => PanelNameRaw.RawSplit();
+        public string PanelNameRaw { get; set; } = "";
+
+        public bool IsPanelSeparator => PanelNames.Count > 1;
+
+        #endregion
+
 
         /// <summary> Размер кнопки на ленте. None - кнопки не будет </summary>
         public string RibbonSize { get; set; }
@@ -61,10 +82,17 @@ namespace MenuFilesGen.Models
         /// <summary> хоткеи </summary>
         public string Accelerators { get; set; }
 
+        #region AddonName
 
         /// <summary> аддон </summary>
-        public string AddonName { get; set; }
+        public string AddonName => AddonNames[0].Trim();
 
+        List<string> AddonNames => AddonNameRaw.RawSplit();
+        public string AddonNameRaw { get; set; } = "";
+
+        public bool IsAddonSeparator => AddonNames.Count > 1;
+
+        #endregion
 
     }
 

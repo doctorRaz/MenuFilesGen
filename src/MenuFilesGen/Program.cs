@@ -15,6 +15,9 @@ namespace MenuFilesGen
         [STAThread]
         static void Main(string[] args)
         {
+            string d = "";// "dsds | d | xzxz";
+            var dd = d.RawSplit();
+            var d0= dd[0];
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
@@ -58,7 +61,7 @@ namespace MenuFilesGen
                 return;
             }
 
-            string addonNameGlobal = rep.AddonNameGlobal;//+
+            string addonNameGlobal = rep.AddonNameGlobal;//x 
 
             CfgCreater cfgCreater = new CfgCreater(rep.CommandDefinitions, rep.AddonNameGlobal);
 

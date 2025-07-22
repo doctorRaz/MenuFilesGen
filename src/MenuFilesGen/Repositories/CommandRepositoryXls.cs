@@ -75,11 +75,11 @@ namespace MenuFilesGen.Repositories
                 CommandDefinition res = new CommandDefinition
                 {
                     DispName = row.Cell(columnNumbers.DispNameColumn + 1).GetString().Trim(),
-                    InterName = row.Cell(columnNumbers.InternameColumn + 1).GetString().Trim(),
+                    InterNameRaw = row.Cell(columnNumbers.InternameColumn + 1).GetString().Trim(),
                     StatusText = row.Cell(columnNumbers.StatusTextColumn + 1).GetString().Trim(),
                     IconName = row.Cell(columnNumbers.IconColumn + 1).GetString().Trim(),
                     ResourceDllName = row.Cell(columnNumbers.ResourseDllNameColumn + 1).GetString().Trim(),
-                    PanelName = row.Cell(columnNumbers.PanelNameColumn + 1).GetString().Trim(),
+                    PanelNameRaw = row.Cell(columnNumbers.PanelNameColumn + 1).GetString().Trim(),
                     RibbonSplitButtonName = row.Cell(columnNumbers.RibbonSplitButtonColumn + 1).GetString().Trim(),
                     RibbonSize = row.Cell(columnNumbers.RibbonSizeColumn + 1).GetString().Trim(),
                     AppName = row.Cell(columnNumbers.AppNameColumn + 1).GetString().Trim(),
@@ -94,7 +94,7 @@ namespace MenuFilesGen.Repositories
 
                     Weight = Utils.StringToInt(row.Cell(columnNumbers.WeightColumn + 1).GetString(), 10),
                     CmdType = Utils.StringToInt(row.Cell(columnNumbers.CmdTypeColumn + 1).GetString(), 1),
-                    AddonName = row.Cell(columnNumbers.AddonNameColumn + 1).GetString().Trim(),
+                    AddonNameRaw = row.Cell(columnNumbers.AddonNameColumn + 1).GetString().Trim(),
 
                 };
 

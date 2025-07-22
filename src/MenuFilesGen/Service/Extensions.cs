@@ -1,4 +1,6 @@
-﻿namespace MenuFilesGen.Service
+﻿using System.Runtime.CompilerServices;
+
+namespace MenuFilesGen.Service
 {
 
     /// <summary>
@@ -12,5 +14,11 @@
             return str;
         }
 
+
+        public static List<string> RawSplit(this string str)
+        {
+
+            return str.Split('|').ToList();
+        }
     }
 }

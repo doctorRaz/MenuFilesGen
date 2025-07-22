@@ -35,7 +35,7 @@ namespace MenuFilesGen.Repositories
                 .Select(o => o[columnNumbers.PanelNameColumn])
                 .Distinct()
                 .Select(o => new PanelDefinition()
-                { Name = o })
+                { NameRaw = o })
         );
 
             RibbonPaletteDefinitions = new List<RibbonPaletteDefinition>(
@@ -54,11 +54,11 @@ namespace MenuFilesGen.Repositories
                     CommandDefinition res = new CommandDefinition
                     {
                         DispName = o[columnNumbers.DispNameColumn].Trim(),
-                        InterName = o[columnNumbers.InternameColumn].Trim(),
+                        InterNameRaw = o[columnNumbers.InternameColumn].Trim(),
                         StatusText = o[columnNumbers.StatusTextColumn].Trim(),
                         IconName = o[columnNumbers.IconColumn].Trim(),
                         ResourceDllName = o[columnNumbers.ResourseDllNameColumn].Trim(),
-                        PanelName = o[columnNumbers.PanelNameColumn].Trim(),
+                        PanelNameRaw = o[columnNumbers.PanelNameColumn].Trim(),
 
                         RibbonSplitButtonName = o[columnNumbers.RibbonSplitButtonColumn].Trim(),
                         RibbonSize = o[columnNumbers.RibbonSizeColumn].Trim(),
@@ -72,7 +72,7 @@ namespace MenuFilesGen.Repositories
                         CmdType = Utils.StringToInt(o[columnNumbers.CmdTypeColumn], 1),
                         ToolTipText = o[columnNumbers.ToolTipTextColumn].Trim(),
                         Accelerators = o[columnNumbers.AcceleratorsColumn].Trim(),
-                        AddonName = o[columnNumbers.AddonNameColumn].Trim(),
+                        AddonNameRaw = o[columnNumbers.AddonNameColumn].Trim(),
                     };
                     return res;
                 })

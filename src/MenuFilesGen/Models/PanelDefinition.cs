@@ -1,4 +1,5 @@
-﻿using NickBuhro.Translit;
+﻿using MenuFilesGen.Service;
+using NickBuhro.Translit;
 
 namespace MenuFilesGen.Models
 {
@@ -9,7 +10,13 @@ namespace MenuFilesGen.Models
         public string Parent { get; set; }
 
         /// <summary> Имя панели </summary>
-        public string Name { get; set; }
+        public string Name => Names[0].Trim();
+        public string NameRaw { get; set; } = "";
+
+        List<string> Names => NameRaw.RawSplit();
+
+        public bool IsPanelSeparator => Names.Count > 1;
+
 
         /// <summary>
         /// Имя панели без пробелов
