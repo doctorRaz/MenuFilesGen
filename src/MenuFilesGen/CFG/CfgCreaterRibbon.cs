@@ -97,7 +97,56 @@ namespace MenuFilesGen.CFG
                         ribbonRowPanelButtonsCount++;
                     }
                 }
+                /*
+                // Дублирование под табом ленты
+                XElement ribbonPanelBreak = new XElement("RibbonPanelBreak");
+                ribbonPanelSource.Add(ribbonPanelBreak);
+                var ribbonRowDuplicatePanel = new XElement("RibbonRowPanel");
+                ribbonPanelSource.Add(ribbonRowDuplicatePanel);
 
+                var items = panelButtons.Elements().ToArray();
+                int nameSymbolsCountMax = 0;
+
+                for (int itemIndex = 0; itemIndex < items.Count(); itemIndex += 2)
+                {
+                    var nameSymbolsCount =
+                        items[itemIndex].Attributes().First(attr => attr.Name == "Text").Value.Count();
+
+                    if (nameSymbolsCount > nameSymbolsCountMax)
+                        nameSymbolsCountMax = nameSymbolsCount;
+                }
+
+                for (int itemIndex = 0; itemIndex < items.Count(); itemIndex++)
+                {
+                    var item = items[itemIndex];
+                    XElement[] itemButtons;
+
+                    if (item.Name == "RibbonSplitButton")
+                        itemButtons = item.Elements().ToArray();
+                    else
+                    {
+                        itemButtons = new[]
+                        {
+                                      item,
+                                  };
+                    }
+
+                    for (int buttonIndex = 0; buttonIndex < itemButtons.Count(); buttonIndex++)
+                    {
+                        var button = itemButtons[buttonIndex];
+                        button.Attributes().First(attr => attr.Name == "ButtonStyle").Value = "LargeWithHorizontalText";
+                        ribbonRowDuplicatePanel.Add(button);
+
+                        if (itemIndex < items.Count() - 1 || buttonIndex < itemButtons.Count() - 1)
+                        {
+                            XElement separator = new XElement("RibbonSeparator");
+                            ribbonRowDuplicatePanel.Add(separator);
+                        }
+                    }
+                }
+
+
+                */
                 XElement ribbonPanelSourceReference = new XElement("RibbonPanelSourceReference");
                 ribbonPanelSourceReference.Add(new XAttribute("PanelId", cmd.Key));
                 ribbonTabSource.Add(ribbonPanelSourceReference);
