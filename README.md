@@ -2,14 +2,15 @@
 
 Совместно с [kpblc2000](https://github.com/kpblc2000) утилита творчески переработана 
 > [!TIP]
-> Теперь _MenuFilesGen_   умеет  генерировать конфиги напрямую из *.xls файлов, и многое другое, подробнее можно [посмотреть тут](https://github.com/doctorRaz/MenuFilesGen/wiki/MenuFilesGen-(Fork)#что-нового)
+> Теперь _MenuFilesGen_   умеет  генерировать конфиги напрямую из *.xls файлов, и многое другое, подробнее  [ тут](https://github.com/doctorRaz/MenuFilesGen/wiki/MenuFilesGen-(Fork)#что-нового)
 
 > [!IMPORTANT]
-> Как пользоваться [можно почитать здесь](https://github.com/doctorRaz/MenuFilesGen/wiki/User-Guid)
+> Как пользоваться [написано здесь](https://github.com/doctorRaz/MenuFilesGen/wiki/User-Guid)
 
 
 > [!WARNING]
->   Документация неполная
+>   Документация в процессе написания \
+>  Возможно функционал будет улучшаться и расширяться
 
 ## [Оргинальный MenuFilesGen](https://github.com/TBS-Software/MenuFilesGen)
 Программа для автоматизированной генерации файлов .cfg и .cuix, описывающих меню программной надстройки для nanoCAD.
