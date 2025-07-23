@@ -1,4 +1,5 @@
-﻿using MenuFilesGen.Models;
+﻿using MenuFilesGen.CFG;
+using MenuFilesGen.Models;
 using MenuFilesGen.Repositories;
 using MenuFilesGen.Service;
 using System.IO.Compression;

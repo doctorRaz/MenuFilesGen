@@ -1,6 +1,6 @@
 ﻿using MenuFilesGen.Models;
 
-namespace MenuFilesGen.Repositories
+namespace MenuFilesGen.CFG
 {
     public partial class CfgCreater
     {
