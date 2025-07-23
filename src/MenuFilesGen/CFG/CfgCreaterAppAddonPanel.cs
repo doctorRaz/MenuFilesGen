@@ -57,7 +57,7 @@ namespace MenuFilesGen.CFG
                     string panelName = "";
                     foreach (PanelDefinition panel in Addon.Panel)
                     {
-                        panelName = panel.Name; //имя панели не может быть пустым
+                        panelName = panel.Name; //todo подумать, может и может пустым , как быть с лентой??? загонять в выпадашку последней плитки ленты???
 
 
                         //+menu

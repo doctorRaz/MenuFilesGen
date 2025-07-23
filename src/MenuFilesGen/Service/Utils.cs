@@ -88,13 +88,13 @@ namespace MenuFilesGen.Service
             {
                 //Console.WriteLine(argsL[i]);
 
-                if (File.Exists(argsL[i]))//если файл
+                if (File.Exists(argsL[i]))//если файл есть
                 {
 
                     argsCmdLine.FileName = argsL[i];
 
                 }
-                else if (Directory.Exists(args[i]))
+                else if (Directory.Exists(args[i]))//директория есть
                 {
                     argsCmdLine.DirectoryPath = argsL[i];
                 }
