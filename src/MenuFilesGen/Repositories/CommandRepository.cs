@@ -1,6 +1,8 @@
 ﻿using MenuFilesGen.Models;
 using MenuFilesGen.Service;
+using System.IO.Compression;
 using System.Text;
+using System.Xml.Linq;
 
 namespace MenuFilesGen.Repositories
 {
@@ -59,9 +61,25 @@ namespace MenuFilesGen.Repositories
             }
         }
 
-        public void SaveToCuix()
+        public void SaveToCuix(XDocument xDoc)
         {
-            throw new NotImplementedException();
+            xDoc.Save(CuiFilePath);
+
+            // Удаление .cuix файла, если он существует
+            if (File.Exists(CuixFilePath))
+                File.Delete(CuixFilePath);
+
+            // Создание архива (.cuix), добавление в него сформированного .xml файла
+            using (ZipArchive zip = ZipFile.Open(CuixFilePath, ZipArchiveMode.Create))
+            {
+                zip.CreateEntryFromFile(CuiFilePath, "RibbonRoot.cui");
+            }
+
+            // Удаление ribbon.cui файла, если он существует
+            if (File.Exists(CuiFilePath))
+            {
+                File.Delete(CuiFilePath);
+            }
         }
 
 

@@ -4,7 +4,15 @@ namespace MenuFilesGen.CFG
 {
     public partial class CfgCreater
     {
-
+        //группировка по PanelName        
+        /// <summary>
+        /// группировка по PanelName для ленты  
+        /// </summary>
+        /// <value>
+        /// The groups panel.
+        /// </value>
+        List<IGrouping<string, CommandDefinition>> groupsPanel => commandDefinitions
+                                                                .GroupBy(e => e.PanelName).ToList();
 
         // https://stackoverflow.com/questions/1159233/multi-level-grouping-in-linq        
         /// <summary>

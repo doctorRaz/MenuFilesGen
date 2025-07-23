@@ -22,6 +22,8 @@ namespace MenuFilesGen.CFG
 
             AppAddonPanel();
 
+            Ribbon();
+
         }
 
         /// <summary>
