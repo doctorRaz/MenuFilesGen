@@ -12,6 +12,12 @@ namespace MenuFilesGen.Models
         /// <summary> Имя аддона </summary>
         List<string> Names => NameRaw.RawSplit();
 
+        /// <summary>
+        /// Добавлять перед аддоном разделитель
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is addon separator; otherwise, <c>false</c>.
+        /// </value>
         public bool IsAddonSeparator => Names.Count > 1;
 
         public string Name => Names[0].Trim();

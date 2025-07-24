@@ -95,6 +95,7 @@ namespace MenuFilesGen.Repositories
                     Weight = Utils.StringToInt(row.Cell(columnNumbers.WeightColumn + 1).GetString(), 10),
                     CmdType = Utils.StringToInt(row.Cell(columnNumbers.CmdTypeColumn + 1).GetString(), 1),
                     AddonNameRaw = row.Cell(columnNumbers.AddonNameColumn + 1).GetString().Trim(),
+                    IsVirtualPanel = row.Cell(columnNumbers.IsVirtualPanelColumn + 1).GetString().Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
 
                 };
 

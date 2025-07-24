@@ -15,6 +15,12 @@ namespace MenuFilesGen.Models
 
         List<string> Names => NameRaw.RawSplit();
 
+        /// <summary>
+        /// Добавлять перед панелью разделитель
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is panel separator; otherwise, <c>false</c>.
+        /// </value>
         public bool IsPanelSeparator => Names.Count > 1;
 
 

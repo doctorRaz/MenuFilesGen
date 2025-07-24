@@ -16,6 +16,12 @@ namespace MenuFilesGen.Models
         List<string> InterNames => InterNameRaw.RawSplit();
         public string InterNameRaw { get; set; } = "";
 
+        /// <summary>
+        /// Добавлять перед командой разделитель
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is command separator; otherwise, <c>false</c>.
+        /// </value>
         public bool IsCommandSeparator => InterNames.Count > 1;
 
         #endregion
@@ -37,7 +43,15 @@ namespace MenuFilesGen.Models
 
         #endregion
 
-
+        /// <summary>
+        /// Флаг виртуальной панели, 
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> Не включать под панель меню, в вкладках ленты выпадающий список; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsVirtualPanel { get; set; } 
+                
+     
         /// <summary> Размер кнопки на ленте. None - кнопки не будет </summary>
         public string RibbonSize { get; set; }
 

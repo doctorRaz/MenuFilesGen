@@ -25,6 +25,7 @@
             CmdTypeColumn = 16;
             ToolTipTextColumn = 17;
             AcceleratorsColumn = 18;
+            IsVirtualPanelColumn = 19;
 
 
         }
@@ -87,5 +88,6 @@
 
         /// <summary>имя аддона</summary>
         public int AddonNameColumn { get; }
+        public int IsVirtualPanelColumn { get; }
     }
 }
