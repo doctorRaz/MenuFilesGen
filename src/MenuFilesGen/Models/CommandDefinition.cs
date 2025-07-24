@@ -49,9 +49,9 @@ namespace MenuFilesGen.Models
         /// <value>
         ///   <c>true</c> Не включать под панель меню, в вкладках ленты выпадающий список; otherwise, <c>false</c>.
         /// </value>
-        public bool IsVirtualPanel { get; set; } 
-                
-     
+        public bool IsVirtualPanel { get; set; }
+
+
         /// <summary> Размер кнопки на ленте. None - кнопки не будет </summary>
         public string RibbonSize { get; set; }
 

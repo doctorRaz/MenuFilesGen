@@ -59,7 +59,6 @@ namespace MenuFilesGen.CFG
                     {
                         panelName = panel.Name; //todo подумать, может и может пустым , как быть с лентой??? загонять в выпадашку последней плитки ленты???
 
-
                         //+menu
                         if (menuPanel != $"{menuAddon}\\{panelName}")//пропуск если было
                         {
@@ -76,6 +75,7 @@ namespace MenuFilesGen.CFG
                         foreach (CommandDefinition cmd in panel.Command)
                         {
                             if (cmd.HideCommand) continue;// не добавлять в меню пропуск
+
 
                             #region Классическое меню
 
