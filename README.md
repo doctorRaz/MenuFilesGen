@@ -1,11 +1,15 @@
 ## MenuFilesGen (Fork)
+### [Описание от Deepwiki](https://deepwiki.com/doctorRaz/MenuFilesGen) [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/doctorRaz/MenuFilesGen)
+
+#### [MenuFilesGen (Fork)](https://github.com/doctorRaz/MenuFilesGen/wiki/MenuFilesGen-(Fork)#что-нового)
+#### [User Guide](https://github.com/doctorRaz/MenuFilesGen/wiki/User-Guide)
 
 Совместно с [kpblc2000](https://github.com/kpblc2000) утилита творчески переработана 
 > [!TIP]
 > Теперь _MenuFilesGen_   умеет  генерировать конфиги напрямую из *.xls файлов, и многое другое, подробнее  [ тут](https://github.com/doctorRaz/MenuFilesGen/wiki/MenuFilesGen-(Fork)#что-нового)
 
 > [!IMPORTANT]
-> Как пользоваться [написано здесь](https://github.com/doctorRaz/MenuFilesGen/wiki/User-Guid)
+> Как пользоваться [написано здесь](https://github.com/doctorRaz/MenuFilesGen/wiki/User-Guide)
 
 
 > [!WARNING]
