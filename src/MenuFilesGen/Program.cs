@@ -59,7 +59,12 @@ namespace MenuFilesGen
 
             CfgCreater cfgCreater = new CfgCreater(rep.CommandDefinitions, rep.AddonNameGlobal);
 
-            Utils.CfgConsoleWrier(cfgCreater.Cfg);//вывод в консоль отладка
+            if (argsCmdLine.EchoOnOff)
+            {
+                Utils.CfgConsoleWrier(cfgCreater.Cfg);//вывод в консоль результата
+                Console.WriteLine(cfgCreater.XDoc);
+            }
+
             #region Save *.cfg            
 
             rep.SaveToCfg(cfgCreater.Cfg);
@@ -70,7 +75,8 @@ namespace MenuFilesGen
 
             Console.WriteLine($"\nФайлы:\t{addonNameGlobal}.cfg" +
                 $"\n\t{addonNameGlobal}.cuix" +
-                $"\nсохранены в: {rep.directoryPath}");
+                $"\nсохранены в: {rep.directoryPath}" +
+                $"\n");
 
             if (argsCmdLine.EchoOnOff)
             {
