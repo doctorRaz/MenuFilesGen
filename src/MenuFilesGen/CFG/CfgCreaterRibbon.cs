@@ -97,7 +97,7 @@ namespace MenuFilesGen.CFG
                         ribbonRowPanelButtonsCount++;
                     }
                 }
-             
+
                 // Дублирование под табом ленты
                 XElement ribbonPanelBreak = new XElement("RibbonPanelBreak");
                 ribbonPanelSource.Add(ribbonPanelBreak);
@@ -146,7 +146,7 @@ namespace MenuFilesGen.CFG
                 }
 
 
-                
+
                 XElement ribbonPanelSourceReference = new XElement("RibbonPanelSourceReference");
                 ribbonPanelSourceReference.Add(new XAttribute("PanelId", cmd.Key));
                 ribbonTabSource.Add(ribbonPanelSourceReference);

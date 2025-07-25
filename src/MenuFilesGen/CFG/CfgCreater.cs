@@ -26,6 +26,7 @@ namespace MenuFilesGen.CFG
 
         }
 
+
         /// <summary>
         /// Gets or sets the CFG.
         /// </summary>
