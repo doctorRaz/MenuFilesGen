@@ -14,11 +14,11 @@
 		<!--<Name space />-->	
 		<!-- Description -->
 		<Product>MenuFilesGen</Product>
-		<Company>Kpblc and dRz</Company>
-		<Authors>Владислав Овчинников, Кулик Алексей, Разыграев Андрей</Authors>
+		<Company>TBS &amp; dRz</Company>
+		<Authors>Владислав Овчинников, Разыграев Андрей</Authors>
 		<Description>Генерация меню и ленты для nanoCAD</Description>
-		<Copyright>Владислав Овчинников, Кулик Алексей, Разыграев Андрей</Copyright>
-		<Trademark>©TBS Software, ©kpblc2000, ©doctorRAZ 2014-2025</Trademark>
+		<Copyright>Владислав Овчинников, Разыграев Андрей</Copyright>
+		<Trademark>©TBS Software, ©doctorRAZ 2014-2025</Trademark>
 		<!-- Description -->
 		<!--<BaseOutputPath>..\bin.NET\</BaseOutputPath>-->
 	</PropertyGroup>
