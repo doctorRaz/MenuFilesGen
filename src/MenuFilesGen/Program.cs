@@ -32,6 +32,8 @@ namespace MenuFilesGen
                         $"\n\t[\"путь к выходному каталогу\"] - {argsCmdLine.DirectoryPath}\n"
                     );
 
+
+
             if (string.IsNullOrEmpty(argsCmdLine.FileName))//если имя файла не аргумент
             {
                 OpenFileDialog OFD = new OpenFileDialog() { Filter = "Книга Excel (*.xls*)|*.xls*|Юникод  разделитель табуляция (*.txt;*.tsv)|*.txt;*.tsv|ASCI разделитель точка запятая (*.csv)|*.csv|Все файлы (*.*)|*.*" };
@@ -52,7 +54,7 @@ namespace MenuFilesGen
                 Console.WriteLine($"Файл {rep.FileFullName} не прочитан");
 
                 argsCmdLine.FileName = "";//чистим путь к шаблону, на случай если будем запрашивать его в цикле
-                Console.WriteLine("Для выхода нажмите любую клавишу...");//todo зациклить выбор файла?
+                Console.WriteLine("Для выхода нажмите любую клавишу...");
                 Console.ReadKey();
 
                 return;
