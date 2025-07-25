@@ -3,9 +3,17 @@
     "not cmd": {
       "commandName": "Project"
     },
-    "cmd": {
+    "cmdXLS": {
       "commandName": "Project",
-      "commandLineArgs": "-exo:0 -hrr:3 -xpn:1    \"d:\\@Developers\\Programmers\\!NET\\!bundle\\BlockFix.bundle\\Resources\\BlockFix.xlsm\""
+      "commandLineArgs": "-exo:0 -hrr:3 -xpn:1    \"d:\\@Developers\\Programmers\\!NET\\GitHubMy\\MenuFilesGen\\example\\BlockFix.xlsm\" \"d:\\@Developers\\Programmers\\!NET\\!bundle\\BlockFix.bundle\\Resources\""
+    },
+    "cmdCSV": {
+      "commandName": "Project",
+      "commandLineArgs": "-exo:0 -hrr:3 -xpn:1    \"d:\\@Developers\\Programmers\\!NET\\GitHubMy\\MenuFilesGen\\example\\BlockFix.csv\" \"d:\\@Developers\\Programmers\\!NET\\!bundle\\BlockFix.bundle\\Resources\""
+    },
+    "cmdTSV": {
+      "commandName": "Project",
+      "commandLineArgs": "-exo:0 -hrr:3 -xpn:1    \"d:\\@Developers\\Programmers\\!NET\\GitHubMy\\MenuFilesGen\\example\\BlockFix.tsv\" \"d:\\@Developers\\Programmers\\!NET\\!bundle\\BlockFix.bundle\\Resources\""
     }
   }
 }

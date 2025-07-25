@@ -38,6 +38,45 @@ namespace MenuFilesGen.Repositories
         }
 
         /// <summary>
+        /// Gets the command definition text.
+        /// </summary>
+        /// <param name="datas">The datas.</param>
+        void GetCmdDefTxt(/*List<string[]> datas*/)
+        {
+            CommandDefinitions = new List<CommandDefinition>(
+                datas.Select(o =>
+                {
+                    CommandDefinition res = new CommandDefinition
+                    {
+                        DispName = o[columnNumbers.DispNameColumn].Trim(),
+                        InterNameRaw = o[columnNumbers.InternameColumn].Trim(),
+                        StatusText = o[columnNumbers.StatusTextColumn].Trim(),
+                        IconName = o[columnNumbers.IconColumn].Trim(),
+                        ResourceDllName = o[columnNumbers.ResourseDllNameColumn].Trim(),
+                        PanelNameRaw = o[columnNumbers.PanelNameColumn].Trim(),
+
+                        RibbonSplitButtonName = o[columnNumbers.RibbonSplitButtonColumn].Trim(),
+                        RibbonSize = o[columnNumbers.RibbonSizeColumn].Trim(),
+                        AppName = o[columnNumbers.AppNameColumn].Trim(),
+                        HideCommand = o[columnNumbers.HideCommandColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
+                        DontTake = o[columnNumbers.DontTakeColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
+                        LocalName = o[columnNumbers.LocalNameColumn].Trim(),
+                        RealCommandName = o[columnNumbers.RealCommandNameColumn].Trim(),
+                        Keyword = o[columnNumbers.KeywordColumn].Trim(),
+                        Weight = Utils.StringToInt(o[columnNumbers.WeightColumn], 10),
+                        CmdType = Utils.StringToInt(o[columnNumbers.CmdTypeColumn], 1),
+                        ToolTipText = o[columnNumbers.ToolTipTextColumn].Trim(),
+                        Accelerators = o[columnNumbers.AcceleratorsColumn].Trim(),
+                        AddonNameRaw = o[columnNumbers.AddonNameColumn].Trim(),
+                        IsVirtualPanel = o[columnNumbers.IsVirtualPanelColumn].Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),//not used
+                    };
+                    return res;
+                })
+                );
+        }
+
+
+        /// <summary>
         /// Saves to CFG.
         /// </summary>
         /// <param name="cfgFileName">Name of the CFG file.</param>
@@ -172,6 +211,15 @@ namespace MenuFilesGen.Repositories
         private int xlPage { get; set; } = 0;
 
         private string newLine = Environment.NewLine;
+
+        /// <summary>
+        /// сырые данные из txt
+        /// </summary>
+        List<string[]> datas { get; set; } = new List<string[]>();
+
+        Encoding encoding { get; set; }
+
+        char splitChar { get; set; }
     }
 
 }
