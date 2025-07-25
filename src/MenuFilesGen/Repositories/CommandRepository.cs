@@ -22,19 +22,25 @@ namespace MenuFilesGen.Repositories
             {
                 ReadFromXls();
             }
-            else if (fileExtension.Contains("csv", StringComparison.OrdinalIgnoreCase))//разделитель ; ASCI
+            else//txt
             {
+
+                if (fileExtension.Contains("csv", StringComparison.OrdinalIgnoreCase))//разделитель ; ASCI
+                {
+                    encoding = Encoding.GetEncoding(1251);
+                    splitChar = ';';
+
+                }
+                else//разделитель tab юникод или tsv
+                {
+                    encoding = Encoding.UTF8;
+                    splitChar = '\t';
+
+                }
+
                 AddonNameGlobal = Path.GetFileNameWithoutExtension(FileFullName);
-
-                ReadFromCsv();
+                ReadFromTxt();
             }
-            else//разделитель tab юникод или tsv
-            {
-                AddonNameGlobal = Path.GetFileNameWithoutExtension(FileFullName);
-
-                ReadFromTsv();
-            }
-
         }
 
         /// <summary>
@@ -95,8 +101,11 @@ namespace MenuFilesGen.Repositories
                 writer.WriteLine(cfg.Configman.LstStr());//команды
                 writer.WriteLine(cfg.ToolbarsCmd.LstStr());//команды меню
 
+                writer.WriteLine(cfg.ViewPopupMenu.LstStr());//меню по ПКМ чертежа, notUsed
+
                 writer.WriteLine(cfg.Ribbon.LstStr());//лента
                 writer.WriteLine(cfg.Accelerators.LstStr());//горячие кнопки
+
             }
         }
 
