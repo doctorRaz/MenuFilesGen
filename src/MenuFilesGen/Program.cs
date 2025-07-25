@@ -34,15 +34,15 @@ namespace MenuFilesGen
 
             if (string.IsNullOrEmpty(argsCmdLine.FileName))//если имя файла не аргумент
             {
-                OpenFileDialog tableFileDialog = new OpenFileDialog() { Filter = "Книга Excel (*.xls*)|*.xls*|Юникод  разделитель табуляция (*.txt;*.tsv)|*.txt;*.tsv|ASCI разделитель точка запятая (*.csv)|*.csv|Все файлы (*.*)|*.*" };
-                if (tableFileDialog.ShowDialog() != DialogResult.OK)
+                OpenFileDialog OFD = new OpenFileDialog() { Filter = "Книга Excel (*.xls*)|*.xls*|Юникод  разделитель табуляция (*.txt;*.tsv)|*.txt;*.tsv|ASCI разделитель точка запятая (*.csv)|*.csv|Все файлы (*.*)|*.*" };
+                if (OFD.ShowDialog(new Form() { TopMost = true/*, TopLevel =true*/ }) != DialogResult.OK)
                 {
                     Console.WriteLine("Не задан файл");
                     Console.WriteLine("\nДля выхода нажмите любую клавишу...");
                     if (argsCmdLine.EchoOnOff) Console.ReadKey();
                     return;
                 }
-                argsCmdLine.FileName = tableFileDialog.FileName;//файл шаблона в аргументы
+                argsCmdLine.FileName = OFD.FileName;//файл шаблона в аргументы
             }
 
             CommandRepository rep = new CommandRepository(argsCmdLine);//парсим файл
