@@ -9,17 +9,9 @@
         /// Initializes a new instance of the <see cref="CfgDefinition"/> class.
         /// </summary>
         /// <param name="_addonNameGlobal">The addon name global.</param>
-        public CfgDefinition(string addonNameGlobal)
+        public CfgDefinition(string _addonNameGlobal)
         {
-            //потому что не могу инициализировать не статическим полем или свойством класса
-            Ribbon = new List<string>()
-                                    {
-                                        "",
-                                        ";Лента",
-                                        $"[\\ribbon\\{addonNameGlobal}]" ,
-                                        $"CUIX=s%CFG_PATH%\\{addonNameGlobal}.cuix" ,
-                                        $"visible=f1"
-                                    };
+            addonNameGlobal = _addonNameGlobal;
         }
 
 
@@ -81,9 +73,23 @@
                                                                             "[\\Accelerators]"
                                                                         };
 
+        public List<string> ViewPopupMenu { get; set; } = new List<string>
+                                                                        {
+                                                                            "",
+                                                                            ";Меню по ПКМ not used",
+                                                                            "[\\ViewPopupMenu]"
+                                                                        };
 
-        /// <summary>регистрация ленты</summary>
-        public List<string> Ribbon { get; set; }
 
+        /// <summary>регистрация ленты, только чтение</summary>
+        public List<string> Ribbon => new List<string>()
+                                    {
+                                        "",
+                                        ";Лента",
+                                        $"[\\ribbon\\{addonNameGlobal}]" ,
+                                        $"CUIX=s%CFG_PATH%\\{addonNameGlobal}.cuix" ,
+                                        $"visible=f1"
+                                    };
+        string addonNameGlobal;
     }
 }
