@@ -4,18 +4,18 @@ namespace MenuFilesGen.Service
 {
     public class Utils
     {
-        public static void CfgConsoleWrier(CfgDefinition cfg)
+        public static void CfgConsoleWriter(CfgDefinition cfg)
         {
             Console.Clear();
             Console.WriteLine("[\\cfg]");
             Console.WriteLine(cfg.Menu.LstStr());//меню
-            Console.WriteLine(cfg.ToolbarPopupMenu.LstStr()); //поп меню
-            Console.WriteLine(cfg.ToolbarsViewMenu.LstStr()); //виев меню
+            Console.WriteLine(cfg.ToolBarPopUpMenu.LstStr()); //поп меню
+            Console.WriteLine(cfg.ToolBarsViewMenu.LstStr()); //виев меню
 
-            Console.WriteLine(cfg.Toolbars.LstStr());//панели
+            Console.WriteLine(cfg.ToolBars.LstStr());//панели
 
             Console.WriteLine(cfg.Configman.LstStr());//команды
-            Console.WriteLine(cfg.ToolbarsCmd.LstStr());//команды меню
+            Console.WriteLine(cfg.ToolBarsCmd.LstStr());//команды меню
 
             Console.WriteLine(cfg.Ribbon.LstStr());//лента
             Console.WriteLine(cfg.Accelerators.LstStr());//горячие кнопки
@@ -50,9 +50,8 @@ namespace MenuFilesGen.Service
 
         public static int StringToInt(string str, int def = 0)
         {
-            int result;
 
-            if (int.TryParse(str, out result))
+            if (int.TryParse(str, out int result))
             {
                 return result;
             }
@@ -62,7 +61,7 @@ namespace MenuFilesGen.Service
             }
 
         }
-        public static bool StringToBool(string str, bool def = true)
+        public static bool StringToBool(string str)
         {
             return str.Trim() == "1";
 
@@ -101,8 +100,8 @@ namespace MenuFilesGen.Service
 
                 else if (args[i].StartsWith("-"))//аргументы ком строки
                 {
-                    var parameterWithoutHyphen = args[i].Substring(1);
-                    var nameValue = parameterWithoutHyphen.Split(':');
+                    string parameterWithoutHyphen = args[i].Substring(1);
+                    string[] nameValue = parameterWithoutHyphen.Split(':');
                     if (nameValue.Length > 1)
                     {
                         switch (nameValue[0].ToLower())
@@ -114,7 +113,7 @@ namespace MenuFilesGen.Service
                                 argsCmdLine.HeaderRowRange = StringToInt(nameValue[1], argsCmdLine.HeaderRowRange);
                                 break;
                             case "exo":
-                                argsCmdLine.EchoOnOff = StringToBool(nameValue[1], argsCmdLine.EchoOnOff);
+                                argsCmdLine.EchoOnOff = StringToBool(nameValue[1]);
                                 break;
                         }
                     }

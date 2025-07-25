@@ -3,7 +3,7 @@ using MenuFilesGen.Service;
 
 namespace MenuFilesGen.CFG
 {
-    public partial class CfgCreater
+    public partial class CfgCreator
     {
         /// <summary>
         /// Заполняем панельки, регистрируем команды
@@ -25,24 +25,24 @@ namespace MenuFilesGen.CFG
 
 
                     //  регистрация панельки
-                    Cfg.Toolbars.Add("");
-                    Cfg.Toolbars.Add($"[\\toolbars\\{panelNameEn}]");
-                    Cfg.Toolbars.Add($"name=s{panel.Name}");
+                    Cfg.ToolBars.Add("");
+                    Cfg.ToolBars.Add($"[\\toolbars\\{panelNameEn}]");
+                    Cfg.ToolBars.Add($"name=s{panel.Name}");
 
                     //регистрация ее команды
                     //+регистрируем команду вызова панели
-                    Cfg.ToolbarsCmd.Add("");
-                    Cfg.ToolbarsCmd.Add($"[\\configman\\commands\\{panelIntername}]");
-                    Cfg.ToolbarsCmd.Add($"weight=i10");
-                    Cfg.ToolbarsCmd.Add($"cmdtype=i0");
-                    Cfg.ToolbarsCmd.Add($"Intername=s{panelIntername}");
-                    Cfg.ToolbarsCmd.Add($"StatusText=sОтображение панели {panelName}");
-                    Cfg.ToolbarsCmd.Add($"ToolTipText=sОтображение панели {panelName}");
-                    Cfg.ToolbarsCmd.Add($"DispName=sОтображение панели {panelName}");
-                    Cfg.ToolbarsCmd.Add($"LocalName=s{panel.LocalName}");
+                    Cfg.ToolBarsCmd.Add("");
+                    Cfg.ToolBarsCmd.Add($"[\\configman\\commands\\{panelIntername}]");
+                    Cfg.ToolBarsCmd.Add($"weight=i10");
+                    Cfg.ToolBarsCmd.Add($"cmdtype=i0");
+                    Cfg.ToolBarsCmd.Add($"Intername=s{panelIntername}");
+                    Cfg.ToolBarsCmd.Add($"StatusText=sОтображение панели {panelName}");
+                    Cfg.ToolBarsCmd.Add($"ToolTipText=sОтображение панели {panelName}");
+                    Cfg.ToolBarsCmd.Add($"DispName=sОтображение панели {panelName}");
+                    Cfg.ToolBarsCmd.Add($"LocalName=s{panel.LocalName}");
 
                     //добавлять к команде показа панели иконку, по первой команде панели
-                    Cfg.ToolbarsCmd.AddRange(Utils.IconDefinition(panel.Command[0]));
+                    Cfg.ToolBarsCmd.AddRange(Utils.IconDefinition(panel.Command[0]));
                 }
 
                 foreach (CommandDefinition cmd in panel.Command)//по описаниям команд
@@ -79,10 +79,10 @@ namespace MenuFilesGen.CFG
 
                     if (cmd.IsCommandSeparator)
                     {
-                        Cfg.Toolbars.Add($"[\\toolbars\\{panel.NameEn}\\sep_{cmd.InterName}]");
+                        Cfg.ToolBars.Add($"[\\toolbars\\{panel.NameEn}\\sep_{cmd.InterName}]");
                     }
-                    Cfg.Toolbars.Add($"[\\toolbars\\{panel.NameEn}\\{cmd.InterName}]");
-                    Cfg.Toolbars.Add($"Intername=s{cmd.InterName}");
+                    Cfg.ToolBars.Add($"[\\toolbars\\{panel.NameEn}\\{cmd.InterName}]");
+                    Cfg.ToolBars.Add($"Intername=s{cmd.InterName}");
                     #endregion
                 }
             }

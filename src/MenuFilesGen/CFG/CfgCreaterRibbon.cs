@@ -3,7 +3,7 @@ using System.Xml.Linq;
 
 namespace MenuFilesGen.CFG
 {
-    public partial class CfgCreater
+    public partial class CfgCreator
     {
         /// <summary>
         /// Заполняем ленту

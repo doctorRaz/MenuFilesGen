@@ -8,10 +8,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CfgDefinition"/> class.
         /// </summary>
-        /// <param name="_addonNameGlobal">The addon name global.</param>
-        public CfgDefinition(string _addonNameGlobal)
+        /// <param name="_addOnNameGlobal">The addon name global.</param>
+        public CfgDefinition(string _addOnNameGlobal)
         {
-            addonNameGlobal = _addonNameGlobal;
+            addonNameGlobal = _addOnNameGlobal;
         }
 
 
@@ -24,15 +24,15 @@
                                                                 };
 
         /// <summary> попап Меню</summary>
-        public List<string> ToolbarPopupMenu { get; set; } = new List<string>
+        public List<string> ToolBarPopUpMenu { get; set; } = new List<string>
                                                                           {
                                                                               "",
                                                                               $";всплывающее меню панелей" ,
-                                                                              $"[\\ToolbarPopupMenu]" ,
+                                                                              $"[\\ToolBarPopUpMenu]" ,
                                                                           };
 
         /// <summary> Меню панелей</summary>
-        public List<string> ToolbarsViewMenu { get; set; } = new List<string>
+        public List<string> ToolBarsViewMenu { get; set; } = new List<string>
                                                                             {
                                                                                 "",
                                                                                 $";View меню" ,
@@ -42,7 +42,7 @@
 
 
         /// <summary> панели</summary>
-        public List<string> Toolbars { get; set; } = new List<string>
+        public List<string> ToolBars { get; set; } = new List<string>
                                                                     {
                                                                         $"",
                                                                         $"; Панели",
@@ -59,7 +59,7 @@
                                                                     };
 
         /// <summary> команды показа панелей</summary>
-        public List<string> ToolbarsCmd { get; set; } = new List<string>
+        public List<string> ToolBarsCmd { get; set; } = new List<string>
                                                                         {
                                                                             "",
                                                                             ";команды вызова панелей"
@@ -73,11 +73,11 @@
                                                                             "[\\Accelerators]"
                                                                         };
 
-        public List<string> ViewPopupMenu { get; set; } = new List<string>
+        public List<string> ViewPopUpMenu { get; set; } = new List<string>
                                                                         {
                                                                             "",
                                                                             ";Меню по ПКМ not used",
-                                                                            "[\\ViewPopupMenu]"
+                                                                            "[\\ViewPopUpMenu]"
                                                                         };
 
 

@@ -38,7 +38,7 @@ namespace MenuFilesGen.Repositories
 
                 }
 
-                AddonNameGlobal = Path.GetFileNameWithoutExtension(FileFullName);
+                AddOnNameGlobal = Path.GetFileNameWithoutExtension(FileFullName);
                 ReadFromTxt();
             }
         }
@@ -46,8 +46,7 @@ namespace MenuFilesGen.Repositories
         /// <summary>
         /// Gets the command definition text.
         /// </summary>
-        /// <param name="datas">The datas.</param>
-        void GetCmdDefTxt(/*List<string[]> datas*/)
+        void GetCmdDefTxt()
         {
             CommandDefinitions = new List<CommandDefinition>(
                 datas.Select(o =>
@@ -93,15 +92,15 @@ namespace MenuFilesGen.Repositories
             {
                 writer.WriteLine("[\\cfg]");
                 writer.WriteLine(cfg.Menu.LstStr());//меню
-                writer.WriteLine(cfg.ToolbarPopupMenu.LstStr()); //поп меню
-                writer.WriteLine(cfg.ToolbarsViewMenu.LstStr()); //виев меню
+                writer.WriteLine(cfg.ToolBarPopUpMenu.LstStr()); //поп меню
+                writer.WriteLine(cfg.ToolBarsViewMenu.LstStr()); //виев меню
 
-                writer.WriteLine(cfg.Toolbars.LstStr());//панели
+                writer.WriteLine(cfg.ToolBars.LstStr());//панели
 
                 writer.WriteLine(cfg.Configman.LstStr());//команды
-                writer.WriteLine(cfg.ToolbarsCmd.LstStr());//команды меню
+                writer.WriteLine(cfg.ToolBarsCmd.LstStr());//команды меню
 
-                writer.WriteLine(cfg.ViewPopupMenu.LstStr());//меню по ПКМ чертежа, notUsed
+                writer.WriteLine(cfg.ViewPopUpMenu.LstStr());//меню по ПКМ чертежа, notUsed
 
                 writer.WriteLine(cfg.Ribbon.LstStr());//лента
                 writer.WriteLine(cfg.Accelerators.LstStr());//горячие кнопки
@@ -162,7 +161,7 @@ namespace MenuFilesGen.Repositories
         /// <value>
         /// The name of the addin.
         /// </value>
-        public string AddonNameGlobal { get; set; }
+        public string AddOnNameGlobal { get; set; }
 
         /// <summary>
         /// Номера столбцов для парсинга
@@ -194,7 +193,7 @@ namespace MenuFilesGen.Repositories
         /// <value>
         /// The CFG file path.
         /// </value>
-        public string CfgFilePath => Path.Combine(directoryPath, AddonNameGlobal + ".cfg");//   $"{directoryPath}\\{addonNameGlobal}.Cfg";
+        public string CfgFilePath => Path.Combine(directoryPath, AddOnNameGlobal + ".cfg");//   $"{directoryPath}\\{addonNameGlobal}.Cfg";
 
         /// <summary>
         /// файл заготовка ленты.
@@ -210,7 +209,7 @@ namespace MenuFilesGen.Repositories
         /// <value>
         /// The cuix file path.
         /// </value>
-        public string CuixFilePath => Path.Combine(directoryPath, AddonNameGlobal + ".cuix");
+        public string CuixFilePath => Path.Combine(directoryPath, AddOnNameGlobal + ".cuix");
 
         /// <summary>
         /// Количество строк пропустить при парсинге

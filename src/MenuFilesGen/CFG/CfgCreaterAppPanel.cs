@@ -2,7 +2,7 @@
 
 namespace MenuFilesGen.CFG
 {
-    public partial class CfgCreater
+    public partial class CfgCreator
     {
         /// <summary>
         /// привязка панелек к приложениям
@@ -17,16 +17,16 @@ namespace MenuFilesGen.CFG
             {
                 string appName = app.Name;
                 //+попап панелей
-                string popupPanelRoot = $"[\\ToolbarPopupMenu\\{appName}";
-                Cfg.ToolbarPopupMenu.Add("");
-                Cfg.ToolbarPopupMenu.Add($"{popupPanelRoot}]");
-                Cfg.ToolbarPopupMenu.Add($"Name=s{appName}");
+                string popupPanelRoot = $"[\\ToolBarPopUpMenu\\{appName}";
+                Cfg.ToolBarPopUpMenu.Add("");
+                Cfg.ToolBarPopUpMenu.Add($"{popupPanelRoot}]");
+                Cfg.ToolBarPopUpMenu.Add($"Name=s{appName}");
 
                 //+ меню вид
                 string viewPanelRoot = $"[\\menu\\View\\toolbars\\{appName}";
-                Cfg.ToolbarsViewMenu.Add("");
-                Cfg.ToolbarsViewMenu.Add($"{viewPanelRoot}]");
-                Cfg.ToolbarsViewMenu.Add($"Name=s{appName}");
+                Cfg.ToolBarsViewMenu.Add("");
+                Cfg.ToolBarsViewMenu.Add($"{viewPanelRoot}]");
+                Cfg.ToolBarsViewMenu.Add($"Name=s{appName}");
 
                 //по панелькам
                 string panelIntername = "";
@@ -41,20 +41,20 @@ namespace MenuFilesGen.CFG
                     //+ ****** поп меню ****************
                     if (panel.IsPanelSeparator)
                     {
-                        Cfg.ToolbarPopupMenu.Add($"{popupPanelRoot}\\sep_{panelIntername}]");
+                        Cfg.ToolBarPopUpMenu.Add($"{popupPanelRoot}\\sep_{panelIntername}]");
                     }
-                    Cfg.ToolbarPopupMenu.Add($"{popupPanelRoot}\\{panelIntername}]");
-                    Cfg.ToolbarPopupMenu.Add($"Name=s{panelName}");
-                    Cfg.ToolbarPopupMenu.Add($"InterName=s{panelIntername}");
+                    Cfg.ToolBarPopUpMenu.Add($"{popupPanelRoot}\\{panelIntername}]");
+                    Cfg.ToolBarPopUpMenu.Add($"Name=s{panelName}");
+                    Cfg.ToolBarPopUpMenu.Add($"InterName=s{panelIntername}");
 
                     //+ ****** вью меню ****************
                     if (panel.IsPanelSeparator)
                     {
-                        Cfg.ToolbarsViewMenu.Add($"{viewPanelRoot}\\sep_{panelIntername}]");
+                        Cfg.ToolBarsViewMenu.Add($"{viewPanelRoot}\\sep_{panelIntername}]");
                     }
-                    Cfg.ToolbarsViewMenu.Add($"{viewPanelRoot}\\{panelIntername}]");
-                    Cfg.ToolbarsViewMenu.Add($"Name=s{panelName}");
-                    Cfg.ToolbarsViewMenu.Add($"InterName=s{panelIntername}");
+                    Cfg.ToolBarsViewMenu.Add($"{viewPanelRoot}\\{panelIntername}]");
+                    Cfg.ToolBarsViewMenu.Add($"Name=s{panelName}");
+                    Cfg.ToolBarsViewMenu.Add($"InterName=s{panelIntername}");
                 }
             }
             #endregion

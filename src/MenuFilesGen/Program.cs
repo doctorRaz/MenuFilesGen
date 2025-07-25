@@ -13,6 +13,9 @@ namespace MenuFilesGen
         [STAThread]
         static void Main(string[] args)
         {
+
+
+
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             Utils utils = new Utils();
@@ -55,13 +58,13 @@ namespace MenuFilesGen
                 return;
             }
 
-            string addonNameGlobal = rep.AddonNameGlobal;//x 
+            string addonNameGlobal = rep.AddOnNameGlobal;//x 
 
-            CfgCreater cfgCreater = new CfgCreater(rep.CommandDefinitions, rep.AddonNameGlobal);
+            CfgCreator cfgCreater = new CfgCreator(rep.CommandDefinitions, rep.AddOnNameGlobal);
 
             if (argsCmdLine.EchoOnOff)
             {
-                Utils.CfgConsoleWrier(cfgCreater.Cfg);//вывод в консоль результата
+                Utils.CfgConsoleWriter(cfgCreater.Cfg);//вывод в консоль результата
                 Console.WriteLine(cfgCreater.XDoc);
             }
 

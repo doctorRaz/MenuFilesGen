@@ -62,9 +62,9 @@ namespace MenuFilesGen.Repositories
 
             IXLWorksheet worksheet = workbook.Worksheet(xlPage);
 
-            AddonNameGlobal = worksheet.Name;
+            AddOnNameGlobal = worksheet.Name;
 
-            Console.WriteLine($"Работаю с листом: {xlPage} - \"{AddonNameGlobal}\"");
+            Console.WriteLine($"Работаю с листом: {xlPage} - \"{AddOnNameGlobal}\"");
 
             IEnumerable<IXLRangeRow> rows = worksheet.RangeUsed().RowsUsed().Skip(HEADER_ROW_RANGE);
 

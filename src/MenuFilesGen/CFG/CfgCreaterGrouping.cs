@@ -2,7 +2,7 @@
 
 namespace MenuFilesGen.CFG
 {
-    public partial class CfgCreater
+    public partial class CfgCreator
     {
         //группировка по PanelName        
         /// <summary>

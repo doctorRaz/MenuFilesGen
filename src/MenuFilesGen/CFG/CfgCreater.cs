@@ -2,17 +2,17 @@
 
 namespace MenuFilesGen.CFG
 {
-    public partial class CfgCreater
+    public partial class CfgCreator
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CfgCreater"/> class.
+        /// Initializes a new instance of the <see cref="CfgCreator"/> class.
         /// </summary>
         /// <param name="cmds">The CMDS.</param>
-        /// <param name="_addonNameGlobal">The addon name global.</param>
-        public CfgCreater(List<CommandDefinition> cmds, string _addonNameGlobal)
+        /// <param name="_addOnNameGlobal">The addon name global.</param>
+        public CfgCreator(List<CommandDefinition> cmds, string _addOnNameGlobal)
         {
             commandDefinitions = cmds;
-            addonNameGlobal = _addonNameGlobal;
+            addonNameGlobal = _addOnNameGlobal;
 
             Cfg = new CfgDefinition(addonNameGlobal);//конфиг
 
