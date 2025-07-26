@@ -29,4 +29,4 @@
 ---
 ### Благодарности:
 - [Владиславу Овчинникову](https://github.com/TBS-Software)
-- [Алексею Кулик ](https://github.com/kpblc2000)
+- [Алексею Кулику ](https://github.com/kpblc2000)
