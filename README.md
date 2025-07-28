@@ -5,7 +5,7 @@
 
 ### [2. User Guide быстрый старт](https://github.com/doctorRaz/MenuFilesGen/wiki/2.-User-Guide#быстрый-старт)
 
-### [3. Feature](https://github.com/doctorRaz/MenuFilesGen/wiki/4.-Feature)
+### [4. Автоматизация генерации меню ](wiki/4.-Автоматизация-генерации-меню)
 
 ---
 
