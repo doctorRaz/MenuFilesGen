@@ -72,6 +72,7 @@ namespace MenuFilesGen.CFG
                         }
 
                         //+ **** уровень команды ********
+                        string _menuPanel = "";
                         foreach (CommandDefinition cmd in panel.Command)
                         {
                             if (cmd.HideCommand) continue;// не добавлять в меню пропуск
@@ -81,11 +82,20 @@ namespace MenuFilesGen.CFG
 
                             string interName = cmd.InterName;
 
+                            if (cmd.IsVirtualPanel)//если не в панели
+                            {
+                                _menuPanel = menuAddon;
+                            }
+                            else
+                            {
+                                _menuPanel = menuPanel;
+                            }
+
                             if (cmd.IsCommandSeparator)
                             {
-                                Cfg.Menu.Add($"{menuPanel}\\sep_{interName}]");
+                                Cfg.Menu.Add($"{_menuPanel}\\sep_{interName}]");
                             }
-                            Cfg.Menu.Add($"{menuPanel}\\s{interName}]");
+                            Cfg.Menu.Add($"{_menuPanel}\\s{interName}]");
                             Cfg.Menu.Add($"name=s{cmd.DispName}");
                             Cfg.Menu.Add($"Intername=s{interName}");
 
