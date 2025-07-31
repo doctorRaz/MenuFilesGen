@@ -25,11 +25,11 @@ namespace MenuFilesGen
             Console.WriteLine
                     (
                         $"Аргументы ком строки:" +
-                        $"\n\t-hrr:[сколько строк пропускать, число] - {argsCmdLine.HeaderRowRange}" +
-                        $"\n\t-xpn:[для *.XLS номер листа шаблона, число] - {argsCmdLine.XlsPageNumber}" +
-                        $"\n\t-exo:[подтверждать выход из консоли - 1, не подтверждать - 0] - {argsCmdLine.EchoOnOff}" +
-                        $"\n\t[\"полный путь к файлу шаблона с расширением\"] - {argsCmdLine.FileName}\n" +
-                        $"\n\t[\"путь к выходному каталогу\"] - {argsCmdLine.DirectoryPath}\n"
+                        $"\n\t-hrr:<сколько строк пропускать, число> - {argsCmdLine.HeaderRowRange}" +
+                        $"\n\t-xpn:<для *.XLS номер листа шаблона, число> - {argsCmdLine.XlsPageNumber}" +
+                        $"\n\t-exo:<подтверждать выход из консоли - 1, не подтверждать - 0> - {argsCmdLine.EchoOnOff}" +
+                        $"\n\t<\"полный путь к файлу шаблона с расширением\"> - {argsCmdLine.FileName}\n" +
+                        $"\n\t<\"путь к выходному каталогу\"> - {argsCmdLine.DirectoryPath}\n"
                     );
 
 
