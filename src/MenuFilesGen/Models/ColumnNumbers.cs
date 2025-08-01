@@ -6,26 +6,27 @@
     {
         public ColumnNumbers()
         {
-            DispNameColumn = 0;
-            InternameColumn = 1;
-            StatusTextColumn = 2;
-            PanelNameColumn = 3;
-            RibbonSizeColumn = 4;
-            RibbonSplitButtonColumn = 5;
-            DontTakeColumn = 6;
-            HideCommandColumn = 7;
-            ResourseDllNameColumn = 8;
-            IconColumn = 9;
-            AppNameColumn = 10;
-            AddonNameColumn = 11;
-            LocalNameColumn = 12;
-            RealCommandNameColumn = 13;
-            KeywordColumn = 14;
-            WeightColumn = 15;
-            CmdTypeColumn = 16;
-            ToolTipTextColumn = 17;
-            AcceleratorsColumn = 18;
+            InterNameColumn = 0;
+            DispNameColumn = 1;
+            PanelNameColumn = 2;
+            RibbonSizeColumn = 3;
+            RibbonSplitButtonColumn = 4;
+            ResourseDllColumn = 5;
+            IconColumn = 6;
+            AppNameColumn = 7;
+            AddonNameColumn = 8;
+            LocalNameColumn = 9;
+            RealCommandNameColumn = 10;
+            KeywordColumn = 11;
+            WeightColumn = 12;
+            CmdTypeColumn = 13;
+            StatusTextColumn = 14;
+            ToolTipTextColumn = 15;
+            AcceleratorsColumn = 16;
+            DontTakeColumn = 17;
+            HideCommandColumn = 18;
             IsVirtualPanelColumn = 19;
+
 
 
         }
@@ -34,7 +35,7 @@
         public int DispNameColumn { get; }
 
         /// <summary> ВНутренне имя команды </summary>
-        public int InternameColumn { get; }
+        public int InterNameColumn { get; }
 
         /// <summary> Описание команды </summary>
         public int StatusTextColumn { get; }
@@ -52,7 +53,7 @@
         public int DontTakeColumn { get; }
 
         /// <summary>библиотека ресурсов или иконка с относительным путем </summary>
-        public int ResourseDllNameColumn { get; }
+        public int ResourseDllColumn { get; }
 
         /// <summary>
         /// имя ресурсной иконки

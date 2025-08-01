@@ -54,10 +54,10 @@ namespace MenuFilesGen.Repositories
                     CommandDefinition res = new CommandDefinition
                     {
                         DispName = o[columnNumbers.DispNameColumn].Trim(),
-                        InterNameRaw = o[columnNumbers.InternameColumn].Trim(),
+                        InterNameRaw = o[columnNumbers.InterNameColumn].Trim(),
                         StatusText = o[columnNumbers.StatusTextColumn].Trim(),
                         IconName = o[columnNumbers.IconColumn].Trim(),
-                        ResourceDllName = o[columnNumbers.ResourseDllNameColumn].Trim(),
+                        ResourceDllName = o[columnNumbers.ResourseDllColumn].Trim(),
                         PanelNameRaw = o[columnNumbers.PanelNameColumn].Trim(),
 
                         RibbonSplitButtonName = o[columnNumbers.RibbonSplitButtonColumn].Trim(),

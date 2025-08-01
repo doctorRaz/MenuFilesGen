@@ -1,29 +1,29 @@
-Обязательные;;;;;Необязательные;;;;;;;;;;;;;;;;Не учитываются
-DispName;InterName;StatusText;PanelName;RibbonSize;RibbonSplitButtonName;DontTake;HideCommand;ResourceDllName;IconName;AppName;AddonName;LocalName;RealCommandName;Keyword;weight;cmdtype;ToolTipText;Accelerators;IsVirtualPanel;Separator;Sort
-0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20;21
-Нормализация блоков;drz-block-normalize;Нормализация блоков, оконный режим;BlockFix;LargeWithText;;ДОБАВИТЬ;ДОБАВИТЬ;;;Приложение;Адон1;;;;;;;Alt+Q;ИСКЛЮЧИТЬ;;100
-Нормализация блоков, ком строка, настройки;-drz-block-normalize;Нормализация блоков, командный режим, настройки окно;BlockFix;SmallWithText;Нормализация блоков;ДОБАВИТЬ;ДОБАВИТЬ;\ic\constr-1.ico;;Приложение;Адон1;;;;;;;;;;110
-Нормализация блоков, ком строка;-drz-block-normalize-notWin;Нормализация блоков, командный режим, настройки ком строка;BlockFix;SmallWithText;Нормализация блоков;ДОБАВИТЬ;ДОБАВИТЬ;ic\constr-50.ico;;Приложение;Адон1;;;;;;;;;;120
-Штриховки назад;-drz-block-HatchBack;Штриховки позади всех;Свойства блоков|;LargeWithText;Порядок;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;BEDIT;Приложение;Адон1;;;;;;;;ИСКЛЮЧИТЬ;;130
-Маскировки назад;-drz-block-WipeOutBack;Маскировки позади всех;Свойства блоков;LargeWithText;Порядок;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;BEDIT;Приложение;Адон1;;;;;;;;;;140
-Запретить расчленение;-drz-block-Explodable-No|;Запретить расчленение блока;Свойства блоков;LargeWithText;Расчленение;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;BEDIT;Приложение;Адон1;;;;;;;;;;150
-Разрешить расчленение;-drz-block-Explodable-Yes;Разрешить расчленение блока;Свойства блоков;LargeWithText;Расчленение;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;BEDIT;Приложение;Адон1;;;;;;;;;;160
-Разные масштабы;-drz-block-Scale-No|;Разные масштабы блока;Свойства блоков;LargeWithText;Масштаб;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;BEDIT;Приложение;Адон1;;;;;;;;;;170
-Одинаковые масштабы;-drz-block-Scale-Yes;Одинаковые масштабы блока;Свойства блоков;LargeWithText;Масштаб;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;BEDIT;Приложение;Адон1;;;;;;;;;;180
-Все свойства по блоку;-drz-block-AllProp-ByBlock;Все свойства по блоку;Свойства примитивов;LargeWithText;Все;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;BEDIT;Приложение;Адон2|;;;;;;;;;;190
-Все свойства по слою;-drz-block-AllProp-ByLayer;Все свойства по слою;Свойства примитивов;LargeWithText;Все;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;;;;;200
-Цвет линий по блоку;-drz-block-Color-ByBlock|;Цвет линий примитивов по блоку;Свойства примитивов;LargeWithText;Цвет;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;;;;;210
-Цвет линий по слою;-drz-block-Color-ByLayer;Цвет линий примитивов по слою;Свойства примитивов;LargeWithText;Цвет;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;;;;;220
-Тип линий по блоку;-drz-block-Linetype-ByBlock|;Тип линий примитивов по блоку;Свойства примитивов;LargeWithText;Тип;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;;;;;228
-Тип линий по слою;-drz-block-Linetype-ByLayer;Тип линий примитивов по слою;Свойства примитивов;LargeWithText;Тип;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;;;;;229
-Вес линий по блоку;-drz-block-Lineweight-ByBlock|sep;Вес линий примитивов по блоку;Свойства примитивов;LargeWithText;Вес;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;;;;;260
-Вес линий по слою;-drz-block-Lineweight-ByLayer;Вес линий примитивов по слою;Свойства примитивов;LargeWithText;Вес;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;;;;;270
-Примитивы на слой 0;-drz-block-LayerZero|;Примитивы блока на слой 0;Свойства примитивов;LargeWithText;На ноль;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;;;;;275
-Ширина полилиний 0;-drz-block-LwGlobalWidth;Ширина полилиний 0;Свойства примитивов;LargeWithText;На ноль;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;;;;;280
-Отключение лога;drz-log-off;Отключение лога;Служебные|;SmallWithText;Лог;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;;;;;295
-Включение лога;drz-log-on;Включение лога;Служебные;SmallWithText;Лог;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;;;;;296
-Путь к конфигурационному файлу;drz-config-filename;Путь к конфигурационному файлу;Служебные;SmallWithText;Лог;ДОБАВИТЬ;ИСКЛЮЧИТЬ;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;;;;;300
-Каталог для  логов;drz-folder-for-logs;Каталог для хранения логов;Служебные;SmallWithText;Лог;ДОБАВИТЬ;ИСКЛЮЧИТЬ;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;;;;;310
-Настройки;drz-log-settings|;Настройки логирования;Служебные;LargeWithoutText;;ДОБАВИТЬ;ДОБАВИТЬ;nmenu.dll;i281;Приложение;Адон2;;;;;;;;;;340
-Информация о командах;-drz-block-lstInfo;Информация о командах сборки;Инфо|;SmallWithText;Инфо;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;npc_info;Приложение;Адон2;;;;;;;;ИСКЛЮЧИТЬ;;345
-О программе;drz_block_home_link|;Домашняя страница blockFix;Инфо;SmallWithText;Инфо;ДОБАВИТЬ;ДОБАВИТЬ;newbtns.dll;About;Приложение;Адон2;Обсуждение_PlotSPDS;shell_exec;open,https://doctorraz.blogspot.com/2022/10/PlotSPDS.NET.html;;0;;;;;350
+Обязательные;;;;Необязательные;;;;;;;;;;;;;;;;Не учитываются
+InterName;DispName;PanelName;RibbonSize;RibbonSplitButtonName;ResourceDllName;IconName;AppName;AddonName;LocalName;RealCommandName;Keyword;weight;cmdtype;StatusText;ToolTipText;Accelerators;DontTake;HideCommand;IsVirtualPanel;Sort
+0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;15;16;17;18;19;20
+drz-block-normalize;Нормализация блоков;BlockFix;LargeWithText;;;;Приложение;Адон1;;;;;;Нормализация блоков, оконный режим;;Alt+Q;ДОБАВИТЬ;ДОБАВИТЬ;;100
+-drz-block-normalize;Нормализация блоков, ком строка, настройки;BlockFix;SmallWithText;Нормализация блоков;\ic\constr-1.ico;;Приложение;Адон1;;;;;;Нормализация блоков, командный режим, настройки окно;;;ДОБАВИТЬ;ДОБАВИТЬ;;110
+-drz-block-normalize-notWin;Нормализация блоков, ком строка;BlockFix;SmallWithText;Нормализация блоков;ic\constr-50.ico;;Приложение;Адон1;;;;;;Нормализация блоков, командный режим, настройки ком строка;;;ДОБАВИТЬ;ДОБАВИТЬ;;120
+-drz-block-HatchBack;Штриховки назад;Свойства блоков|;LargeWithText;Порядок;newbtns.dll;BEDIT;Приложение;Адон1;;;;;;Штриховки позади всех;;;ДОБАВИТЬ;ДОБАВИТЬ;;130
+-drz-block-WipeOutBack;Маскировки назад;Свойства блоков;LargeWithText;Порядок;newbtns.dll;BEDIT;Приложение;Адон1;;;;;;Маскировки позади всех;;;ДОБАВИТЬ;ДОБАВИТЬ;;140
+-drz-block-Explodable-No|;Запретить расчленение;Свойства блоков;LargeWithText;Расчленение;newbtns.dll;BEDIT;Приложение;Адон1;;;;;;Запретить расчленение блока;;;ДОБАВИТЬ;ДОБАВИТЬ;;150
+-drz-block-Explodable-Yes;Разрешить расчленение;Свойства блоков;LargeWithText;Расчленение;newbtns.dll;BEDIT;Приложение;Адон1;;;;;;Разрешить расчленение блока;;;ДОБАВИТЬ;ДОБАВИТЬ;;160
+-drz-block-Scale-No|;Разные масштабы;Свойства блоков;LargeWithText;Масштаб;newbtns.dll;BEDIT;Приложение;Адон1;;;;;;Разные масштабы блока;;;ДОБАВИТЬ;ДОБАВИТЬ;;170
+-drz-block-Scale-Yes;Одинаковые масштабы;Свойства блоков;LargeWithText;Масштаб;newbtns.dll;BEDIT;Приложение;Адон1;;;;;;Одинаковые масштабы блока;;;ДОБАВИТЬ;ДОБАВИТЬ;;180
+-drz-block-AllProp-ByBlock;Все свойства по блоку;Свойства примитивов;LargeWithText;Все;newbtns.dll;BEDIT;Приложение;Адон2|;;;;;;Все свойства по блоку;;;ДОБАВИТЬ;ДОБАВИТЬ;;190
+-drz-block-AllProp-ByLayer;Все свойства по слою;Свойства примитивов;LargeWithText;Все;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;Все свойства по слою;;;ДОБАВИТЬ;ДОБАВИТЬ;;200
+-drz-block-Color-ByBlock|;Цвет линий по блоку;Свойства примитивов;LargeWithText;Цвет;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;Цвет линий примитивов по блоку;;;ДОБАВИТЬ;ДОБАВИТЬ;;210
+-drz-block-Color-ByLayer;Цвет линий по слою;Свойства примитивов;LargeWithText;Цвет;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;Цвет линий примитивов по слою;;;ДОБАВИТЬ;ДОБАВИТЬ;;220
+-drz-block-Linetype-ByBlock|;Тип линий по блоку;Свойства примитивов;LargeWithText;Тип;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;Тип линий примитивов по блоку;;;ДОБАВИТЬ;ДОБАВИТЬ;;228
+-drz-block-Linetype-ByLayer;Тип линий по слою;Свойства примитивов;LargeWithText;Тип;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;Тип линий примитивов по слою;;;ДОБАВИТЬ;ДОБАВИТЬ;;229
+-drz-block-Lineweight-ByBlock|sep;Вес линий по блоку;Свойства примитивов;LargeWithText;Вес;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;Вес линий примитивов по блоку;;;ДОБАВИТЬ;ДОБАВИТЬ;;260
+-drz-block-Lineweight-ByLayer;Вес линий по слою;Свойства примитивов;LargeWithText;Вес;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;Вес линий примитивов по слою;;;ДОБАВИТЬ;ДОБАВИТЬ;;270
+-drz-block-LayerZero|;Примитивы на слой 0;Свойства примитивов;LargeWithText;На ноль;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;Примитивы блока на слой 0;;;ДОБАВИТЬ;ДОБАВИТЬ;;275
+-drz-block-LwGlobalWidth;Ширина полилиний 0;Свойства примитивов;LargeWithText;На ноль;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;Ширина полилиний 0;;;ДОБАВИТЬ;ДОБАВИТЬ;;280
+drz-log-off;Отключение лога;Служебные|;SmallWithText;Лог;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;Отключение лога;;;ДОБАВИТЬ;ДОБАВИТЬ;;295
+drz-log-on;Включение лога;Служебные;SmallWithText;Лог;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;Включение лога;;;ДОБАВИТЬ;ДОБАВИТЬ;;296
+drz-config-filename;Путь к конфигурационному файлу;Служебные;SmallWithText;Лог;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;Путь к конфигурационному файлу;;;ДОБАВИТЬ;ИСКЛЮЧИТЬ;;300
+drz-folder-for-logs;Каталог для  логов;Служебные;SmallWithText;Лог;newbtns.dll;BEDIT;Приложение;Адон2;;;;;;Каталог для хранения логов;;;ДОБАВИТЬ;ИСКЛЮЧИТЬ;;310
+drz-log-settings|;Настройки;Служебные;LargeWithoutText;;nmenu.dll;i281;Приложение;Адон2;;;;;;Настройки логирования;;;ДОБАВИТЬ;ДОБАВИТЬ;;340
+-drz-block-lstInfo;Информация о командах;Инфо|;SmallWithText;Инфо;newbtns.dll;npc_info;Приложение;Адон2;;;;;;Информация о командах сборки;;;ДОБАВИТЬ;ДОБАВИТЬ;ИСКЛЮЧИТЬ;345
+drz_block_home_link|;О программе;Инфо;SmallWithText;Инфо;newbtns.dll;About;Приложение;Адон2;Обсуждение_PlotSPDS;shell_exec;open,https://doctorraz.blogspot.com/2022/10/PlotSPDS.NET.html;;0;Домашняя страница blockFix;;;ДОБАВИТЬ;ДОБАВИТЬ;;350

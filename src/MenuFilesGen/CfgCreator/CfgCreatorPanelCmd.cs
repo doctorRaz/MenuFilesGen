@@ -55,9 +55,9 @@ namespace MenuFilesGen.CFG
                     Cfg.Configman.Add($"cmdtype=i{cmd.CmdType}");
                     Cfg.Configman.Add($"intername=s{cmd.InterName}");
                     Cfg.Configman.Add($"DispName=s{cmd.DispName}");
-                    Cfg.Configman.Add($"StatusText=s{cmd.StatusText}");
 
                     //необязательные ключи
+                    if (!string.IsNullOrEmpty(cmd.StatusText)) Cfg.Configman.Add($"StatusText=s{cmd.StatusText}");
                     if (!string.IsNullOrEmpty(cmd.ToolTipText)) Cfg.Configman.Add($"ToolTipText=s{cmd.ToolTipText}");
                     if (!string.IsNullOrEmpty(cmd.LocalName)) Cfg.Configman.Add($"LocalName=s{cmd.LocalName}");
                     if (!string.IsNullOrEmpty(cmd.RealCommandName)) Cfg.Configman.Add($"RealCommandName=s{cmd.RealCommandName}");
