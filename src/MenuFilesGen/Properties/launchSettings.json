@@ -18,6 +18,10 @@
     "cmdTemplate": {
       "commandName": "Project",
       "commandLineArgs": "-exo:0 -hrr:3 -xpn:1    \"d:\\@Developers\\Programmers\\!NET\\GitHubMy\\MenuFilesGen\\example\\template.xlsx\" \"d:\\@Developers\\Programmers\\!NET\\!bundle\\BlockFix.bundle\\Resources\""
+    },
+    "cmd_drzTools": {
+      "commandName": "Project",
+      "commandLineArgs": "-exo:0 -hrr:3 -xpn:1 \"d:\\@Developers\\Programmers\\!NET\\!bundle\\drzTools\\Resources\" \"d:\\@Developers\\Programmers\\!NET\\!bundle\\!!MenuFilesGen\\drzTools.xlsm\""
     }
   }
 }

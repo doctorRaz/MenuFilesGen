@@ -15,6 +15,9 @@ namespace MenuFilesGen.CFG
             //по App
             foreach (AppDefinition app in groupingAppPanel)
             {
+                //todo загонять панельки под AddonName в ToolBarPopUpMenuб и View
+                //цикл по -		groupingAppAddonPanel сперва по аддонам, потом по панелям
+
                 string appName = app.Name;
                 //+попап панелей
                 string popupPanelRoot = $"[\\ToolBarPopUpMenu\\{appName}";
