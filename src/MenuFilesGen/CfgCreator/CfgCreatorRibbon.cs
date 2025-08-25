@@ -8,7 +8,7 @@ namespace MenuFilesGen.CFG
         /// <summary>
         /// Заполняем ленту
         /// </summary>
-        void Ribbon()
+        void Ribbon(bool isDuplicatePanel)
         {
             #region Ribbon
             // Ленточное меню
@@ -98,53 +98,56 @@ namespace MenuFilesGen.CFG
                     }
                 }
 
-                // Дублирование под табом ленты
-                XElement ribbonPanelBreak = new XElement("RibbonPanelBreak");
-                ribbonPanelSource.Add(ribbonPanelBreak);
-                var ribbonRowDuplicatePanel = new XElement("RibbonRowPanel");
-                ribbonPanelSource.Add(ribbonRowDuplicatePanel);
-
-                var items = panelButtons.Elements().ToArray();
-                int nameSymbolsCountMax = 0;
-
-                for (int itemIndex = 0; itemIndex < items.Count(); itemIndex += 2)
+                //todo добавить флаг генерации выпадашки под табом ленты
+                if (isDuplicatePanel)
                 {
-                    var nameSymbolsCount =
-                        items[itemIndex].Attributes().First(attr => attr.Name == "Text").Value.Count();
+                    // Дублирование под табом ленты
+                    XElement ribbonPanelBreak = new XElement("RibbonPanelBreak");
+                    ribbonPanelSource.Add(ribbonPanelBreak);
+                    XElement ribbonRowDuplicatePanel = new XElement("RibbonRowPanel");
+                    ribbonPanelSource.Add(ribbonRowDuplicatePanel);
 
-                    if (nameSymbolsCount > nameSymbolsCountMax)
-                        nameSymbolsCountMax = nameSymbolsCount;
-                }
+                    XElement[] items = panelButtons.Elements().ToArray();
+                    int nameSymbolsCountMax = 0;
 
-                for (int itemIndex = 0; itemIndex < items.Count(); itemIndex++)
-                {
-                    var item = items[itemIndex];
-                    XElement[] itemButtons;
-
-                    if (item.Name == "RibbonSplitButton")
-                        itemButtons = item.Elements().ToArray();
-                    else
+                    for (int itemIndex = 0; itemIndex < items.Count(); itemIndex += 2)
                     {
-                        itemButtons = new[]
-                        {
-                                      item,
-                                  };
+                        int nameSymbolsCount =
+                            items[itemIndex].Attributes().First(attr => attr.Name == "Text").Value.Count();
+
+                        if (nameSymbolsCount > nameSymbolsCountMax)
+                            nameSymbolsCountMax = nameSymbolsCount;
                     }
 
-                    for (int buttonIndex = 0; buttonIndex < itemButtons.Count(); buttonIndex++)
+                    for (int itemIndex = 0; itemIndex < items.Count(); itemIndex++)
                     {
-                        var button = itemButtons[buttonIndex];
-                        button.Attributes().First(attr => attr.Name == "ButtonStyle").Value = "LargeWithHorizontalText";
-                        ribbonRowDuplicatePanel.Add(button);
+                        XElement item = items[itemIndex];
+                        XElement[] itemButtons;
 
-                        if (itemIndex < items.Count() - 1 || buttonIndex < itemButtons.Count() - 1)
+                        if (item.Name == "RibbonSplitButton")
+                            itemButtons = item.Elements().ToArray();
+                        else
                         {
-                            XElement separator = new XElement("RibbonSeparator");
-                            ribbonRowDuplicatePanel.Add(separator);
+                            itemButtons = new[]
+                            {
+                                      item,
+                                  };
+                        }
+
+                        for (int buttonIndex = 0; buttonIndex < itemButtons.Count(); buttonIndex++)
+                        {
+                            var button = itemButtons[buttonIndex];
+                            button.Attributes().First(attr => attr.Name == "ButtonStyle").Value = "LargeWithHorizontalText";
+                            ribbonRowDuplicatePanel.Add(button);
+
+                            if (itemIndex < items.Count() - 1 || buttonIndex < itemButtons.Count() - 1)
+                            {
+                                XElement separator = new XElement("RibbonSeparator");
+                                ribbonRowDuplicatePanel.Add(separator);
+                            }
                         }
                     }
                 }
-
 
 
                 XElement ribbonPanelSourceReference = new XElement("RibbonPanelSourceReference");
