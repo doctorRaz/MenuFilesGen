@@ -1,7 +1,7 @@
 ## MenuFilesGen (Fork)
-### [Описание от Deepwiki](https://deepwiki.com/doctorRaz/MenuFilesGen) [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/doctorRaz/MenuFilesGen)
+### [Описание от Deepwiki](https://deepwiki.com/doctorRaz/MenuFilesGen) [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/doctorRaz/MenuFilesGen){: target="_blank"}
 
-### [1. MenuFilesGen (Fork) что нового](https://github.com/doctorRaz/MenuFilesGen/wiki/1.-MenuFilesGen-(Fork))
+### [1. MenuFilesGen (Fork) что нового](https://github.com/doctorRaz/MenuFilesGen/wiki/1.-MenuFilesGen-(Fork)){: target="_blank"}
 
 ### [2. User Guide быстрый старт](https://github.com/doctorRaz/MenuFilesGen/wiki/2.-User-Guide#быстрый-старт)
 
