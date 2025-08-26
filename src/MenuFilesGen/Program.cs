@@ -14,8 +14,6 @@ namespace MenuFilesGen
         static void Main(string[] args)
         {
 
-
-
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             Utils utils = new Utils();
@@ -25,11 +23,12 @@ namespace MenuFilesGen
             Console.WriteLine
                     (
                         $"Аргументы ком строки:" +
-                        $"\n\t-hrr:<сколько строк пропускать, число> - {argsCmdLine.HeaderRowRange}" +
-                        $"\n\t-xpn:<для *.XLS номер листа шаблона, число> - {argsCmdLine.XlsPageNumber}" +
-                        $"\n\t-exo:<подтверждать выход из консоли - 1, не подтверждать - 0> - {argsCmdLine.EchoOnOff}" +
-                        $"\n\t<\"полный путь к файлу шаблона с расширением\"> - {argsCmdLine.FileName}\n" +
-                        $"\n\t<\"путь к выходному каталогу\"> - {argsCmdLine.DirectoryPath}\n"
+                        $"\n\t-hrr:<сколько строк пропускать> - {argsCmdLine.HeaderRowRange}" +
+                        $"\n\t-xpn:<для *.XLS номер листа шаблона> - {argsCmdLine.XlsPageNumber}" +
+                        $"\n\t-exo:<подтверждать выход из консоли - 1, не подтверждать - 0> - {(argsCmdLine.EchoOnOff ? 1 : 0)}" +
+                        $"\n\t-dup:<не создавать меню под лентой - 1, создавать - 0> - {(argsCmdLine.IsNotDuplicatePanel ? 1 : 0)}" +
+                       $"\n\t<\"полный путь к файлу шаблона с расширением\"> - {argsCmdLine.FileName}" +
+                        $"\n\t<\"путь к выходному каталогу\"> - {(argsCmdLine.DirectoryPath != "" ? argsCmdLine.DirectoryPath : "рядом с шаблоном")}\n"
                     );
 
 
@@ -62,7 +61,7 @@ namespace MenuFilesGen
 
             string addonNameGlobal = rep.AddOnNameGlobal;//x 
 
-            CfgCreator cfgCreater = new CfgCreator(rep.CommandDefinitions, rep.AddOnNameGlobal, argsCmdLine.IsDuplicatePanel);
+            CfgCreator cfgCreater = new CfgCreator(rep.CommandDefinitions, rep.AddOnNameGlobal, argsCmdLine.IsNotDuplicatePanel);
 
             if (argsCmdLine.EchoOnOff)
             {

@@ -5,7 +5,7 @@
     },
     "cmdXLS": {
       "commandName": "Project",
-      "commandLineArgs": "-exo:0 -hrr:3 -xpn:1    \"d:\\@Developers\\Programmers\\!NET\\GitHubMy\\MenuFilesGen\\example\\BlockFix.xlsm\" \"d:\\@Developers\\Programmers\\!NET\\!bundle\\BlockFix.bundle\\Resources\""
+      "commandLineArgs": "-exo:1 -hrr:3 -xpn:1 -dup:1  \"d:\\@Developers\\Programmers\\!NET\\!MenuFilesGen\\MenuFilesGen\\example\\drzTools.xlsm\" \"d:\\@Developers\\Programmers\\!NET\\!bundle\\drzTools\\Resources\""
     },
     "cmdCSV": {
       "commandName": "Project",

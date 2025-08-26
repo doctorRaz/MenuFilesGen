@@ -98,10 +98,9 @@ namespace MenuFilesGen.CFG
                     }
                 }
 
-                //todo добавить флаг генерации выпадашки под табом ленты
-                if (isDuplicatePanel)
+                if (!isDuplicatePanel) //если false генерим выпадающее меню под табом ленты
                 {
-                    // Дублирование под табом ленты
+                    // Дублированое меню под табом ленты
                     XElement ribbonPanelBreak = new XElement("RibbonPanelBreak");
                     ribbonPanelSource.Add(ribbonPanelBreak);
                     XElement ribbonRowDuplicatePanel = new XElement("RibbonRowPanel");
