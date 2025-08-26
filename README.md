@@ -30,6 +30,7 @@
 Подробнее о данном решении можно узнать из [статьи](https://dzen.ru/a/ZWA3t4qMPmYrDlzz?share_to=link)
 
 ---
+
 ### Благодарности:
 - [Владиславу Овчинникову](https://github.com/TBS-Software)
 - [Алексею Кулику ](https://github.com/kpblc2000)
