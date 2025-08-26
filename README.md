@@ -1,9 +1,10 @@
 ## MenuFilesGen (Fork)
-### [Описание от Deepwiki](https://deepwiki.com/doctorRaz/MenuFilesGen) [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/doctorRaz/MenuFilesGen)
 
-### [1. MenuFilesGen (Fork) что нового](https://github.com/doctorRaz/MenuFilesGen/wiki/1.-MenuFilesGen-(Fork))
+### [Описание от Deepwiki](https://deepwiki.com/doctorRaz/MenuFilesGen) [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/doctorRaz/MenuFilesGen ) 
 
-### [2. User Guide быстрый старт](https://github.com/doctorRaz/MenuFilesGen/wiki/2.-User-Guide#быстрый-старт)
+### [1. MenuFilesGen (Fork) что нового](https://github.com/doctorRaz/MenuFilesGen/wiki/1.-MenuFilesGen-(Fork)) 
+
+### [2. User Guide быстрый старт](https://github.com/doctorRaz/MenuFilesGen/wiki/2.-User-Guide#быстрый-старт) 
 
 ### [3. Принцип формирования меню](https://github.com/doctorRaz/MenuFilesGen/wiki/3.-Принцип-формирования-меню)
 
@@ -12,10 +13,10 @@
 ---
 
 > [!TIP]
-> Теперь _MenuFilesGen_   умеет  генерировать конфиги напрямую из *.xls файлов, и многое другое, подробнее  [ тут](https://github.com/doctorRaz/MenuFilesGen/wiki/1.-MenuFilesGen-(Fork)#что-нового)
+> Теперь _MenuFilesGen_   умеет  генерировать конфиги напрямую из *.xls файлов, и многое другое, подробнее **[можно прочитать здесь](https://github.com/doctorRaz/MenuFilesGen/wiki/1.-MenuFilesGen-(Fork)#что-нового)**
 
 > [!IMPORTANT]
-> Как пользоваться [написано здесь](https://github.com/doctorRaz/MenuFilesGen/wiki/2.-User-Guide)
+> Как пользоваться **[описано тут](https://github.com/doctorRaz/MenuFilesGen/wiki/2.-User-Guide)**
 
 
 > [!WARNING]
