@@ -9,7 +9,7 @@ namespace MenuFilesGen.CFG
         /// </summary>
         /// <param name="cmds">The CMDS.</param>
         /// <param name="_addOnNameGlobal">The addon name global.</param>
-        public CfgCreator(List<CommandDefinition> cmds, string _addOnNameGlobal)
+        public CfgCreator(List<CommandDefinition> cmds, string _addOnNameGlobal, bool isDuplicatePanel)
         {
             commandDefinitions = cmds;
             addonNameGlobal = _addOnNameGlobal;
@@ -22,7 +22,7 @@ namespace MenuFilesGen.CFG
 
             AppAddonPanel();
 
-            Ribbon();
+            Ribbon(isDuplicatePanel);
 
         }
 

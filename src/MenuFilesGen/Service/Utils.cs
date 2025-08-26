@@ -115,6 +115,9 @@ namespace MenuFilesGen.Service
                             case "exo":
                                 argsCmdLine.EchoOnOff = StringToBool(nameValue[1]);
                                 break;
+                            case "dup":
+                                argsCmdLine.IsNotDuplicatePanel = StringToBool(nameValue[1]);
+                                break;
                         }
                     }
 
@@ -169,6 +172,15 @@ namespace MenuFilesGen.Service
         ///   <c>true</c> if [echo ON]; otherwise, <c>false</c>.
         /// </value>
         public bool EchoOnOff { get; set; } = true;
+
+
+        /// <summary>
+        /// Не создавать выпадающее меню под табом ленты
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is not duplicate panel; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsNotDuplicatePanel { get; set; } = false;
 
 
     }
