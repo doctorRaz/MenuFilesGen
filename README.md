@@ -1,5 +1,7 @@
 ## MenuFilesGen (Fork)
-<H2><a href="http://example.com/" target="_blank">example</a></H2>
+
+><a href="http://example.com/" target="_blank">example</a>
+
 ### [Описание от Deepwiki](https://deepwiki.com/doctorRaz/MenuFilesGen) [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/doctorRaz/MenuFilesGen) {target="_blank"}
 
 ### [1. MenuFilesGen (Fork) что нового](https://github.com/doctorRaz/MenuFilesGen/wiki/1.-MenuFilesGen-(Fork)) {target="blank"}
