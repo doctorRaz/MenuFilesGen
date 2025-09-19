@@ -15,9 +15,12 @@ namespace MenuFilesGen.Repositories
             {
                 /*XLWorkbook*/
                 workbook = new XLWorkbook(new FileStream(FileFullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
+                //workbook = new XLWorkbook(FileFullName );
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine("Supported extensions are '.xlsx', '.xlsm', '.xltx' and '.xltm'\n");
                 return;
             }
 
