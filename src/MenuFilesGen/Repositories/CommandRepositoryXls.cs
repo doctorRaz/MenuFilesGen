@@ -66,12 +66,22 @@ namespace MenuFilesGen.Repositories
 
             Console.WriteLine($"Работаю с листом: {xlPage} - \"{AddOnNameGlobal}\"");
 
-            IEnumerable<IXLRangeRow> rows = worksheet.RangeUsed().RowsUsed().Skip(HEADER_ROW_RANGE);
+            //by dRz on 19.09.2025 at 9:21 переделал исключать отфильтрованные
+            //IEnumerable<IXLRangeRow> rows = worksheet.RangeUsed().RowsUsed().Skip(HEADER_ROW_RANGE);
+
+            //think подумать над ограничением количества столбцов
+            IEnumerable<IXLRow> rows = worksheet.RowsUsed(
+                x =>
+                !(x.IsHidden == true ||
+                x.Cell(columnNumbers.DontTakeColumn + 1).GetString().Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase)))
+                .Skip(HEADER_ROW_RANGE);
+
 
             CommandDefinitions = new List<CommandDefinition>();
 
-            foreach (IXLRangeRow row in rows)
+            foreach (IXLRow row in rows)
             {
+
                 CommandDefinition res = new CommandDefinition
                 {
                     DispName = row.Cell(columnNumbers.DispNameColumn + 1).GetString().Trim(),
@@ -90,7 +100,8 @@ namespace MenuFilesGen.Repositories
                     Accelerators = row.Cell(columnNumbers.AcceleratorsColumn + 1).GetString().Trim(),
 
                     HideCommand = row.Cell(columnNumbers.HideCommandColumn + 1).GetString().Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
-                    DontTake = row.Cell(columnNumbers.DontTakeColumn + 1).GetString().Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
+                    //отфильтровано раньше
+                    // DontTake = row.Cell(columnNumbers.DontTakeColumn + 1).GetString().Contains("ИСКЛЮЧИТЬ", StringComparison.OrdinalIgnoreCase),
 
                     Weight = Utils.StringToInt(row.Cell(columnNumbers.WeightColumn + 1).GetString(), 10),
                     CmdType = Utils.StringToInt(row.Cell(columnNumbers.CmdTypeColumn + 1).GetString(), 1),
@@ -99,10 +110,11 @@ namespace MenuFilesGen.Repositories
 
                 };
 
-                if (res.DontTake)//пропуск исключенных
-                {
-                    continue;
-                }
+                //by dRz on 19.09.2025 at 9:39 исключаем при выборке
+                //if (res.DontTake)//пропуск исключенных
+                //{
+                //    continue;
+                //}
                 CommandDefinitions.Add(res);
             }
         }
