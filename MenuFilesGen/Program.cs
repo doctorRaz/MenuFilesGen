@@ -59,7 +59,7 @@ namespace MenuFilesGen
                 return;
             }
 
-            string addonNameGlobal = rep.AddOnNameGlobal;//x 
+            string addonNameGlobal = rep.AddOnNameGlobal;
 
             CfgCreator cfgCreater = new CfgCreator(rep.CommandDefinitions, rep.AddOnNameGlobal, argsCmdLine.IsNotDuplicatePanel);
 
