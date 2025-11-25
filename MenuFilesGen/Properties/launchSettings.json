@@ -5,7 +5,7 @@
     },
     "cmdXLS": {
       "commandName": "Project",
-      "commandLineArgs": "-exo:1 -hrr:3 -xpn:1 -dup:1  \"d:\\@Developers\\Programmers\\!NET\\!MenuFilesGen\\MenuFilesGen\\example\\template.xlsm\" \"d:\\@Developers\\Programmers\\!NET\\!bundle\\drzTools\\Resources\""
+      "commandLineArgs": "-exo:1 -hrr:3 -xpn:1 -dup:1  \"d:\\@Developers\\Programmers\\!NET\\!MenuFilesGen\\MenuFilesGen\\example\\template.xlsm\" \"d:\\@Developers\\Programmers\\!NET\\!MenuFilesGen\\MenuFilesGen\\example\""
     },
     "cmdCSV": {
       "commandName": "Project",
