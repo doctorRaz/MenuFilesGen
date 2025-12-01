@@ -12,7 +12,7 @@ namespace MenuFilesGen.Repositories
         {
             XLWorkbook workbook = new XLWorkbook();
             try
-            {
+            { //todo не читает либре офис
                 /*XLWorkbook*/
                 workbook = new XLWorkbook(new FileStream(FileFullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
                 //workbook = new XLWorkbook(FileFullName );
