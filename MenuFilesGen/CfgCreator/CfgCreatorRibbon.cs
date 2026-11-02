@@ -32,11 +32,9 @@ namespace MenuFilesGen.CFG
                         .SelectMany(panel => panel.Command)
                         .First();
 
-                    // Пустое имя аддона сохраняет прежнее поведение для таблиц,
-                    // в которых AddonNameRaw не заполнен.
-                    string tabName = string.IsNullOrWhiteSpace(addon.Name)
-                        ? app.Name
-                        : addon.Name;
+                    // Если имя аддона не задано, используем имя приложения,
+                    // а для старых таблиц без обоих значений — глобальное имя.
+                    string tabName = GetDisplayName(addon.NameRaw, app.Name);
 
                     string tabUid = CreateRibbonUid("Tab", firstCommand.AppName, addon.NameRaw);
 
@@ -55,7 +53,7 @@ namespace MenuFilesGen.CFG
 
                         XElement ribbonPanelSource = new XElement("RibbonPanelSource");
                         ribbonPanelSource.Add(new XAttribute("UID", panelUid));
-                        ribbonPanelSource.Add(new XAttribute("Text", panel.Name));
+                        ribbonPanelSource.Add(new XAttribute("Text", GetDisplayName(panel.NameRaw)));
                         ribbonPanelSourceCollection.Add(ribbonPanelSource);
 
                         // Временный контейнер для сбора кнопок.
@@ -174,6 +172,16 @@ namespace MenuFilesGen.CFG
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Возвращает первое отображаемое имя из значения с разделителями.
+        /// </summary>
+        static string GetDisplayName(string? rawName, string fallback = "")
+        {
+            return string.IsNullOrWhiteSpace(rawName)
+                ? fallback
+                : rawName.Split('|')[0].Trim();
         }
 
         /// <summary>
